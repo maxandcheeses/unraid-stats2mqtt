@@ -94,7 +94,7 @@ Several sensors expose additional detail as HA state attributes (accessible via 
    ```bash
    /etc/rc.d/rc.unraid-stats2mqtt start
    ```
-4. Visit **Settings → MQTT Monitor** in the WebUI.
+4. Visit **Settings → Stats to MQTT** in the WebUI.
 
 ---
 
