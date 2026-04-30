@@ -1,4 +1,4 @@
-#### unraid-stats2mqtt
+#### Stats to MQTT
 
 Publishes Unraid system metrics to an MQTT broker in Home Assistant auto-discovery format.
 
