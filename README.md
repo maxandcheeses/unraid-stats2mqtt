@@ -1,5 +1,7 @@
 # unraid-stats2mqtt
 
+![unraid-stats2mqtt](docs/unraid-mqtt.png)
+
 An Unraid plugin (no Docker) that monitors your array and publishes metrics to an MQTT broker in **Home Assistant discovery format**.
 
 ## Features
