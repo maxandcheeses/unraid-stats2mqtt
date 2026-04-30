@@ -1,0 +1,86 @@
+name: Build and Release
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'source/**'
+      - 'plugin/**'
+      - 'build.sh'
+      - 'mosquitto/MOSQUITTO_VERSION'
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: 'Build number override'
+        required: false
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull latest commits
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase
+
+      - name: Compute version
+        id: meta
+        run: |
+          if [ -n "${{ inputs.build_number }}" ]; then
+            BUILD="${{ inputs.build_number }}"
+          else
+            BUILD=$(( $(cat BUILD 2>/dev/null || echo 0) + 1 ))
+          fi
+          echo "$BUILD" > BUILD
+          VERSION="$(date '+%Y.%m').${BUILD}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build
+        run: |
+          chmod +x build.sh
+          VERSION="${{ steps.meta.outputs.version }}" bash build.sh
+
+      - name: Get MD5
+        id: artifact
+        run: |
+          VERSION="${{ steps.meta.outputs.version }}"
+          TXZ="dist/unraid-stats2mqtt-${VERSION}-x86_64-1.txz"
+          MD5=$(md5sum "$TXZ" | cut -d' ' -f1)
+          echo "txz=$TXZ" >> $GITHUB_OUTPUT
+          echo "md5=$MD5" >> $GITHUB_OUTPUT
+
+      - name: Commit updated .plg
+        run: |
+          VERSION="${{ steps.meta.outputs.version }}"
+          MD5="${{ steps.artifact.outputs.md5 }}"
+          sed -i "s/<!ENTITY version   \"[^\"]*\">/<!ENTITY version   \"${VERSION}\">/" plugin/unraid-stats2mqtt.plg
+          sed -i "s|<MD5>.*</MD5>|<MD5>${MD5}</MD5>|" plugin/unraid-stats2mqtt.plg
+          git add plugin/unraid-stats2mqtt.plg BUILD
+          git diff --cached --quiet || git commit -m "ci: update version and MD5 for ${VERSION} [skip ci]"
+          git push
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.meta.outputs.version }}"
+          TXZ="${{ steps.artifact.outputs.txz }}"
+          gh release delete "$VERSION" --yes 2>/dev/null || true
+          gh release create "$VERSION" \
+            --title "${VERSION}" \
+            --notes "Automated release for ${VERSION}" \
+            "$TXZ"

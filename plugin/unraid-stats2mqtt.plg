@@ -1,0 +1,117 @@
+<?xml version='1.0' standalone='yes'?>
+<!DOCTYPE PLUGIN [
+  <!ENTITY name      "unraid-stats2mqtt">
+  <!ENTITY author    "Maxwell Luong">
+  <!ENTITY launch    "Settings/unraid-stats2mqtt">
+  <!ENTITY version   "2026.04.459">
+  <!ENTITY pluginURL "https://raw.githubusercontent.com/maxandcheeses/unraid-stats2mqtt/main/plugin/unraid-stats2mqtt.plg">
+  <!ENTITY pluginDir "/usr/local/emhttp/plugins/&name;">
+  <!ENTITY emhttp    "/usr/local/emhttp">
+  <!ENTITY txzURL    "https://github.com/maxandcheeses/unraid-stats2mqtt/releases/download/&version;/unraid-stats2mqtt-&version;-x86_64-1.txz">
+]>
+
+<PLUGIN name="&name;" author="Maxwell Luong" version="&version;" pluginURL="&pluginURL;" launch="&launch;" icon="images/unraid-mqtt-bw.png" support="https://forums.unraid.net" WebUI="/Settings/unraid-stats2mqtt">
+
+<CHANGES>
+###2024.01.01
+- Initial release
+- Home Assistant MQTT discovery support
+- Per-metric publish rules (interval, on-change, or both)
+- MQTT / MQTTS / WS / WSS support with cert management
+- Array status, disk temps, SMART data, parity, read/write speeds
+</CHANGES>
+
+<!-- Download and install the source package -->
+<FILE Name="/boot/config/plugins/&name;/&name;-&version;.txz" Run="upgradepkg --install-new">
+<URL>&txzURL;</URL>
+<MD5>2f0fd4ed49b188382782791d3fad2c36</MD5>
+</FILE>
+
+<!-- Plugin config directory (only write if not already present) -->
+<FILE Name="/boot/config/plugins/&name;/config.cfg" Run="bash -c 'test -f /boot/config/plugins/unraid-stats2mqtt/config.cfg &amp;&amp; exit 0; chmod 600 /boot/config/plugins/unraid-stats2mqtt/config.cfg'">
+<INLINE>
+# unraid-stats2mqtt default config - edit via the WebUI
+MQTT_HOST="localhost"
+MQTT_PORT="1883"
+MQTT_PROTOCOL="mqtt"
+MQTT_USER=""
+MQTT_PASS=""
+MQTT_BASE_TOPIC="homeassistant"
+MQTT_DEVICE_ID="unraid"
+MQTT_DEVICE_NAME="Unraid Server"
+MQTT_TOPIC="unraid"
+MQTT_CA_CERT=""
+MQTT_CLIENT_CERT=""
+MQTT_CLIENT_KEY=""
+MQTT_TLS_INSECURE="false"
+
+HA_WATCH_STATUS="true"
+HA_STATUS_TOPIC="homeassistant/status"
+HA_DISCOVERY_TOPIC="homeassistant"
+
+# Per-metric publish modes: interval | onchange | both
+PUBLISH_ARRAY_STATUS="both"
+PUBLISH_PARITY="both"
+PUBLISH_REBUILD="both"
+PUBLISH_DISK_TEMPS="interval"
+PUBLISH_DISK_STATES="onchange"
+PUBLISH_SMART="interval"
+PUBLISH_RW_SPEEDS="interval"
+
+# Interval seconds per metric (used when mode is interval or both)
+INTERVAL_ARRAY_STATUS="30"
+INTERVAL_PARITY="60"
+INTERVAL_REBUILD="30"
+INTERVAL_DISK_TEMPS="60"
+INTERVAL_DISK_STATES="30"
+INTERVAL_SMART="300"
+INTERVAL_RW_SPEEDS="30"
+
+# Expire after seconds per metric (0 = disabled)
+EXPIRE_ARRAY_STATUS="0"
+EXPIRE_PARITY="0"
+EXPIRE_REBUILD="0"
+EXPIRE_DISK_TEMPS="0"
+EXPIRE_DISK_STATES="0"
+EXPIRE_SMART="0"
+EXPIRE_RW_SPEEDS="0"
+
+PLUGIN_ENABLED="true"
+</INLINE>
+</FILE>
+
+<!-- Set up certs directory and permissions -->
+<FILE Run="/bin/bash">
+<INLINE>
+mkdir -p /boot/config/plugins/unraid-stats2mqtt/certs
+chmod +x /usr/local/emhttp/plugins/unraid-stats2mqtt/scripts/*.sh 2>/dev/null || true
+echo "unraid-stats2mqtt installed successfully."
+</INLINE>
+</FILE>
+
+<!-- Start service on install -->
+<FILE Run="/bin/bash">
+<INLINE>
+if [ -f /etc/rc.d/rc.unraid-stats2mqtt ]; then
+  chmod +x /etc/rc.d/rc.unraid-stats2mqtt
+  /etc/rc.d/rc.unraid-stats2mqtt start
+fi
+</INLINE>
+</FILE>
+
+<!-- Remove plugin -->
+<FILE Run="/bin/bash" Method="remove">
+<INLINE>
+if [ -f /etc/rc.d/rc.unraid-stats2mqtt ]; then
+  /etc/rc.d/rc.unraid-stats2mqtt stop
+fi
+rm -rf /usr/local/emhttp/plugins/unraid-stats2mqtt
+rm -f /etc/rc.d/rc.unraid-stats2mqtt
+rm -rf /tmp/unraid-stats2mqtt
+rm -f /var/log/unraid-stats2mqtt.log
+rm -rf /boot/config/plugins/unraid-stats2mqtt
+echo "unraid-stats2mqtt removed."
+</INLINE>
+</FILE>
+
+</PLUGIN>
