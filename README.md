@@ -67,7 +67,7 @@ Several sensors expose additional detail as HA state attributes (accessible via 
 - Protocol support: **MQTT**, **MQTTS** (TLS), **WS**, **WSS**
 - TLS: CA cert, client cert/key, or insecure skip-verify
 - Pure Bash/PHP daemon — no Docker, no Node, no Python required
-- Settings UI in the Unraid WebUI under **Settings → MQTT Monitor**
+- Settings UI in the Unraid WebUI under **Settings → Stats to MQTT**
 
 ---
 
