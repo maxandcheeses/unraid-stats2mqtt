@@ -2947,5 +2947,32 @@
     "hook_event_name": "Stop",
     "stop_hook_active": false,
     "last_assistant_message": "The old name references are only in the `logs/` directory (Claude session artifacts) \u2014 not in source files. Good. Here's the plan:\n\n1. Update the git remote to the new repo URL\n2. Squash all 389 commits into one\n3. Force-push to remote (this is destructive and irreversible)\n\nConfirm you want to proceed with force-pushing a squashed history to `https://github.com/maxandcheeses/unraid-stats2mqtt`?"
+  },
+  {
+    "session_id": "82e2e8cb-ad97-4afb-ab11-3f003ee3b9be",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-stats2mqtt/82e2e8cb-ad97-4afb-ab11-3f003ee3b9be.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-stats2mqtt",
+    "permission_mode": "default",
+    "hook_event_name": "Stop",
+    "stop_hook_active": false,
+    "last_assistant_message": "The `.page` file already has `Title=\"Stats to MQTT\"` \u2014 that's already correct. The `.plg` uses `&name;` (`unraid-stats2mqtt`) as the internal identifier, which is right. There's nothing to change; the display name is already \"Stats to MQTT\"."
+  },
+  {
+    "session_id": "82e2e8cb-ad97-4afb-ab11-3f003ee3b9be",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-stats2mqtt/82e2e8cb-ad97-4afb-ab11-3f003ee3b9be.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-stats2mqtt",
+    "permission_mode": "default",
+    "hook_event_name": "Stop",
+    "stop_hook_active": false,
+    "last_assistant_message": "The `name` entity (`unraid-stats2mqtt`) is the internal identifier used for file paths, directories, and the plugin registry \u2014 changing it to `Stats to MQTT` would break installations (spaces in paths, package names, etc.). That's intentional.\n\nThe human-readable display name is controlled by `Title=` in the `.page` file, which is already `\"Stats to MQTT\"`. The `.plg` also has a separate `author` field but no distinct display-name field \u2014 Unraid uses the `.page` title for the UI label.\n\nSo the split is correct: `unraid-stats2mqtt` = internal ID, `Stats to MQTT` = what users see."
+  },
+  {
+    "session_id": "82e2e8cb-ad97-4afb-ab11-3f003ee3b9be",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-stats2mqtt/82e2e8cb-ad97-4afb-ab11-3f003ee3b9be.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-stats2mqtt",
+    "permission_mode": "default",
+    "hook_event_name": "Stop",
+    "stop_hook_active": false,
+    "last_assistant_message": "No old references \u2014 URLs and name are already correct. The heading uses `unraid-stats2mqtt` (the internal ID); want me to change it to `Stats to MQTT` to match the display name?"
   }
 ]

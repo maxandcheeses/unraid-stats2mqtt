@@ -1690,3 +1690,9 @@
 {"timestamp": "2026-04-30T16:24:23.019551+00:00", "tool_name": "Bash", "decision": "allow", "reason": "", "command_preview": "grep -rn \"unraid-mqtt-monitor\" . --exclude-dir=\".git\" 2>/dev/null | grep -v \".claude/logs\""}
 {"timestamp": "2026-04-30T16:24:47.572669+00:00", "tool_name": "Bash", "decision": "allow", "reason": "", "command_preview": "git remote set-url origin https://github.com/maxandcheeses/unraid-stats2mqtt.git && git remote -v"}
 {"timestamp": "2026-04-30T16:24:51.092800+00:00", "tool_name": "Bash", "decision": "allow", "reason": "", "command_preview": "git checkout --orphan squashed-main && git add -A && git commit -m \"Initial release: unraid-stats2mqtt\""}
+{"timestamp": "2026-04-30T16:26:30.346443+00:00", "tool_name": "Bash", "decision": "allow", "reason": "", "command_preview": "grep -rn \"Unraid MQTT\\|unraid mqtt\\|plugin.*name\\|Menu=\\|Title=\" source/usr/local/emhttp/plugins/unraid-stats2mqtt/ plugin/ --include=\"*.page\" --include=\"*.plg\" -i"}
+{"timestamp": "2026-04-30T16:26:56.457352+00:00", "tool_name": "Read", "decision": "allow", "reason": "", "command_preview": null}
+{"timestamp": "2026-04-30T16:27:28.332532+00:00", "tool_name": "Bash", "decision": "allow", "reason": "", "command_preview": "grep -n \"unraid-mqtt-monitor\\|Unraid MQTT Monitor\\|unraid_mqtt_monitor\" /Users/maxwell/Documents/development/unraid-stats2mqtt/source/usr/local/emhttp/plugins/unraid-stats2mqtt/README.md"}
+{"timestamp": "2026-04-30T16:27:32.118902+00:00", "tool_name": "Bash", "decision": "allow", "reason": "", "command_preview": "head -20 /Users/maxwell/Documents/development/unraid-stats2mqtt/source/usr/local/emhttp/plugins/unraid-stats2mqtt/README.md"}
+{"timestamp": "2026-04-30T16:27:57.772589+00:00", "tool_name": "Read", "decision": "allow", "reason": "", "command_preview": null}
+{"timestamp": "2026-04-30T16:27:59.975156+00:00", "tool_name": "Edit", "decision": "allow", "reason": "", "command_preview": null}
