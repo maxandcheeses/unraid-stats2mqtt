@@ -1,0 +1,73 @@
+name: Build Mosquitto Binaries
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mosquitto/MOSQUITTO_VERSION'
+      - 'mosquitto/Dockerfile'
+  workflow_dispatch:
+    inputs:
+      mosquitto_version:
+        description: 'Mosquitto version (leave blank to use MOSQUITTO_VERSION file)'
+        required: false
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve version
+        id: version
+        run: |
+          if [ -n "${{ inputs.mosquitto_version }}" ]; then
+            VERSION="${{ inputs.mosquitto_version }}"
+            echo "$VERSION" > mosquitto/MOSQUITTO_VERSION
+          else
+            VERSION="$(cat mosquitto/MOSQUITTO_VERSION | tr -d '[:space:]')"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build static binaries
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          docker build \
+            --platform linux/amd64 \
+            --build-arg "MOSQUITTO_VERSION=${VERSION}" \
+            --tag "mosquitto-static-builder:${VERSION}" \
+            mosquitto/
+
+      - name: Extract binaries
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          mkdir -p source/usr/local/bin
+          CONTAINER=$(docker create --platform linux/amd64 "mosquitto-static-builder:${VERSION}")
+          docker cp "${CONTAINER}:/usr/local/bin/mosquitto_pub" source/usr/local/bin/mosquitto_pub
+          docker cp "${CONTAINER}:/usr/local/bin/mosquitto_sub" source/usr/local/bin/mosquitto_sub
+          docker rm "$CONTAINER"
+          chmod +x source/usr/local/bin/mosquitto_pub source/usr/local/bin/mosquitto_sub
+          echo "Built binaries:"
+          ls -lh source/usr/local/bin/mosquitto_pub source/usr/local/bin/mosquitto_sub
+          file source/usr/local/bin/mosquitto_pub
+
+      - name: Commit updated binaries
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add source/usr/local/bin/mosquitto_pub source/usr/local/bin/mosquitto_sub mosquitto/MOSQUITTO_VERSION
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "chore: update bundled mosquitto binaries to ${VERSION} [skip ci]"
+          git pull --rebase
+          git push

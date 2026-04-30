@@ -1,0 +1,114 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "uv run ~/Documents/development/unraid-stats2mqtt/.claude/status_lines/status_line_v9.py",
+    "padding": 0
+  },
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Write",
+      "Bash"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/Documents/development/unraid-stats2mqtt/.claude/hooks/pre_tool_use.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/Documents/development/unraid-stats2mqtt/.claude/hooks/post_tool_use.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd ~/Documents/development/unraid-stats2mqtt && git add -A && (git diff --cached --quiet || git commit -m 'auto: save changes') && git fetch origin && { git stash --include-untracked -q 2>/dev/null; git rebase origin/main && git push; git stash pop -q 2>/dev/null; } || true",
+            "statusMessage": "Pushing changes..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/Documents/development/unraid-stats2mqtt/.claude/hooks/user_prompt_submit.py --store-last-prompt"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/Documents/development/unraid-stats2mqtt/.claude/hooks/notification.py --notify"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/Documents/development/unraid-stats2mqtt/.claude/hooks/subagent_stop.py --notify"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/Documents/development/unraid-stats2mqtt/.claude/hooks/session_start.py"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/Documents/development/unraid-stats2mqtt/.claude/hooks/session_end.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/Documents/development/unraid-stats2mqtt/.claude/hooks/stop.py --notify"
+          }
+        ]
+      }
+    ]
+  }
+}

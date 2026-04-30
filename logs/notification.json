@@ -1,0 +1,1322 @@
+[
+  {
+    "session_id": "0db050c8-aecb-4ebb-ae38-148bf04d371b",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/0db050c8-aecb-4ebb-ae38-148bf04d371b.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "803a6d50-a36d-4507-ad5a-835f7fef46b8",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/803a6d50-a36d-4507-ad5a-835f7fef46b8.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "803a6d50-a36d-4507-ad5a-835f7fef46b8",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/803a6d50-a36d-4507-ad5a-835f7fef46b8.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "803a6d50-a36d-4507-ad5a-835f7fef46b8",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/803a6d50-a36d-4507-ad5a-835f7fef46b8.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "803a6d50-a36d-4507-ad5a-835f7fef46b8",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/803a6d50-a36d-4507-ad5a-835f7fef46b8.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "05e1d257-eac0-4e1b-bcc9-ec66b42d399d",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/05e1d257-eac0-4e1b-bcc9-ec66b42d399d.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "f2d7508e-0ae5-4d4f-a7a9-0d41aa1a9f0c",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/f2d7508e-0ae5-4d4f-a7a9-0d41aa1a9f0c.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "f2d7508e-0ae5-4d4f-a7a9-0d41aa1a9f0c",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/f2d7508e-0ae5-4d4f-a7a9-0d41aa1a9f0c.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "dc4abd2e-ce88-4c90-8d3b-89c72be92b6f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/dc4abd2e-ce88-4c90-8d3b-89c72be92b6f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "dc4abd2e-ce88-4c90-8d3b-89c72be92b6f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/dc4abd2e-ce88-4c90-8d3b-89c72be92b6f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "dc4abd2e-ce88-4c90-8d3b-89c72be92b6f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/dc4abd2e-ce88-4c90-8d3b-89c72be92b6f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "dc4abd2e-ce88-4c90-8d3b-89c72be92b6f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/dc4abd2e-ce88-4c90-8d3b-89c72be92b6f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Fetch",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "dc4abd2e-ce88-4c90-8d3b-89c72be92b6f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/dc4abd2e-ce88-4c90-8d3b-89c72be92b6f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "dc4abd2e-ce88-4c90-8d3b-89c72be92b6f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/dc4abd2e-ce88-4c90-8d3b-89c72be92b6f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "dc4abd2e-ce88-4c90-8d3b-89c72be92b6f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/dc4abd2e-ce88-4c90-8d3b-89c72be92b6f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "dc4abd2e-ce88-4c90-8d3b-89c72be92b6f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/dc4abd2e-ce88-4c90-8d3b-89c72be92b6f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "190d8988-8522-49ce-83fc-66facfa851eb",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/190d8988-8522-49ce-83fc-66facfa851eb.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "190d8988-8522-49ce-83fc-66facfa851eb",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/190d8988-8522-49ce-83fc-66facfa851eb.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "190d8988-8522-49ce-83fc-66facfa851eb",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/190d8988-8522-49ce-83fc-66facfa851eb.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "190d8988-8522-49ce-83fc-66facfa851eb",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/190d8988-8522-49ce-83fc-66facfa851eb.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "190d8988-8522-49ce-83fc-66facfa851eb",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/190d8988-8522-49ce-83fc-66facfa851eb.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "918b14fe-8771-4756-9e42-918f9e2448e3",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/918b14fe-8771-4756-9e42-918f9e2448e3.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "918b14fe-8771-4756-9e42-918f9e2448e3",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/918b14fe-8771-4756-9e42-918f9e2448e3.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "b917bbc3-6a81-4421-a6c1-7c40f03825ce",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/b917bbc3-6a81-4421-a6c1-7c40f03825ce.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "ecd635c7-b8ba-4b55-92ff-e515ff349056",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/ecd635c7-b8ba-4b55-92ff-e515ff349056.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "ecd635c7-b8ba-4b55-92ff-e515ff349056",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/ecd635c7-b8ba-4b55-92ff-e515ff349056.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "aab6c4c1-14c4-40cb-8e1b-d8d6df85e1a8",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/aab6c4c1-14c4-40cb-8e1b-d8d6df85e1a8.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "aab6c4c1-14c4-40cb-8e1b-d8d6df85e1a8",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/aab6c4c1-14c4-40cb-8e1b-d8d6df85e1a8.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "aab6c4c1-14c4-40cb-8e1b-d8d6df85e1a8",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/aab6c4c1-14c4-40cb-8e1b-d8d6df85e1a8.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "aab6c4c1-14c4-40cb-8e1b-d8d6df85e1a8",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/aab6c4c1-14c4-40cb-8e1b-d8d6df85e1a8.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "aab6c4c1-14c4-40cb-8e1b-d8d6df85e1a8",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/aab6c4c1-14c4-40cb-8e1b-d8d6df85e1a8.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "987a5443-7497-4d9e-94fd-6d09eb631060",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/987a5443-7497-4d9e-94fd-6d09eb631060.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "987a5443-7497-4d9e-94fd-6d09eb631060",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/987a5443-7497-4d9e-94fd-6d09eb631060.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "9ea3dd7e-f350-4348-9927-0836f0cf70f7",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/9ea3dd7e-f350-4348-9927-0836f0cf70f7.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "9ea3dd7e-f350-4348-9927-0836f0cf70f7",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/9ea3dd7e-f350-4348-9927-0836f0cf70f7.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "9ea3dd7e-f350-4348-9927-0836f0cf70f7",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/9ea3dd7e-f350-4348-9927-0836f0cf70f7.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "9ea3dd7e-f350-4348-9927-0836f0cf70f7",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/9ea3dd7e-f350-4348-9927-0836f0cf70f7.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "9ea3dd7e-f350-4348-9927-0836f0cf70f7",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/9ea3dd7e-f350-4348-9927-0836f0cf70f7.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "9ea3dd7e-f350-4348-9927-0836f0cf70f7",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/9ea3dd7e-f350-4348-9927-0836f0cf70f7.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "18089cd8-777c-427c-bf95-003f5c9bbb7d",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/18089cd8-777c-427c-bf95-003f5c9bbb7d.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "18089cd8-777c-427c-bf95-003f5c9bbb7d",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/18089cd8-777c-427c-bf95-003f5c9bbb7d.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "18089cd8-777c-427c-bf95-003f5c9bbb7d",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/18089cd8-777c-427c-bf95-003f5c9bbb7d.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "18089cd8-777c-427c-bf95-003f5c9bbb7d",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/18089cd8-777c-427c-bf95-003f5c9bbb7d.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "18089cd8-777c-427c-bf95-003f5c9bbb7d",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/18089cd8-777c-427c-bf95-003f5c9bbb7d.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "18089cd8-777c-427c-bf95-003f5c9bbb7d",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/18089cd8-777c-427c-bf95-003f5c9bbb7d.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "330b5135-2918-4d3a-891c-5be0335378a7",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/330b5135-2918-4d3a-891c-5be0335378a7.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "132ca5a4-9b6d-4b43-996b-18b4d747dc02",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/132ca5a4-9b6d-4b43-996b-18b4d747dc02.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "132ca5a4-9b6d-4b43-996b-18b4d747dc02",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/132ca5a4-9b6d-4b43-996b-18b4d747dc02.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "321c190f-65b5-45da-a4dd-9f28ff9ec6ac",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/321c190f-65b5-45da-a4dd-9f28ff9ec6ac.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "3991223d-1555-43f8-a9f7-fa0c398e0715",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/3991223d-1555-43f8-a9f7-fa0c398e0715.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "3991223d-1555-43f8-a9f7-fa0c398e0715",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/3991223d-1555-43f8-a9f7-fa0c398e0715.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "3991223d-1555-43f8-a9f7-fa0c398e0715",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/3991223d-1555-43f8-a9f7-fa0c398e0715.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "3991223d-1555-43f8-a9f7-fa0c398e0715",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/3991223d-1555-43f8-a9f7-fa0c398e0715.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "dc6661e0-3ddd-4456-9621-bef905761a40",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/dc6661e0-3ddd-4456-9621-bef905761a40.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "9f26c915-8a14-47fa-a030-73e5d47b7c3a",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/9f26c915-8a14-47fa-a030-73e5d47b7c3a.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "9f26c915-8a14-47fa-a030-73e5d47b7c3a",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/9f26c915-8a14-47fa-a030-73e5d47b7c3a.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "9f26c915-8a14-47fa-a030-73e5d47b7c3a",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/9f26c915-8a14-47fa-a030-73e5d47b7c3a.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "8cc58a1b-0f1b-4271-911f-89ca923de45e",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/8cc58a1b-0f1b-4271-911f-89ca923de45e.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "8cc58a1b-0f1b-4271-911f-89ca923de45e",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/8cc58a1b-0f1b-4271-911f-89ca923de45e.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "8cc58a1b-0f1b-4271-911f-89ca923de45e",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/8cc58a1b-0f1b-4271-911f-89ca923de45e.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "8cc58a1b-0f1b-4271-911f-89ca923de45e",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/8cc58a1b-0f1b-4271-911f-89ca923de45e.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "47e30fed-2e7c-4a39-8972-d425ada07cab",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/47e30fed-2e7c-4a39-8972-d425ada07cab.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "47e30fed-2e7c-4a39-8972-d425ada07cab",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/47e30fed-2e7c-4a39-8972-d425ada07cab.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Fetch",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "c13bbc92-ba01-4c94-b250-51f1a1a52e2d",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/c13bbc92-ba01-4c94-b250-51f1a1a52e2d.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "eb2435c9-0d64-45df-926d-2ac7b8de8800",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/eb2435c9-0d64-45df-926d-2ac7b8de8800.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "eb2435c9-0d64-45df-926d-2ac7b8de8800",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/eb2435c9-0d64-45df-926d-2ac7b8de8800.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "11713125-9d24-409a-a9c7-345003a5cbb5",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/11713125-9d24-409a-a9c7-345003a5cbb5.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "11713125-9d24-409a-a9c7-345003a5cbb5",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/11713125-9d24-409a-a9c7-345003a5cbb5.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Web Search",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "11713125-9d24-409a-a9c7-345003a5cbb5",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/11713125-9d24-409a-a9c7-345003a5cbb5.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Fetch",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "11713125-9d24-409a-a9c7-345003a5cbb5",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/11713125-9d24-409a-a9c7-345003a5cbb5.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "a1de816b-3b17-4f42-825c-d0cd63acad87",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/a1de816b-3b17-4f42-825c-d0cd63acad87.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Write",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "a1de816b-3b17-4f42-825c-d0cd63acad87",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/a1de816b-3b17-4f42-825c-d0cd63acad87.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Write",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "a1de816b-3b17-4f42-825c-d0cd63acad87",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/a1de816b-3b17-4f42-825c-d0cd63acad87.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Bash",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "a1de816b-3b17-4f42-825c-d0cd63acad87",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/a1de816b-3b17-4f42-825c-d0cd63acad87.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "20e8a61e-35ff-41ca-9b8b-33d13a4fb048",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/20e8a61e-35ff-41ca-9b8b-33d13a4fb048.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "20e8a61e-35ff-41ca-9b8b-33d13a4fb048",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/20e8a61e-35ff-41ca-9b8b-33d13a4fb048.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "d0e402f1-b282-45d8-9d97-6fabb607d2e0",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/d0e402f1-b282-45d8-9d97-6fabb607d2e0.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "d0e402f1-b282-45d8-9d97-6fabb607d2e0",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/d0e402f1-b282-45d8-9d97-6fabb607d2e0.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "fe7f7f9a-43ed-48f8-a362-4d5fa836c3ec",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/fe7f7f9a-43ed-48f8-a362-4d5fa836c3ec.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "fe7f7f9a-43ed-48f8-a362-4d5fa836c3ec",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/fe7f7f9a-43ed-48f8-a362-4d5fa836c3ec.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "f7a26c67-298e-4589-a015-fbc3d3fb270a",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/f7a26c67-298e-4589-a015-fbc3d3fb270a.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "f7a26c67-298e-4589-a015-fbc3d3fb270a",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/f7a26c67-298e-4589-a015-fbc3d3fb270a.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "f7a26c67-298e-4589-a015-fbc3d3fb270a",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/f7a26c67-298e-4589-a015-fbc3d3fb270a.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "f7a26c67-298e-4589-a015-fbc3d3fb270a",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/f7a26c67-298e-4589-a015-fbc3d3fb270a.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "d28c519f-e957-47ec-8f5c-044d984dad58",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/d28c519f-e957-47ec-8f5c-044d984dad58.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "e4e393ab-d514-4182-b58d-46faee1f830b",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/e4e393ab-d514-4182-b58d-46faee1f830b.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "168c0a35-8b0a-4d61-afb9-3ec9bd4e95a7",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/168c0a35-8b0a-4d61-afb9-3ec9bd4e95a7.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "54d367fb-5148-4e8d-b0ed-93ad6e0f9079",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/54d367fb-5148-4e8d-b0ed-93ad6e0f9079.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "54d367fb-5148-4e8d-b0ed-93ad6e0f9079",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/54d367fb-5148-4e8d-b0ed-93ad6e0f9079.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "54d367fb-5148-4e8d-b0ed-93ad6e0f9079",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/54d367fb-5148-4e8d-b0ed-93ad6e0f9079.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "a72c341f-6c3c-4cb3-9b75-903d0b9c856a",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/a72c341f-6c3c-4cb3-9b75-903d0b9c856a.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "a72c341f-6c3c-4cb3-9b75-903d0b9c856a",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/a72c341f-6c3c-4cb3-9b75-903d0b9c856a.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "a72c341f-6c3c-4cb3-9b75-903d0b9c856a",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/a72c341f-6c3c-4cb3-9b75-903d0b9c856a.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "8d0342ee-5416-41ef-a281-50a2bc55d592",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/8d0342ee-5416-41ef-a281-50a2bc55d592.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "8d0342ee-5416-41ef-a281-50a2bc55d592",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/8d0342ee-5416-41ef-a281-50a2bc55d592.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "5487655b-23f1-4c69-ba7d-36f6806cf645",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/5487655b-23f1-4c69-ba7d-36f6806cf645.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "5487655b-23f1-4c69-ba7d-36f6806cf645",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/5487655b-23f1-4c69-ba7d-36f6806cf645.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "5487655b-23f1-4c69-ba7d-36f6806cf645",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/5487655b-23f1-4c69-ba7d-36f6806cf645.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "5487655b-23f1-4c69-ba7d-36f6806cf645",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/5487655b-23f1-4c69-ba7d-36f6806cf645.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "5487655b-23f1-4c69-ba7d-36f6806cf645",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/5487655b-23f1-4c69-ba7d-36f6806cf645.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "5182085d-a488-4845-a737-d65c73dc72cd",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/5182085d-a488-4845-a737-d65c73dc72cd.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "5182085d-a488-4845-a737-d65c73dc72cd",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/5182085d-a488-4845-a737-d65c73dc72cd.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "0847db3e-ed24-46e4-9d53-6e78c0eabfa0",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/0847db3e-ed24-46e4-9d53-6e78c0eabfa0.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "0847db3e-ed24-46e4-9d53-6e78c0eabfa0",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/0847db3e-ed24-46e4-9d53-6e78c0eabfa0.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "0847db3e-ed24-46e4-9d53-6e78c0eabfa0",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/0847db3e-ed24-46e4-9d53-6e78c0eabfa0.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "bd6288fe-b7b0-4a17-afba-44e92881e39f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/bd6288fe-b7b0-4a17-afba-44e92881e39f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "bd6288fe-b7b0-4a17-afba-44e92881e39f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/bd6288fe-b7b0-4a17-afba-44e92881e39f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "bd6288fe-b7b0-4a17-afba-44e92881e39f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/bd6288fe-b7b0-4a17-afba-44e92881e39f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "bd6288fe-b7b0-4a17-afba-44e92881e39f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/bd6288fe-b7b0-4a17-afba-44e92881e39f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "f80bc70f-0523-409c-b8b0-c7ed053ce95c",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/f80bc70f-0523-409c-b8b0-c7ed053ce95c.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "16c9dc16-1621-4c2b-a1ed-2dd109d68c70",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/16c9dc16-1621-4c2b-a1ed-2dd109d68c70.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "9de8ffda-ade6-471c-b78d-8a3f7f5201f8",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/9de8ffda-ade6-471c-b78d-8a3f7f5201f8.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "a9931030-961e-40b6-af74-1520a0054f1f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/a9931030-961e-40b6-af74-1520a0054f1f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "a9931030-961e-40b6-af74-1520a0054f1f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/a9931030-961e-40b6-af74-1520a0054f1f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "60a4dfbe-6115-4753-a394-19df926c1692",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/60a4dfbe-6115-4753-a394-19df926c1692.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "60a4dfbe-6115-4753-a394-19df926c1692",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/60a4dfbe-6115-4753-a394-19df926c1692.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "14543819-200c-430e-9e2f-ba1e60c299a4",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/14543819-200c-430e-9e2f-ba1e60c299a4.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "08d19b32-68ae-4638-ab9f-ba6e4847319b",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/08d19b32-68ae-4638-ab9f-ba6e4847319b.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "b0c1806b-d2be-46ba-b4fd-33a63f6db54f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/b0c1806b-d2be-46ba-b4fd-33a63f6db54f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "f372cb76-d199-4dc7-bff8-ffb73cf49634",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/f372cb76-d199-4dc7-bff8-ffb73cf49634.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "5afcfacc-ff82-462e-8f40-996a412d1eaa",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/5afcfacc-ff82-462e-8f40-996a412d1eaa.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "7b92233d-dbe9-42d1-b85f-3d5e6e3b5374",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/7b92233d-dbe9-42d1-b85f-3d5e6e3b5374.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "7b92233d-dbe9-42d1-b85f-3d5e6e3b5374",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/7b92233d-dbe9-42d1-b85f-3d5e6e3b5374.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "7b92233d-dbe9-42d1-b85f-3d5e6e3b5374",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/7b92233d-dbe9-42d1-b85f-3d5e6e3b5374.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "c75eacee-6cc0-4cd0-9cb4-c7d7754bd018",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/c75eacee-6cc0-4cd0-9cb4-c7d7754bd018.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "9ed73794-88a4-4d3a-9bf7-01f35dee1670",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/9ed73794-88a4-4d3a-9bf7-01f35dee1670.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "ba600bfe-8496-4157-82c2-48e353eac13b",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/ba600bfe-8496-4157-82c2-48e353eac13b.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "aa196878-33fe-43d1-924f-c5880b53f326",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/aa196878-33fe-43d1-924f-c5880b53f326.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "aa196878-33fe-43d1-924f-c5880b53f326",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/aa196878-33fe-43d1-924f-c5880b53f326.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "aa196878-33fe-43d1-924f-c5880b53f326",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/aa196878-33fe-43d1-924f-c5880b53f326.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "aa196878-33fe-43d1-924f-c5880b53f326",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/aa196878-33fe-43d1-924f-c5880b53f326.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "b87c709a-50a3-46e4-b799-2a1fac5b5723",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/b87c709a-50a3-46e4-b799-2a1fac5b5723.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "3b37938a-44a4-4c8e-a9fe-3b1bd386e4b0",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/3b37938a-44a4-4c8e-a9fe-3b1bd386e4b0.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "3b37938a-44a4-4c8e-a9fe-3b1bd386e4b0",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/3b37938a-44a4-4c8e-a9fe-3b1bd386e4b0.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "3b37938a-44a4-4c8e-a9fe-3b1bd386e4b0",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/3b37938a-44a4-4c8e-a9fe-3b1bd386e4b0.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "b66666c3-5615-4214-8dbc-55cc573a1ce4",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/b66666c3-5615-4214-8dbc-55cc573a1ce4.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "b66666c3-5615-4214-8dbc-55cc573a1ce4",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/b66666c3-5615-4214-8dbc-55cc573a1ce4.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "3a0eae68-e263-4184-b7b4-dae2c787ceea",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/3a0eae68-e263-4184-b7b4-dae2c787ceea.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "ac342121-ed27-4b47-bcef-876600d78192",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/ac342121-ed27-4b47-bcef-876600d78192.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "ac342121-ed27-4b47-bcef-876600d78192",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/ac342121-ed27-4b47-bcef-876600d78192.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "ac342121-ed27-4b47-bcef-876600d78192",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/ac342121-ed27-4b47-bcef-876600d78192.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "ac342121-ed27-4b47-bcef-876600d78192",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/ac342121-ed27-4b47-bcef-876600d78192.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "ac342121-ed27-4b47-bcef-876600d78192",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/ac342121-ed27-4b47-bcef-876600d78192.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "ac342121-ed27-4b47-bcef-876600d78192",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/ac342121-ed27-4b47-bcef-876600d78192.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "ac342121-ed27-4b47-bcef-876600d78192",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/ac342121-ed27-4b47-bcef-876600d78192.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "47b13e09-e154-41dd-a5af-42c68d6fccba",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/47b13e09-e154-41dd-a5af-42c68d6fccba.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "47b13e09-e154-41dd-a5af-42c68d6fccba",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/47b13e09-e154-41dd-a5af-42c68d6fccba.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "dafd724c-b343-450f-b34d-800759803ad4",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/dafd724c-b343-450f-b34d-800759803ad4.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "77b55085-e147-46d3-9f57-39d5fc1ee90f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/77b55085-e147-46d3-9f57-39d5fc1ee90f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "8eab5042-6944-4073-8296-066fe25a9f2c",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/8eab5042-6944-4073-8296-066fe25a9f2c.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "6683a95c-b36f-4136-9362-6e6f52edad9f",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/6683a95c-b36f-4136-9362-6e6f52edad9f.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "fe042bce-7898-4606-8ecb-f9794c5d0b02",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/fe042bce-7898-4606-8ecb-f9794c5d0b02.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "fe042bce-7898-4606-8ecb-f9794c5d0b02",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/fe042bce-7898-4606-8ecb-f9794c5d0b02.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "fe042bce-7898-4606-8ecb-f9794c5d0b02",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/fe042bce-7898-4606-8ecb-f9794c5d0b02.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "b3d7675d-6d57-4432-9892-fe3e5154a5e3",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/b3d7675d-6d57-4432-9892-fe3e5154a5e3.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "b3d7675d-6d57-4432-9892-fe3e5154a5e3",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/b3d7675d-6d57-4432-9892-fe3e5154a5e3.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "b3d7675d-6d57-4432-9892-fe3e5154a5e3",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/b3d7675d-6d57-4432-9892-fe3e5154a5e3.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "7291d9e1-d1cd-4238-8785-7a7acc336aec",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/7291d9e1-d1cd-4238-8785-7a7acc336aec.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Read",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "7291d9e1-d1cd-4238-8785-7a7acc336aec",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/7291d9e1-d1cd-4238-8785-7a7acc336aec.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "7291d9e1-d1cd-4238-8785-7a7acc336aec",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/7291d9e1-d1cd-4238-8785-7a7acc336aec.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "7291d9e1-d1cd-4238-8785-7a7acc336aec",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/7291d9e1-d1cd-4238-8785-7a7acc336aec.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "7291d9e1-d1cd-4238-8785-7a7acc336aec",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/7291d9e1-d1cd-4238-8785-7a7acc336aec.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Read",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "7291d9e1-d1cd-4238-8785-7a7acc336aec",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/7291d9e1-d1cd-4238-8785-7a7acc336aec.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "7291d9e1-d1cd-4238-8785-7a7acc336aec",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-mqtt-monitor/7291d9e1-d1cd-4238-8785-7a7acc336aec.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-mqtt-monitor",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "82e2e8cb-ad97-4afb-ab11-3f003ee3b9be",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-stats2mqtt/82e2e8cb-ad97-4afb-ab11-3f003ee3b9be.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-stats2mqtt",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  }
+]

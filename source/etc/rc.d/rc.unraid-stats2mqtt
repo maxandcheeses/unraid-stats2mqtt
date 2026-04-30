@@ -1,0 +1,78 @@
+#!/bin/bash
+# =============================================================================
+# /etc/rc.d/rc.unraid-stats2mqtt
+# SysV-style init script for unraid-stats2mqtt daemon
+# =============================================================================
+
+DAEMON_SCRIPT="/usr/local/emhttp/plugins/unraid-stats2mqtt/scripts/mqtt_monitor.sh"
+PID_FILE="/var/run/unraid-stats2mqtt.pid"
+LOG_FILE="/var/log/unraid-stats2mqtt.log"
+NAME="unraid-stats2mqtt"
+
+start() {
+  if [ -f "$PID_FILE" ]; then
+    local pid
+    pid=$(cat "$PID_FILE")
+    if kill -0 "$pid" 2>/dev/null; then
+      echo "$NAME is already running (PID $pid)"
+      return 0
+    fi
+    rm -f "$PID_FILE"
+  fi
+
+  echo "Starting $NAME..."
+  nohup bash "$DAEMON_SCRIPT" >> "$LOG_FILE" 2>&1 &
+  echo $! > "$PID_FILE"
+  echo "$NAME started (PID $!)"
+}
+
+stop() {
+  if [ -f "$PID_FILE" ]; then
+    local pid
+    pid=$(cat "$PID_FILE")
+    if kill -0 "$pid" 2>/dev/null; then
+      echo "Stopping $NAME (PID $pid)..."
+      kill "$pid"
+      local count=0
+      while kill -0 "$pid" 2>/dev/null && [ $count -lt 10 ]; do
+        sleep 1
+        count=$(( count + 1 ))
+      done
+      kill -9 "$pid" 2>/dev/null || true
+    fi
+    rm -f "$PID_FILE"
+    echo "$NAME stopped."
+  else
+    echo "$NAME is not running."
+  fi
+}
+
+restart() {
+  stop
+  sleep 1
+  start
+}
+
+status() {
+  if [ -f "$PID_FILE" ]; then
+    local pid
+    pid=$(cat "$PID_FILE")
+    if kill -0 "$pid" 2>/dev/null; then
+      echo "$NAME is running (PID $pid)"
+      return 0
+    fi
+  fi
+  echo "$NAME is not running"
+  return 1
+}
+
+case "$1" in
+  start)   start   ;;
+  stop)    stop    ;;
+  restart) restart ;;
+  status)  status  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+    exit 1
+    ;;
+esac

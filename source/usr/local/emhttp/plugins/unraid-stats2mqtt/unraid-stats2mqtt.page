@@ -1,0 +1,953 @@
+Menu="Utilities"
+Title="Stats to MQTT"
+Icon="unraid-mqtt.png"
+---
+<?php
+/* unraid-stats2mqtt - Settings Page */
+
+$plugin   = "unraid-stats2mqtt";
+$cfg_file = "/boot/config/plugins/{$plugin}/config.cfg";
+$cert_dir = "/boot/config/plugins/{$plugin}/certs";
+$version_file = "/usr/local/emhttp/plugins/{$plugin}/version";
+$version = file_exists($version_file) ? trim(file_get_contents($version_file)) : 'unknown';
+
+function load_cfg($file) {
+  $cfg = [];
+  if (!file_exists($file)) return $cfg;
+  foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+    if ($line[0] === '#' || strpos($line, '=') === false) continue;
+    list($k, $v) = explode('=', $line, 2);
+    $cfg[trim($k)] = trim($v, " \"\t\n\r");
+  }
+  return $cfg;
+}
+
+$cfg = load_cfg($cfg_file);
+
+$pid_file = '/var/run/unraid-stats2mqtt.pid';
+$daemon_running = false;
+if (file_exists($pid_file)) {
+  $pid = trim(file_get_contents($pid_file));
+  $daemon_running = file_exists("/proc/{$pid}");
+}
+
+function sel($cfg, $key, $val) { return ($cfg[$key] ?? '') === $val ? 'selected' : ''; }
+function opt($cfg, $key)       { return ($cfg[$key] ?? '') === 'true' ? 'selected' : ''; }
+function esc($val)             { return htmlspecialchars($val ?? '', ENT_QUOTES); }
+
+$tls_protocols = ['mqtts', 'wss'];
+$show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
+?>
+<style>
+  :root {
+    --umm-accent: #f57900;
+    --umm-success: #4caf50;
+    --umm-error: #f44336;
+    --umm-border: var(--color-border, var(--border-color, #ccc));
+    --umm-muted: var(--color-text-muted, #888);
+  }
+
+  body { font-family: 'Open Sans', Arial, sans-serif; background: transparent; margin: 0; }
+
+  .umm-page { max-width: 1100px; }
+  .umm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
+  @media (max-width: 900px) { .umm-grid { grid-template-columns: 1fr; } }
+
+  /* Sections — flat, no card box */
+  .umm-card { padding: 0 0 24px; margin-bottom: 0; }
+  .umm-card h3 {
+    margin: 0 0 0; font-size: 13px; font-weight: 700;
+    color: var(--umm-accent); text-transform: uppercase; letter-spacing: 0.6px;
+    padding: 16px 0 6px; border-bottom: 2px solid var(--umm-accent);
+  }
+
+  /* Form rows — Unraid native style */
+  .umm-row {
+    display: flex; align-items: baseline; margin-bottom: 0; gap: 0; flex-wrap: wrap;
+    border-bottom: 1px solid var(--umm-border);
+    padding: 9px 0;
+  }
+  .umm-row:last-child { border-bottom: none; }
+  .umm-row > label {
+    width: clamp(140px, 30%, 200px); font-size: 13px; font-weight: 700;
+    flex-shrink: 0; text-align: right; padding-right: 16px; box-sizing: border-box;
+  }
+  .umm-row > label::after { content: ':'; }
+  .umm-row input[type="text"],
+  .umm-row input[type="password"],
+  .umm-row input[type="number"],
+  .umm-row select {
+    background-color: transparent; border: none; border-bottom: 1px solid var(--umm-border); border-radius: 0;
+    color: inherit; padding: 2px 24px 2px 0;
+    font-size: 13px; flex: 1; min-width: 0; width: 100%;
+  }
+  .umm-row input:focus, .umm-row select:focus { outline: none; border-bottom-color: var(--umm-accent); }
+  .umm-row input[type="file"] { font-size: 12px; opacity: 0.7; flex: 1; min-width: 0; }
+
+  /* Button-only rows (no label, no underline) */
+  .umm-row-actions {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 10px 0 4px clamp(140px, 30%, 200px);
+  }
+
+  /* All selects: remove native chrome, Unraid-style filled triangle */
+  select {
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath fill='%23888' d='M0 0l4 5 4-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 4px center;
+    background-size: 7px 4px;
+    padding-right: 20px !important;
+    cursor: pointer;
+  }
+  .umm-row select { flex: 1; width: 100%; max-width: none; }
+
+  /* Compact inline dropdown (status bar, log header) */
+  .umm-select-sm {
+    background-color: transparent;
+    border: none; border-bottom: 1px solid var(--umm-border); border-radius: 0;
+    color: inherit;
+    padding: 2px 20px 2px 0 !important;
+    font-size: 12px; font-weight: 500; width: auto;
+  }
+  .umm-select-sm:focus { outline: none; border-bottom-color: var(--umm-accent); }
+
+  /* Per-metric rows */
+  .umm-metric-row {
+    display: grid; grid-template-columns: minmax(120px, 22%) 1fr minmax(80px, 15%) minmax(80px, 15%) minmax(70px, 10%);
+    align-items: start; gap: 8px; margin-bottom: 0; font-size: 13px;
+    border-bottom: 1px solid var(--umm-border); padding: 7px 0;
+  }
+  .umm-metric-row:last-child { border-bottom: none; }
+  .umm-metric-row label { font-weight: 700; font-size: 13px; }
+  .umm-metric-row select,
+  .umm-metric-row input[type="number"] {
+    background-color: transparent; border: none; border-bottom: 1px solid var(--umm-border); border-radius: 0;
+    color: inherit; padding: 2px 20px 2px 0; width: 100%; box-sizing: border-box;
+    font-size: 13px;
+  }
+  .umm-metric-row select:focus, .umm-metric-row input:focus { outline: none; border-bottom-color: var(--umm-accent); }
+  @media (max-width: 700px) {
+    .umm-metric-row {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+    .umm-metric-row label { grid-column: 1 / -1; margin-bottom: 2px; }
+  }
+
+  /* Status bar — minimal, just a horizontal strip */
+  .umm-status-bar {
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--umm-border);
+    padding: 10px 0 14px; margin-bottom: 16px;
+  }
+  .umm-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .umm-dot.running { background: var(--umm-success); box-shadow: 0 0 5px var(--umm-success); }
+  .umm-dot.stopped { background: var(--umm-error); }
+  .umm-status-text { font-size: 13px; flex: 1; }
+
+  .umm-btn {
+    padding: 6px 16px; border: none; border-image: none; border-radius: 4px;
+    cursor: pointer; font-size: 13px; font-weight: 600; transition: opacity 0.15s;
+    background-image: none; box-shadow: none; outline: none;
+  }
+  .umm-btn:hover { opacity: 0.85; }
+  .umm-btn-primary { background: var(--umm-accent); color: #fff; }
+  .umm-btn-success { background: var(--umm-success); color: #fff; }
+  .umm-btn-danger  { background: var(--umm-error); color: #fff; }
+  .umm-btn-muted   { background: var(--color-button, #666); color: inherit; }
+  .umm-btn-outline-danger { background: transparent !important; color: var(--umm-error) !important; border: 2px solid var(--umm-error) !important; }
+  .umm-btn-sm      { padding: 3px 10px; font-size: 11px; }
+
+  .umm-cert-badge { font-size: 11px; padding: 2px 8px; border-radius: 12px; }
+  .umm-cert-badge.set  { color: var(--umm-success); border: 1px solid var(--umm-success); }
+  .umm-cert-badge.none { opacity: 0.6; border: 1px solid currentColor; }
+
+  .umm-toast {
+    position: fixed; top: 20px; right: 20px; z-index: 9999;
+    padding: 10px 18px; border-radius: 6px; font-size: 13px; font-weight: 500;
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  }
+  .umm-toast.show { opacity: 1; }
+  .umm-toast.success { border: 1px solid var(--umm-success); color: var(--umm-success); }
+  .umm-toast.error   { border: 1px solid var(--umm-error);   color: var(--umm-error);   }
+
+  .umm-section-full { }
+  .umm-hint { font-size: 11px; color: var(--umm-muted); margin-top: 3px; }
+  .tls-section.hidden { display: none; }
+
+  .umm-log-box {
+    background: var(--color-input, var(--input-background, inherit));
+    border: 1px solid var(--umm-border); border-radius: 4px;
+    padding: 12px; font-family: monospace; font-size: 11px;
+    opacity: 0.85; max-height: 200px; overflow: auto; white-space: pre; word-break: break-all;
+    box-sizing: border-box; width: 100%;
+  }
+
+  .umm-dim { opacity: 0.35; }
+
+  .umm-metric-group {
+    grid-column: 1 / -1; padding: 12px 0 2px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; opacity: 0.45; border-bottom: none;
+  }
+
+  /* Metric table header row */
+  .umm-metric-header {
+    display: grid; grid-template-columns: minmax(120px, 22%) 1fr minmax(80px, 15%) minmax(80px, 15%) minmax(70px, 10%);
+    gap: 8px; font-size: 11px; color: var(--umm-muted);
+    padding: 4px 0 6px; border-bottom: 2px solid var(--umm-border); margin-bottom: 0;
+  }
+
+  .umm-view-toggle {
+    display: inline-flex; border: 1px solid var(--umm-border);
+    border-radius: 4px; overflow: hidden; margin-bottom: 16px;
+  }
+  .umm-view-toggle button {
+    padding: 8px 14px; border: none; border-image: none; background: transparent; cursor: pointer;
+    font-size: 12px; font-weight: 600; color: inherit; opacity: 0.55; transition: all 0.15s;
+    flex: 1; margin: 0;
+  }
+  .umm-view-toggle button.active {
+    background: var(--umm-accent); color: #fff; opacity: 1;
+  }
+
+  .umm-yaml-editor {
+    width: 100%; min-height: clamp(260px, 40vh, 480px); box-sizing: border-box;
+    background: var(--color-input, var(--input-background, inherit));
+    border: 1px solid var(--umm-border); border-radius: 4px;
+    padding: 14px; font-family: monospace; font-size: clamp(11px, 1.2vw, 13px); color: inherit;
+    resize: vertical; line-height: 1.6;
+  }
+  .umm-yaml-editor:focus { outline: none; border-color: var(--umm-accent); }
+
+  @media (max-width: 600px) {
+    .umm-status-bar { flex-wrap: wrap; }
+    .umm-view-toggle { width: 100%; }
+    .umm-view-toggle button { flex: 1; }
+    .umm-row > label { width: 100%; text-align: left; padding-right: 0; }
+    .umm-row-actions { padding-left: 0; }
+  }
+</style>
+
+<div id="umm-toast" class="umm-toast"></div>
+
+<div class="umm-page">
+<!-- Status bar -->
+<div class="umm-status-bar">
+  <div class="umm-dot <?= $daemon_running ? 'running' : 'stopped' ?>"></div>
+  <div class="umm-status-text">
+    <strong>Daemon:</strong> <span id="umm-daemon-status"><?= $daemon_running ? 'Running' : 'Stopped' ?></span>
+    <?php if ($daemon_running && file_exists($pid_file)): ?>
+      &nbsp;<span id="umm-daemon-pid" style="color:var(--umm-muted);font-size:12px">(PID <?= esc(trim(file_get_contents($pid_file))) ?>)</span>
+    <?php else: ?>
+      <span id="umm-daemon-pid"></span>
+    <?php endif; ?>
+  </div>
+  <button type="button" id="umm-daemon-btn" class="umm-btn <?= $daemon_running ? 'umm-btn-danger' : 'umm-btn-success' ?> umm-btn-sm"
+    onclick="ummDaemonToggle('<?= $daemon_running ? 'daemon_stop' : 'daemon_start' ?>')">
+    <?= $daemon_running ? 'Stop' : 'Start' ?>
+  </button>
+  <button type="button" class="umm-btn umm-btn-muted umm-btn-sm"
+    onclick="ummDaemonToggle('daemon_restart')">
+    &#8635; Restart
+  </button>
+  <span style="font-size:12px;color:var(--umm-muted);margin-left:8px">Plugin:</span>
+  <select id="umm-enabled-select" class="umm-select-sm"
+    onchange="ummSetEnabled(this.value)">
+    <option value="true"  <?= ($cfg['PLUGIN_ENABLED'] ?? 'true') === 'true'  ? 'selected' : '' ?>>Enabled</option>
+    <option value="false" <?= ($cfg['PLUGIN_ENABLED'] ?? 'true') === 'false' ? 'selected' : '' ?>>Disabled</option>
+  </select>
+  <span style="font-size:12px;color:var(--umm-muted);margin-left:auto">version <?= esc($version) ?></span>
+</div>
+
+<!-- View toggle -->
+<div class="umm-view-toggle">
+  <button type="button" id="umm-btn-form" class="active" onclick="ummSwitchView('form')">&#9776; Form</button><button type="button" id="umm-btn-yaml" onclick="ummSwitchView('yaml')">&#9776; YAML</button>
+</div>
+
+<!-- Main settings form — saved via Unraid's built-in /update.php -->
+<form method="POST" action="/update.php" target="progressFrame" onsubmit="return ummSaveAndRestart(event)">
+  <input type="hidden" name="#file" value="/boot/config/plugins/unraid-stats2mqtt/config.cfg">
+  <input type="hidden" name="PLUGIN_ENABLED" id="umm-plugin-enabled-field" value="<?= esc($cfg['PLUGIN_ENABLED'] ?? 'true') ?>">
+
+<div id="umm-form-view">
+<div class="umm-grid">
+
+  <!-- MQTT Connection -->
+  <div class="umm-card">
+    <h3>&#128246; MQTT Connection</h3>
+
+    <div class="umm-row">
+      <label>Protocol</label>
+      <select name="MQTT_PROTOCOL" id="proto_select" onchange="updateTLS()">
+        <option value="mqtt"  <?= sel($cfg,'MQTT_PROTOCOL','mqtt')  ?>>MQTT (plain)</option>
+        <option value="mqtts" <?= sel($cfg,'MQTT_PROTOCOL','mqtts') ?>>MQTTS (TLS)</option>
+        <option value="ws"    <?= sel($cfg,'MQTT_PROTOCOL','ws')    ?>>WS (WebSocket)</option>
+        <option value="wss"   <?= sel($cfg,'MQTT_PROTOCOL','wss')   ?>>WSS (WebSocket TLS)</option>
+      </select>
+    </div>
+
+    <div class="umm-row">
+      <label>Broker Host</label>
+      <input type="text" name="MQTT_HOST" value="<?= esc($cfg['MQTT_HOST'] ?? 'localhost') ?>" placeholder="192.168.1.x or hostname">
+    </div>
+
+    <div class="umm-row">
+      <label>Port</label>
+      <input type="number" name="MQTT_PORT" value="<?= esc($cfg['MQTT_PORT'] ?? '1883') ?>" min="1" max="65535" style="max-width:100px">
+    </div>
+
+    <div class="umm-row">
+      <label>Username</label>
+      <input type="text" name="MQTT_USER" value="<?= esc($cfg['MQTT_USER'] ?? '') ?>" placeholder="optional">
+    </div>
+
+    <div class="umm-row">
+      <label>Password</label>
+      <input type="password" name="MQTT_PASS" value="<?= esc($cfg['MQTT_PASS'] ?? '') ?>" placeholder="optional">
+    </div>
+
+    <div class="umm-row-actions">
+      <button type="button" class="umm-btn umm-btn-muted umm-btn-sm"
+        onclick="ummTestConnection(this)">
+        &#128279; Test Connection
+      </button>
+      <span id="umm-conn-result" style="font-size:12px;font-weight:600;opacity:0;transition:opacity 0.3s"></span>
+      <button type="button" class="umm-btn umm-btn-muted umm-btn-sm"
+        onclick="ummAction({action:'test'})">
+        &#9654; Send Test Message
+      </button>
+    </div>
+  </div>
+
+  <!-- MQTT Plugin Identity -->
+  <div class="umm-card">
+    <h3>&#128268; MQTT Plugin</h3>
+    <div class="umm-row">
+      <label>Device Name</label>
+      <div style="flex:1;min-width:0">
+        <input type="text" name="MQTT_DEVICE_NAME" value="<?= esc($cfg['MQTT_DEVICE_NAME'] ?? 'Unraid Server') ?>" style="width:100%;box-sizing:border-box">
+        <div class="umm-hint">Friendly name shown in Home Assistant.</div>
+      </div>
+    </div>
+
+    <div class="umm-row">
+      <label>Device ID</label>
+      <div style="flex:1;min-width:0">
+        <input type="text" name="MQTT_DEVICE_ID" id="mqtt_device_id" value="<?= esc($cfg['MQTT_DEVICE_ID'] ?? 'unraid') ?>" placeholder="unraid" style="width:100%;box-sizing:border-box">
+        <div class="umm-hint">HA unique device identifier. Alphanumeric + underscore only.</div>
+      </div>
+    </div>
+
+    <div class="umm-row">
+      <label>Base Topic</label>
+      <div style="flex:1;min-width:0">
+        <input type="text" name="MQTT_BASE_TOPIC" value="<?= esc($cfg['MQTT_BASE_TOPIC'] ?? 'unraid') ?>" style="width:100%;box-sizing:border-box">
+        <div class="umm-hint">Base topic for publishing messages (e.g. <code>unraid</code>).</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /grid -->
+
+<!-- Home Assistant -->
+<div class="umm-section-full">
+  <div class="umm-card">
+    <h3>&#127968; Home Assistant</h3>
+
+    <div class="umm-row">
+      <label>Watch HA Status</label>
+      <div style="flex:1;min-width:0">
+        <select name="HA_WATCH_STATUS" style="width:100%;box-sizing:border-box">
+          <option value="true"  <?= sel($cfg,'HA_WATCH_STATUS','true')  ?>>Enabled</option>
+          <option value="false" <?= sel($cfg,'HA_WATCH_STATUS','false') ?>>Disabled</option>
+        </select>
+        <div class="umm-hint">Re-publishes discovery when HA restarts.</div>
+      </div>
+    </div>
+
+    <div class="umm-row">
+      <label>HA Status Topic</label>
+      <div style="flex:1;min-width:0">
+        <input type="text" name="HA_STATUS_TOPIC" value="<?= esc($cfg['HA_STATUS_TOPIC'] ?? 'homeassistant/status') ?>" style="width:100%;box-sizing:border-box">
+        <div class="umm-hint">Topic HA publishes its birth/will to.</div>
+      </div>
+    </div>
+
+    <div class="umm-row">
+      <label>Discovery Topic</label>
+      <div style="flex:1;min-width:0">
+        <input type="text" name="HA_DISCOVERY_TOPIC" value="<?= esc($cfg['HA_DISCOVERY_TOPIC'] ?? 'homeassistant') ?>" style="width:100%;box-sizing:border-box">
+        <div class="umm-hint">HA MQTT discovery prefix (e.g. <code>homeassistant</code>).</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TLS / Certificates (full width) -->
+<div class="umm-section-full tls-section <?= $show_tls ? '' : 'hidden' ?>" id="tls_section">
+  <div class="umm-card">
+    <h3>&#128274; TLS / Certificate Settings</h3>
+
+    <div class="umm-row">
+      <label>Skip TLS Verify</label>
+      <select name="MQTT_TLS_INSECURE">
+        <option value="false" <?= sel($cfg,'MQTT_TLS_INSECURE','false') ?>>Verify (recommended)</option>
+        <option value="true"  <?= sel($cfg,'MQTT_TLS_INSECURE','true')  ?>>Skip verify (--insecure)</option>
+      </select>
+    </div>
+
+    <!-- Cert status (read-only display) -->
+    <?php
+    $certs = [
+      ['CA Certificate',     'MQTT_CA_CERT',     'ca_cert_file',     '.crt,.pem,.cer'],
+      ['Client Certificate', 'MQTT_CLIENT_CERT', 'client_cert_file', '.crt,.pem,.cer'],
+      ['Client Private Key', 'MQTT_CLIENT_KEY',  'client_key_file',  '.key,.pem'],
+    ];
+    foreach ($certs as list($label, $cfg_key, $field, $accept)):
+      $is_set = !empty($cfg[$cfg_key]) && file_exists($cfg[$cfg_key]);
+    ?>
+    <div class="umm-row">
+      <label><?= $label ?></label>
+      <span class="umm-cert-badge <?= $is_set ? 'set' : 'none' ?>"><?= $is_set ? '&#10003; Installed' : 'Not set' ?></span>
+      <?php if ($is_set): ?>
+        <button type="button" class="umm-btn umm-btn-danger umm-btn-sm"
+          onclick="ummAction({action:'clear_cert',cert_key:'<?= $cfg_key ?>'})">Remove</button>
+      <?php else: ?>
+        <button type="button" class="umm-btn umm-btn-muted umm-btn-sm"
+          onclick="document.getElementById('upload_<?= $field ?>').click()">Upload</button>
+        <input type="file" id="upload_<?= $field ?>" accept="<?= $accept ?>"
+          style="display:none" onchange="ummUploadCert('<?= $field ?>', this)">
+      <?php endif; ?>
+    </div>
+    <?php endforeach; ?>
+  </div>
+</div>
+
+<!-- Per-Metric Publish Rules (full width) -->
+<div class="umm-section-full">
+  <div class="umm-card">
+    <h3>&#128200; Per-Metric Publish Rules</h3>
+
+    <div class="umm-metric-header">
+      <span>Metric</span><span>Publish Mode</span><span>Interval (s)</span><span>Expire After (s)</span><span>Retain</span>
+    </div>
+
+    <?php
+    // Each entry: [label, mode_key, int_key, default_int, exp_key, default_mode, hint, retain_key]
+    // A string entry inserts a group header row.
+    $metric_groups = [
+
+      '— var.ini',
+
+      ['Array Status',
+       'PUBLISH_ARRAY_STATUS', 'INTERVAL_ARRAY_STATUS', 30,   'EXPIRE_ARRAY_STATUS', '',
+       'mdState — STARTED / STOPPED / DEGRADED', 'RETAIN_ARRAY_STATUS'],
+
+      ['Array Summary',
+       'PUBLISH_ARRAY_SUMMARY', 'INTERVAL_ARRAY_SUMMARY', 60, 'EXPIRE_ARRAY_SUMMARY', '',
+       'Disk counts (total, disabled, invalid, missing) + array capacity / used / free', 'RETAIN_ARRAY_SUMMARY'],
+
+      ['Cache Pool',
+       'PUBLISH_CACHE', 'INTERVAL_CACHE', 60,                  'EXPIRE_CACHE', '',
+       'Cache state, device count, capacity / used / free', 'RETAIN_CACHE'],
+
+      ['Parity Check',
+       'PUBLISH_PARITY', 'INTERVAL_PARITY', 60,                'EXPIRE_PARITY', '',
+       'Status, progress %, speed (KB/s) while a parity check or sync is running', 'RETAIN_PARITY'],
+
+      ['Disk Rebuild',
+       'PUBLISH_REBUILD', 'INTERVAL_REBUILD', 30,              'EXPIRE_REBUILD', '',
+       'Status, progress %, speed (KB/s), ETA (min) during a disk rebuild', 'RETAIN_REBUILD'],
+
+      ['System Info',
+       'PUBLISH_SYSTEM_INFO', 'INTERVAL_SYSTEM_INFO', 3600,    'EXPIRE_SYSTEM_INFO', '',
+       'Unraid OS version + server name / description / model (Identification sensor)', 'RETAIN_SYSTEM_INFO'],
+
+      ['System Uptime',
+       'PUBLISH_UPTIME', 'INTERVAL_UPTIME', 60,                'EXPIRE_UPTIME', '',
+       'System uptime in seconds (from /proc/uptime)', 'RETAIN_UPTIME'],
+
+      '— disks.ini',
+
+      ['Disk Temperatures',
+       'PUBLISH_DISK_TEMPS', 'INTERVAL_DISK_TEMPS', 60,        'EXPIRE_DISK_TEMPS', '',
+       '°C per disk (excludes standby / not-present disks)', 'RETAIN_DISK_TEMPS'],
+
+      ['Disk States',
+       'PUBLISH_DISK_STATES', 'INTERVAL_DISK_STATES', 30,      'EXPIRE_DISK_STATES', '',
+       'ACTIVE / STANDBY / DISABLED per disk', 'RETAIN_DISK_STATES'],
+
+      ['Disk Filesystem Usage',
+       'PUBLISH_DISK_USAGE', 'INTERVAL_DISK_USAGE', 300,       'EXPIRE_DISK_USAGE', '',
+       'Filesystem size / free / used (GB) per disk — reads fsSize, fsFree, fsUsed', 'RETAIN_DISK_USAGE'],
+
+      ['Disk Errors',
+       'PUBLISH_DISK_ERRORS', 'INTERVAL_DISK_ERRORS', 300,     'EXPIRE_DISK_ERRORS', '',
+       'Error count per disk', 'RETAIN_DISK_ERRORS'],
+
+      ['Disk Details (JSON)',
+       'PUBLISH_DISK_JSON', 'INTERVAL_DISK_JSON', 300,         'EXPIRE_DISK_JSON', '',
+       'All raw disks.ini fields per disk as a single JSON sensor (complements individual sensors)', 'RETAIN_DISK_JSON'],
+
+      ['SMART Data',
+       'PUBLISH_SMART', 'INTERVAL_SMART', 300,                 'EXPIRE_SMART', '',
+       'Health, power hours/cycles, reallocated/pending/uncorrectable sectors, CRC errors, load cycles; NVMe: wear %, spare %, unsafe shutdowns, media errors — reads /var/local/emhttp/smart/*', 'RETAIN_SMART'],
+
+      ['Read/Write Speeds',
+       'PUBLISH_RW_SPEEDS', 'INTERVAL_RW_SPEEDS', 30,          'EXPIRE_RW_SPEEDS', '',
+       'KB/s read and write per disk — delta from /proc/diskstats', 'RETAIN_RW_SPEEDS'],
+
+      '— monitor.ini',
+
+      ['Monitor',
+       'PUBLISH_MONITOR', 'INTERVAL_MONITOR', 60,              'EXPIRE_MONITOR', '',
+       'Array errors, parity history, flash drive state, Docker disk %, per-disk usage % and alert color', 'RETAIN_MONITOR'],
+
+      '— /proc/net/dev',
+
+      ['Network RX/TX Speeds',
+       'PUBLISH_NETWORK', 'INTERVAL_NETWORK', 30,              'EXPIRE_NETWORK', '',
+       'KB/s receive and transmit per network interface (lo excluded)', 'RETAIN_NETWORK'],
+
+      '— shares.ini',
+
+      ['Share Details (JSON)',
+       'PUBLISH_SHARES', 'INTERVAL_SHARES', 300,               'EXPIRE_SHARES', '',
+       'All raw shares.ini fields per share as a single JSON sensor (shareSize, shareFree, shareUsed, etc.)', 'RETAIN_SHARES'],
+
+    ];
+
+    foreach ($metric_groups as $item):
+      if (is_string($item)):
+    ?>
+    <div class="umm-metric-row">
+      <div class="umm-metric-group" style="grid-column:1/-1"><?= $item ?></div>
+    </div>
+    <?php
+        continue;
+      endif;
+      list($label, $mode_key, $int_key, $default_int, $exp_key, $default_mode, $hint, $retain_key) = $item;
+      $mode     = $cfg[$mode_key]    ?? $default_mode;
+      $interval = $cfg[$int_key]     ?? $default_int;
+      $expire   = $cfg[$exp_key]     ?? 0;
+      $retain   = $cfg[$retain_key]  ?? 'true';
+      $dim      = ($mode === 'onchange' || $mode === '') ? 'umm-dim' : '';
+    ?>
+    <div class="umm-metric-row">
+      <label title="<?= esc($hint) ?>"><?= htmlspecialchars($label) ?></label>
+      <span>
+        <select name="<?= $mode_key ?>" onchange="toggleInterval(this,'<?= $int_key ?>')">
+          <option value=""         <?= sel($cfg,$mode_key,'')         ?>>Disabled</option>
+          <option value="interval" <?= sel($cfg,$mode_key,'interval') ?>>Interval only</option>
+          <option value="onchange" <?= sel($cfg,$mode_key,'onchange') ?>>On change only</option>
+          <option value="both"     <?= sel($cfg,$mode_key,'both')     ?>>Both</option>
+        </select>
+        <?php if ($hint): ?>
+          <div class="umm-hint"><?= htmlspecialchars($hint) ?></div>
+        <?php endif; ?>
+      </span>
+      <span>
+        <input type="number" name="<?= $int_key ?>" id="int_<?= $int_key ?>"
+          value="<?= esc($interval) ?>" min="5" max="86400"
+          class="<?= $dim ?>">
+        <div class="umm-hint">secs</div>
+      </span>
+      <span>
+        <input type="number" name="<?= $exp_key ?>"
+          value="<?= esc($expire) ?>" min="0" max="86400">
+        <div class="umm-hint">0 = off</div>
+      </span>
+      <span>
+        <select name="<?= $retain_key ?>">
+          <option value="true"  <?= $retain === 'true'  ? 'selected' : '' ?>>Yes</option>
+          <option value="false" <?= $retain === 'false' ? 'selected' : '' ?>>No</option>
+        </select>
+      </span>
+    </div>
+    <?php endforeach; ?>
+  </div>
+</div>
+
+<!-- Save -->
+</div><!-- /umm-form-view -->
+
+<!-- YAML editor view -->
+<div id="umm-yaml-view" style="display:none">
+  <textarea id="umm-yaml-textarea" class="umm-yaml-editor" spellcheck="false"></textarea>
+</div>
+
+<div style="margin-top:8px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+  <span style="font-size:0.85em;color:var(--color-text-muted,#888)">&#8505; Settings are applied after the server restarts.</span>
+  <button type="submit" id="umm-save-btn" class="umm-btn umm-btn-primary">&#128190; Save Settings</button>
+</div>
+
+<!-- Log viewer -->
+<div class="umm-section-full">
+  <div class="umm-card">
+    <h3 style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>&#128196; Recent Log</span>
+      <span style="display:flex;align-items:center;gap:8px">
+        <label style="font-size:11px;opacity:0.6">Lines</label>
+        <select id="umm-log-lines" class="umm-select-sm" onchange="ummRefreshLogs()">
+          <option value="40">40</option>
+          <option value="100">100</option>
+          <option value="250">250</option>
+          <option value="500">500</option>
+        </select>
+        <button type="button" class="umm-btn umm-btn-outline-danger umm-btn-sm" style="white-space:nowrap;flex-shrink:0"
+          onclick="ummClearLogs()">&#10005; Clear Logs</button>
+      </span>
+    </h3>
+    <div class="umm-log-box" id="umm-log-box"><?php
+      $log = '/var/log/unraid-stats2mqtt.log';
+      if (file_exists($log)) {
+        echo htmlspecialchars(implode('', array_slice(file($log), -40)));
+      } else {
+        echo "Log file not found yet. Start the daemon to generate logs.";
+      }
+    ?></div>
+  </div>
+</div>
+
+</form>
+
+</div><!-- /umm-page -->
+
+<script>
+var UMM_EXEC = '/plugins/unraid-stats2mqtt/include/exec.php';
+var UMM_CSRF = '<?= htmlspecialchars($var['csrf_token'] ?? '', ENT_QUOTES) ?>';
+
+function ummToast(msg, type) {
+  var t = document.getElementById('umm-toast');
+  t.textContent = msg;
+  t.className = 'umm-toast ' + type + ' show';
+  setTimeout(function() { t.classList.remove('show'); }, 4000);
+}
+
+function ummLogAppend(msg) {
+  var box = document.querySelector('.umm-log-box');
+  if (!box) return;
+  var ts = new Date().toLocaleTimeString();
+  box.textContent += '\n[' + ts + '] ' + msg;
+  box.scrollTop = box.scrollHeight;
+}
+
+var UMM_NO_RELOAD = { test: true, test_connection: true, set_enabled: true, clear_logs: true };
+var UMM_LOG_ONLY  = { test: true, test_connection: true };
+
+function ummIsErr(msg) {
+  var m = msg.toLowerCase();
+  return m.indexOf('fail') !== -1 || m.indexOf('error') !== -1 || m.indexOf('not found') !== -1;
+}
+
+function ummPost(params, onSuccess, onError) {
+  params['csrf_token'] = UMM_CSRF;
+  fetch(UMM_EXEC, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(params),
+    credentials: 'same-origin'
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.text();
+  })
+  .then(onSuccess)
+  .catch(function(err) { if (onError) onError(err); else ummToast('Request failed: ' + err, 'error'); });
+}
+
+function ummDaemonToggle(action) {
+  var statusEl = document.getElementById('umm-daemon-status');
+  var pidEl    = document.getElementById('umm-daemon-pid');
+  var btn      = document.getElementById('umm-daemon-btn');
+  if (btn) btn.disabled = true;
+  if (statusEl) statusEl.textContent = action === 'daemon_start' ? 'Starting…' : 'Stopping…';
+  if (pidEl) pidEl.textContent = '';
+  ummPost({ action: action }, function(msg) {
+    var isErr = ummIsErr(msg);
+    if (isErr) {
+      if (statusEl) statusEl.textContent = msg;
+      if (btn) btn.disabled = false;
+    } else {
+      setTimeout(function() { window.location.reload(); }, 3000);
+    }
+  });
+}
+
+function ummAction(data) {
+  ummPost(data, function(msg) {
+    if (UMM_LOG_ONLY[data.action]) {
+      ummLogAppend(msg);
+      return;
+    }
+    var isErr = ummIsErr(msg);
+    ummToast(msg, isErr ? 'error' : 'success');
+    if (!isErr && !UMM_NO_RELOAD[data.action]) setTimeout(function() { window.location.reload(); }, 1500);
+  });
+}
+
+function ummSetEnabled(val) {
+  var hidden = document.getElementById('umm-plugin-enabled-field');
+  if (hidden) hidden.value = val;
+  ummPost({ action: 'set_enabled', enabled: val }, function(msg) {
+    ummToast(msg, ummIsErr(msg) ? 'error' : 'success');
+  });
+}
+
+function ummUploadCert(field, input) {
+  if (!input.files || !input.files[0]) return;
+  var fd = new FormData();
+  fd.append('action', 'upload_cert');
+  fd.append('csrf_token', UMM_CSRF);
+  fd.append(field, input.files[0]);
+  fetch(UMM_EXEC, { method: 'POST', body: fd, credentials: 'same-origin' })
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    })
+    .then(function(msg) {
+      ummToast(msg, ummIsErr(msg) ? 'error' : 'success');
+      setTimeout(function() { window.location.reload(); }, 1500);
+    })
+    .catch(function(err) { ummToast('Upload failed: ' + err, 'error'); });
+}
+
+function ummSanitizeDeviceId() {
+  var el = document.getElementById('mqtt_device_id');
+  if (el) el.value = el.value.toLowerCase().replace(/[^a-z0-9_]/g, '_');
+}
+
+function ummSaveAndRestart(e) {
+  ummSanitizeDeviceId();
+  var enabled = (document.getElementById('umm-plugin-enabled-field') || {}).value ?? 'true';
+  var action = enabled === 'false' ? 'daemon_stop' : 'daemon_restart';
+  setTimeout(function() {
+    fetch(UMM_EXEC, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ action: action, csrf_token: UMM_CSRF }),
+      credentials: 'same-origin'
+    });
+    setTimeout(function() { window.location.reload(); }, 2000);
+  }, 1200);
+  return true;
+}
+
+function updateTLS() {
+  var proto = document.getElementById('proto_select').value;
+  var tls   = document.getElementById('tls_section');
+  tls.classList.toggle('hidden', proto !== 'mqtts' && proto !== 'wss');
+}
+
+function ummRefreshLogs() {
+  var lines = document.getElementById('umm-log-lines').value;
+  ummPost({ action: 'get_logs', lines: lines }, function(text) {
+    var box = document.getElementById('umm-log-box');
+    if (box) { box.textContent = text; box.scrollTop = box.scrollHeight; }
+  });
+}
+
+function ummClearLogs() {
+  ummPost({ action: 'clear_logs' }, function(msg) {
+    var isErr = ummIsErr(msg);
+    ummToast(msg, isErr ? 'error' : 'success');
+    if (!isErr) {
+      var box = document.getElementById('umm-log-box');
+      if (box) box.textContent = '';
+    }
+  });
+}
+
+function toggleInterval(sel, intKey) {
+  var inp = document.getElementById('int_' + intKey);
+  if (inp) inp.classList.toggle('umm-dim', sel.value === 'onchange' || sel.value === '');
+}
+
+// ── View toggle: Form ↔ YAML ──────────────────────────────────────────────
+var UMM_VIEW = 'form';
+
+var UMM_YAML_FIELDS = [
+  // Connection
+  'MQTT_PROTOCOL','MQTT_HOST','MQTT_PORT','MQTT_USER','MQTT_PASS',
+  'MQTT_TLS_INSECURE',
+  // Identity
+  'MQTT_DEVICE_NAME','MQTT_DEVICE_ID','MQTT_BASE_TOPIC',
+  // Home Assistant
+  'HA_WATCH_STATUS','HA_STATUS_TOPIC','HA_DISCOVERY_TOPIC',
+  // var.ini — array & cache
+  'PUBLISH_ARRAY_STATUS','INTERVAL_ARRAY_STATUS','EXPIRE_ARRAY_STATUS','RETAIN_ARRAY_STATUS',
+  'PUBLISH_ARRAY_SUMMARY','INTERVAL_ARRAY_SUMMARY','EXPIRE_ARRAY_SUMMARY','RETAIN_ARRAY_SUMMARY',
+  'PUBLISH_CACHE','INTERVAL_CACHE','EXPIRE_CACHE','RETAIN_CACHE',
+  'PUBLISH_PARITY','INTERVAL_PARITY','EXPIRE_PARITY','RETAIN_PARITY',
+  'PUBLISH_REBUILD','INTERVAL_REBUILD','EXPIRE_REBUILD','RETAIN_REBUILD',
+  'PUBLISH_SYSTEM_INFO','INTERVAL_SYSTEM_INFO','EXPIRE_SYSTEM_INFO','RETAIN_SYSTEM_INFO',
+  'PUBLISH_UPTIME','INTERVAL_UPTIME','EXPIRE_UPTIME','RETAIN_UPTIME',
+  // disks.ini — per-disk
+  'PUBLISH_DISK_TEMPS','INTERVAL_DISK_TEMPS','EXPIRE_DISK_TEMPS','RETAIN_DISK_TEMPS',
+  'PUBLISH_DISK_STATES','INTERVAL_DISK_STATES','EXPIRE_DISK_STATES','RETAIN_DISK_STATES',
+  'PUBLISH_DISK_USAGE','INTERVAL_DISK_USAGE','EXPIRE_DISK_USAGE','RETAIN_DISK_USAGE',
+  'PUBLISH_DISK_ERRORS','INTERVAL_DISK_ERRORS','EXPIRE_DISK_ERRORS','RETAIN_DISK_ERRORS',
+  'PUBLISH_DISK_JSON','INTERVAL_DISK_JSON','EXPIRE_DISK_JSON','RETAIN_DISK_JSON',
+  'PUBLISH_SMART','INTERVAL_SMART','EXPIRE_SMART','RETAIN_SMART',
+  'PUBLISH_RW_SPEEDS','INTERVAL_RW_SPEEDS','EXPIRE_RW_SPEEDS','RETAIN_RW_SPEEDS',
+  // monitor.ini
+  'PUBLISH_MONITOR','INTERVAL_MONITOR','EXPIRE_MONITOR','RETAIN_MONITOR',
+  // network
+  'PUBLISH_NETWORK','INTERVAL_NETWORK','EXPIRE_NETWORK','RETAIN_NETWORK',
+  // shares.ini
+  'PUBLISH_SHARES','INTERVAL_SHARES','EXPIRE_SHARES','RETAIN_SHARES',
+  // plugin state
+  'PLUGIN_ENABLED'
+];
+
+function ummFormToYaml() {
+  var sections = [
+    { comment: '# Plugin', fields: ['PLUGIN_ENABLED'] },
+    { comment: '# MQTT Connection', fields: ['MQTT_PROTOCOL','MQTT_HOST','MQTT_PORT','MQTT_USER','MQTT_PASS','MQTT_TLS_INSECURE'] },
+    { comment: '# Device Identity', fields: ['MQTT_DEVICE_NAME','MQTT_DEVICE_ID','MQTT_BASE_TOPIC'] },
+    { comment: '# Home Assistant', fields: ['HA_WATCH_STATUS','HA_STATUS_TOPIC','HA_DISCOVERY_TOPIC'] },
+    { comment: '# Metrics — var.ini', fields: [
+      'PUBLISH_ARRAY_STATUS','INTERVAL_ARRAY_STATUS','EXPIRE_ARRAY_STATUS','RETAIN_ARRAY_STATUS',
+      'PUBLISH_ARRAY_SUMMARY','INTERVAL_ARRAY_SUMMARY','EXPIRE_ARRAY_SUMMARY','RETAIN_ARRAY_SUMMARY',
+      'PUBLISH_CACHE','INTERVAL_CACHE','EXPIRE_CACHE','RETAIN_CACHE',
+      'PUBLISH_PARITY','INTERVAL_PARITY','EXPIRE_PARITY','RETAIN_PARITY',
+      'PUBLISH_REBUILD','INTERVAL_REBUILD','EXPIRE_REBUILD','RETAIN_REBUILD',
+      'PUBLISH_SYSTEM_INFO','INTERVAL_SYSTEM_INFO','EXPIRE_SYSTEM_INFO','RETAIN_SYSTEM_INFO',
+      'PUBLISH_UPTIME','INTERVAL_UPTIME','EXPIRE_UPTIME','RETAIN_UPTIME',
+    ]},
+    { comment: '# Metrics — disks.ini', fields: [
+      'PUBLISH_DISK_TEMPS','INTERVAL_DISK_TEMPS','EXPIRE_DISK_TEMPS','RETAIN_DISK_TEMPS',
+      'PUBLISH_DISK_STATES','INTERVAL_DISK_STATES','EXPIRE_DISK_STATES','RETAIN_DISK_STATES',
+      'PUBLISH_DISK_USAGE','INTERVAL_DISK_USAGE','EXPIRE_DISK_USAGE','RETAIN_DISK_USAGE',
+      'PUBLISH_DISK_ERRORS','INTERVAL_DISK_ERRORS','EXPIRE_DISK_ERRORS','RETAIN_DISK_ERRORS',
+      'PUBLISH_DISK_JSON','INTERVAL_DISK_JSON','EXPIRE_DISK_JSON','RETAIN_DISK_JSON',
+      'PUBLISH_SMART','INTERVAL_SMART','EXPIRE_SMART','RETAIN_SMART',
+      'PUBLISH_RW_SPEEDS','INTERVAL_RW_SPEEDS','EXPIRE_RW_SPEEDS','RETAIN_RW_SPEEDS',
+    ]},
+    { comment: '# Metrics — monitor.ini', fields: [
+      'PUBLISH_MONITOR','INTERVAL_MONITOR','EXPIRE_MONITOR','RETAIN_MONITOR',
+    ]},
+    { comment: '# Metrics — network', fields: [
+      'PUBLISH_NETWORK','INTERVAL_NETWORK','EXPIRE_NETWORK','RETAIN_NETWORK',
+    ]},
+    { comment: '# Metrics — shares.ini', fields: [
+      'PUBLISH_SHARES','INTERVAL_SHARES','EXPIRE_SHARES','RETAIN_SHARES',
+    ]},
+  ];
+  var lines = ['# unraid-stats2mqtt config'];
+  sections.forEach(function(sec) {
+    lines.push('');
+    lines.push(sec.comment);
+    sec.fields.forEach(function(name) {
+      var el = document.querySelector('[name="' + name + '"]');
+      if (!el) return;
+      var val = el.value || '';
+      lines.push(name + ': "' + val.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"');
+    });
+  });
+  return lines.join('\n');
+}
+
+function ummYamlToForm(yaml) {
+  var map = {};
+  yaml.split('\n').forEach(function(line) {
+    line = line.trim();
+    if (!line || line[0] === '#') return;
+    var m = line.match(/^([A-Z0-9_]+):\s*"?(.*?)"?\s*$/);
+    if (m) map[m[1]] = m[2].replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+  });
+  UMM_YAML_FIELDS.forEach(function(name) {
+    var el = document.querySelector('[name="' + name + '"]');
+    if (el && map[name] !== undefined) el.value = map[name];
+  });
+  // Re-sync dependent UI
+  updateTLS();
+}
+
+function ummSwitchView(view) {
+  if (view === UMM_VIEW) return;
+  if (view === 'yaml') {
+    document.getElementById('umm-yaml-textarea').value = ummFormToYaml();
+    document.getElementById('umm-form-view').style.display = 'none';
+    document.getElementById('umm-yaml-view').style.display  = '';
+    document.getElementById('umm-btn-form').classList.remove('active');
+    document.getElementById('umm-btn-yaml').classList.add('active');
+  } else {
+    var yaml = document.getElementById('umm-yaml-textarea').value;
+    ummYamlToForm(yaml);
+    document.getElementById('umm-yaml-view').style.display  = 'none';
+    document.getElementById('umm-form-view').style.display  = '';
+    document.getElementById('umm-btn-yaml').classList.remove('active');
+    document.getElementById('umm-btn-form').classList.add('active');
+  }
+  UMM_VIEW = view;
+}
+
+// Override save to handle YAML mode
+(function() {
+  var form = document.querySelector('form');
+  if (!form) return;
+  var origSubmit = form.onsubmit;
+  form.addEventListener('submit', function(e) {
+    if (UMM_VIEW !== 'yaml') return; // let ummSaveAndRestart handle form mode
+    e.preventDefault();
+    var yaml = document.getElementById('umm-yaml-textarea').value;
+    ummPost({ action: 'save_yaml', yaml: yaml }, function(msg) {
+      var isErr = ummIsErr(msg);
+      ummToast(msg, isErr ? 'error' : 'success');
+      if (!isErr) {
+        var yaml = document.getElementById('umm-yaml-textarea').value;
+        var enabledMatch = yaml.match(/^PLUGIN_ENABLED:\s*"?(\w+)"?/m);
+        var yamlEnabled = enabledMatch ? enabledMatch[1] : 'true';
+        var yamlAction = yamlEnabled === 'false' ? 'daemon_stop' : 'daemon_restart';
+        fetch(UMM_EXEC, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ action: yamlAction, csrf_token: UMM_CSRF }),
+          credentials: 'same-origin'
+        });
+        setTimeout(function() { window.location.reload(); }, 2500);
+      }
+    });
+  }, true);
+})();
+
+function ummTestConnection(btn) {
+  var lbl = document.getElementById('umm-conn-result');
+  if (btn) btn.disabled = true;
+  if (lbl) { lbl.textContent = '…'; lbl.style.color = 'inherit'; lbl.style.opacity = '1'; }
+  ummPost({ action: 'test_connection' }, function(msg) {
+    if (btn) btn.disabled = false;
+    if (!lbl) return;
+    var isErr = ummIsErr(msg);
+    lbl.textContent = isErr ? '✗ ' + msg : '✓ Connected';
+    lbl.style.color = isErr ? 'var(--umm-error)' : 'var(--umm-success)';
+    lbl.style.opacity = '1';
+    ummLogAppend(msg);
+    clearTimeout(lbl._hideTimer);
+    lbl._hideTimer = setTimeout(function() { lbl.style.opacity = '0'; }, 5000);
+  });
+}
+
+(function() {
+  var _logPoll = null;
+  function startLogPoll() {
+    if (_logPoll) return;
+    _logPoll = setInterval(ummRefreshLogs, 3000);
+  }
+  function stopLogPoll() {
+    clearInterval(_logPoll);
+    _logPoll = null;
+  }
+  var box = document.getElementById('umm-log-box');
+  if (box) {
+    box.addEventListener('mouseenter', stopLogPoll);
+    box.addEventListener('mouseleave', startLogPoll);
+  }
+  startLogPoll();
+})();
+</script>
