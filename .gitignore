@@ -19,6 +19,7 @@ source/usr/local/emhttp/plugins/unraid-stats2mqtt/version
 
 # Claude logs
 .claude/logs/
+.claude/data/last_prompt.txt
 logs/
 
 # Editor
