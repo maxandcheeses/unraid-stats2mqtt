@@ -18,7 +18,7 @@ dist/
 source/usr/local/emhttp/plugins/unraid-stats2mqtt/version
 
 # Claude logs
-.claude/logs/prompts.json
+.claude/logs/
 
 # Editor
 .vscode/
