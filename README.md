@@ -112,6 +112,8 @@ Certificates are stored in:
 /boot/config/plugins/unraid-stats2mqtt/certs/
 ```
 
+![Settings page](docs/settings.png)
+
 ### Key Settings
 
 | Setting | Description | Default |
