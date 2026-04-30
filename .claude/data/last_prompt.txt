@@ -1,1 +1,1 @@
-yes
+when in yaml view, the save button doesn't save the current yaml

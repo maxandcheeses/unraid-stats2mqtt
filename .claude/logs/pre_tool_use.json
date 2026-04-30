@@ -1696,3 +1696,13 @@
 {"timestamp": "2026-04-30T16:27:32.118902+00:00", "tool_name": "Bash", "decision": "allow", "reason": "", "command_preview": "head -20 /Users/maxwell/Documents/development/unraid-stats2mqtt/source/usr/local/emhttp/plugins/unraid-stats2mqtt/README.md"}
 {"timestamp": "2026-04-30T16:27:57.772589+00:00", "tool_name": "Read", "decision": "allow", "reason": "", "command_preview": null}
 {"timestamp": "2026-04-30T16:27:59.975156+00:00", "tool_name": "Edit", "decision": "allow", "reason": "", "command_preview": null}
+{"timestamp": "2026-04-30T16:30:51.924089+00:00", "tool_name": "Bash", "decision": "allow", "reason": "", "command_preview": "grep -n \"yaml\\|save\\|Save\\|YAML\" /Users/maxwell/Documents/development/unraid-stats2mqtt/source/usr/local/emhttp/plugins/unraid-stats2mqtt/unraid-stats2mqtt.page | head -60"}
+{"timestamp": "2026-04-30T16:30:54.457025+00:00", "tool_name": "Read", "decision": "allow", "reason": "", "command_preview": null}
+{"timestamp": "2026-04-30T16:30:58.134478+00:00", "tool_name": "Read", "decision": "allow", "reason": "", "command_preview": null}
+{"timestamp": "2026-04-30T16:31:02.780678+00:00", "tool_name": "Read", "decision": "allow", "reason": "", "command_preview": null}
+{"timestamp": "2026-04-30T16:31:08.803607+00:00", "tool_name": "Bash", "decision": "allow", "reason": "", "command_preview": "grep -n \"function ummPost\\|ummIsErr\" /Users/maxwell/Documents/development/unraid-stats2mqtt/source/usr/local/emhttp/plugins/unraid-stats2mqtt/unraid-stats2mqtt.page"}
+{"timestamp": "2026-04-30T16:31:11.208990+00:00", "tool_name": "Read", "decision": "allow", "reason": "", "command_preview": null}
+{"timestamp": "2026-04-30T16:31:14.133741+00:00", "tool_name": "Bash", "decision": "allow", "reason": "", "command_preview": "grep -n \"save_yaml\\|save_form\\|save\" /Users/maxwell/Documents/development/unraid-stats2mqtt/source/usr/local/emhttp/plugins/unraid-stats2mqtt/include/exec.php | head -30"}
+{"timestamp": "2026-04-30T16:31:16.960057+00:00", "tool_name": "Read", "decision": "allow", "reason": "", "command_preview": null}
+{"timestamp": "2026-04-30T16:31:33.665459+00:00", "tool_name": "Read", "decision": "allow", "reason": "", "command_preview": null}
+{"timestamp": "2026-04-30T16:31:38.270879+00:00", "tool_name": "Edit", "decision": "allow", "reason": "", "command_preview": null}

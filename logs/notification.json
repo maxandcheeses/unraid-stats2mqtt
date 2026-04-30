@@ -1318,5 +1318,13 @@
     "hook_event_name": "Notification",
     "message": "Claude is waiting for your input",
     "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "82e2e8cb-ad97-4afb-ab11-3f003ee3b9be",
+    "transcript_path": "/Users/maxwell/.claude/projects/-Users-maxwell-Documents-development-unraid-stats2mqtt/82e2e8cb-ad97-4afb-ab11-3f003ee3b9be.jsonl",
+    "cwd": "/Users/maxwell/Documents/development/unraid-stats2mqtt",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
   }
 ]

@@ -722,6 +722,7 @@ function ummSanitizeDeviceId() {
 }
 
 function ummSaveAndRestart(e) {
+  if (UMM_VIEW === 'yaml') { e.preventDefault(); return false; }
   ummSanitizeDeviceId();
   var enabled = (document.getElementById('umm-plugin-enabled-field') || {}).value ?? 'true';
   var action = enabled === 'false' ? 'daemon_stop' : 'daemon_restart';
