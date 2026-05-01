@@ -538,7 +538,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
        'PUBLISH_NETWORK', 'INTERVAL_NETWORK', 30,              'EXPIRE_NETWORK', '',
        'KB/s receive and transmit per network interface (lo excluded)', 'RETAIN_NETWORK'],
 
-      '— shares.ini',
+      '— Shares',
 
       ['Share Details (JSON)',
        'PUBLISH_SHARES', 'INTERVAL_SHARES', 300,               'EXPIRE_SHARES', '',
