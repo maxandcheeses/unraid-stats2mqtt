@@ -127,6 +127,14 @@ main() {
     _publish_metric "system_info" "$sysinfo_mode" "$sysinfo_interval" "$sysinfo_expire" publish_system_info \
       "awk '/^version=/{print}' /var/local/emhttp/var.ini 2>/dev/null | md5sum" "$sysinfo_retain"
 
+    # ── var.ini: Update Available ──────────────────────────────────────────────
+    local update_mode="${PUBLISH_UPDATE_AVAILABLE:-}"
+    local update_interval="${INTERVAL_UPDATE_AVAILABLE:-3600}"
+    local update_expire; update_expire=$(resolve_expire "${EXPIRE_UPDATE_AVAILABLE:-0}" "$update_interval")
+    local update_retain="${RETAIN_UPDATE_AVAILABLE:-true}"
+    _publish_metric "update_available" "$update_mode" "$update_interval" "$update_expire" publish_update_available \
+      "cat /tmp/unraidcheck/result.json 2>/dev/null | md5sum" "$update_retain"
+
     # ── disks.ini: Disk Temperatures ──────────────────────────────────────────
     local temp_mode="${PUBLISH_DISK_TEMPS:-}"
     local temp_interval="${INTERVAL_DISK_TEMPS:-60}"
@@ -222,6 +230,7 @@ main() {
       is_enabled "$par_mode"          && publish_parity        "$par_expire"      "$par_retain"
       is_enabled "$rebuild_mode"      && publish_rebuild       "$rebuild_expire"  "$rebuild_retain"
       is_enabled "$sysinfo_mode"      && publish_system_info   "$sysinfo_expire"  "$sysinfo_retain"
+      is_enabled "$update_mode"       && publish_update_available "$update_expire" "$update_retain"
       is_enabled "$temp_mode"         && publish_disk_temps    "$temp_expire"     "$temp_retain"
       is_enabled "$ds_mode"           && publish_disk_states   "$ds_expire"       "$ds_retain"
       is_enabled "$disk_usage_mode"   && publish_disk_usage    "$disk_usage_expire" "$disk_usage_retain"

@@ -18,6 +18,10 @@ on:
         description: 'Build number override'
         required: false
         type: string
+      changelog:
+        description: 'Release notes (markdown). Leave blank to auto-generate from commits.'
+        required: false
+        type: string
 
 jobs:
   release:
@@ -73,6 +77,24 @@ jobs:
           git diff --cached --quiet || git commit -m "ci: update version and MD5 for ${VERSION} [skip ci]"
           git push
 
+      - name: Build release notes
+        id: notes
+        run: |
+          if [ -n "${{ inputs.changelog }}" ]; then
+            NOTES="${{ inputs.changelog }}"
+          else
+            LAST_TAG=$(git tag --sort=-creatordate | head -1)
+            if [ -n "$LAST_TAG" ]; then
+              NOTES=$(git log "${LAST_TAG}..HEAD" --pretty=format:"- %s" --no-merges | grep -v '^\- ci:' || true)
+            else
+              NOTES=$(git log --pretty=format:"- %s" --no-merges | grep -v '^\- ci:' || true)
+            fi
+            [ -z "$NOTES" ] && NOTES="No changes listed."
+          fi
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -82,5 +104,5 @@ jobs:
           gh release delete "$VERSION" --yes 2>/dev/null || true
           gh release create "$VERSION" \
             --title "${VERSION}" \
-            --notes "Automated release for ${VERSION}" \
+            --notes "${{ steps.notes.outputs.notes }}" \
             "$TXZ"

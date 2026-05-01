@@ -1,5 +1,5 @@
 #!/bin/bash
-# SOURCE: var.ini
+# SOURCE: var.ini, /tmp/unraidcheck/result.json
 # Fields: mdState, mdNumDisks, mdNumDisabled, mdNumInvalid, mdNumMissing,
 #         mdCapacity, mdFree, mdResync*, cacheState, cacheNumDevices,
 #         cacheFsSize, cacheFsFree, cacheFsUsed, version
@@ -216,6 +216,31 @@ publish_rebuild() {
   mqtt_publish "${base}_progress/state" "$pct"    "$retain"
   mqtt_publish "${base}_speed/state"    "$speed"  "$retain"
   mqtt_publish "${base}_eta/state"      "$eta"    "$retain"
+}
+
+publish_update_available() {
+  local expire="${1:-0}" retain="${2:-true}"
+  local check_file="/tmp/unraidcheck/result.json"
+  local state_topic="${MQTT_BASE_TOPIC}/binary_sensor/${MQTT_TOPIC}_update_available/state"
+  local attr_topic="${MQTT_BASE_TOPIC}/binary_sensor/${MQTT_TOPIC}_update_available/attributes"
+
+  ha_register_binary "update_available" "Unraid Update Available" "$state_topic" "update" "package-up" "$expire" "$attr_topic"
+
+  if [ ! -f "$check_file" ]; then
+    mqtt_publish "$state_topic" "OFF" "$retain"
+    mqtt_publish "$attr_topic" "{}" "$retain"
+    return
+  fi
+
+  local result; result=$(cat "$check_file")
+  local is_newer; is_newer=$(printf '%s' "$result" | grep -o '"isNewer":[^,}]*' | cut -d: -f2 | tr -d ' "')
+
+  if [ "$is_newer" = "true" ]; then
+    mqtt_publish "$state_topic" "ON" "$retain"
+  else
+    mqtt_publish "$state_topic" "OFF" "$retain"
+  fi
+  mqtt_publish "$attr_topic" "$result" "$retain"
 }
 
 publish_system_info() {

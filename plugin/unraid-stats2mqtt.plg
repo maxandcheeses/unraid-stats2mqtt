@@ -10,7 +10,7 @@
   <!ENTITY txzURL    "https://github.com/maxandcheeses/unraid-stats2mqtt/releases/download/&version;/unraid-stats2mqtt-&version;-x86_64-1.txz">
 ]>
 
-<PLUGIN name="&name;" author="Maxwell Luong" version="&version;" pluginURL="&pluginURL;" launch="&launch;" icon="images/unraid-mqtt-bw.png" support="https://forums.unraid.net" WebUI="/Settings/unraid-stats2mqtt">
+<PLUGIN name="&name;" author="Maxwell Luong" version="&version;" pluginURL="&pluginURL;" launch="&launch;" icon="images/unraid-mqtt-bw.png" support="https://forums.unraid.net/topic/198517-plugin-stats-to-mqtt-publish-unraid-metrics-to-mqtt-with-home-assistant-auto-discovery/" WebUI="/Settings/unraid-stats2mqtt">
 
 <CHANGES>
 ###2024.01.01
