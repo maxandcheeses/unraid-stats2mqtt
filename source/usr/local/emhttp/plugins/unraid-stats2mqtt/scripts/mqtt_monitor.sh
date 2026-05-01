@@ -20,12 +20,12 @@ source "$SCRIPT_DIR/lib/helpers.sh"
 source "$SCRIPT_DIR/lib/ha_discovery.sh"
 source "$SCRIPT_DIR/lib/loop.sh"
 source "$SCRIPT_DIR/lib/api.sh"
-source "$SCRIPT_DIR/metrics/var_ini.sh"
-source "$SCRIPT_DIR/metrics/disks_ini.sh"
-source "$SCRIPT_DIR/metrics/monitor_ini.sh"
-source "$SCRIPT_DIR/metrics/network.sh"
-source "$SCRIPT_DIR/metrics/shares_ini.sh"
-source "$SCRIPT_DIR/metrics/system.sh"
+source "$SCRIPT_DIR/collectors/var_ini.sh"
+source "$SCRIPT_DIR/collectors/disks_ini.sh"
+source "$SCRIPT_DIR/collectors/monitor_ini.sh"
+source "$SCRIPT_DIR/collectors/network.sh"
+source "$SCRIPT_DIR/collectors/shares_ini.sh"
+source "$SCRIPT_DIR/collectors/system.sh"
 
 trap 'on_exit $?' EXIT
 
