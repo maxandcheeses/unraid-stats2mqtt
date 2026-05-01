@@ -92,7 +92,7 @@ main() {
     local cache_expire; cache_expire=$(resolve_expire "${EXPIRE_CACHE:-0}" "$cache_interval")
     local cache_retain="${RETAIN_CACHE:-true}"
     _publish_metric "cache" "$cache_mode" "$cache_interval" "$cache_expire" publish_cache \
-      "awk '/^(cacheState|cacheNumDevices|cacheFsSize|cacheFsFree|cacheFsUsed)=/{print}' /var/local/emhttp/var.ini 2>/dev/null | md5sum" \
+      "get_array_data 2>/dev/null | jq -c '.data.array.caches // empty'" \
       "$cache_retain"
 
     # ── var.ini: Parity ────────────────────────────────────────────────────────
