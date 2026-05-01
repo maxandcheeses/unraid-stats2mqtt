@@ -10,9 +10,9 @@ graphql_query() {
     return 1
   fi
   local payload; payload=$(jq -n --arg q "$query" '{"query":$q}')
-  local host="${UNRAID_API_HOST:-https://localhost}"
+  local host="${UNRAID_API_HOST:-http://localhost}"
   local response
-  response=$(curl -sk --connect-timeout 5 --max-time 10 \
+  response=$(curl -skL --connect-timeout 5 --max-time 10 \
     -X POST "${host}/graphql" \
     -H "Content-Type: application/json" \
     -H "x-api-key: ${UNRAID_API_KEY}" \
