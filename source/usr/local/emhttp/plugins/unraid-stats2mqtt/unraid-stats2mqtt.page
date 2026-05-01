@@ -534,7 +534,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
 
       ['Share Details (JSON)',
        'PUBLISH_SHARES', 'INTERVAL_SHARES', 300,               'EXPIRE_SHARES', '',
-       'All raw shares.ini fields per share as a single JSON sensor (shareSize, shareFree, shareUsed, etc.)', 'RETAIN_SHARES'],
+       'Usage stats per share (free, used, size, comment, color) as a JSON sensor', 'RETAIN_SHARES'],
 
     ];
 
