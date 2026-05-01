@@ -462,82 +462,82 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     </div>
 
     <?php
-    // Each entry: [label, mode_key, int_key, default_int, exp_key, default_mode, hint, retain_key]
+    // Each entry: [label, int_key, default_int, exp_key, hint, retain_key]
     // A string entry inserts a group header row.
     $metric_groups = [
 
       '— Array &amp; System',
 
       ['Array Status',
-       'PUBLISH_ARRAY_STATUS', 'INTERVAL_ARRAY_STATUS', 30,   'EXPIRE_ARRAY_STATUS', '',
+       'INTERVAL_ARRAY_STATUS', 30,   'EXPIRE_ARRAY_STATUS',
        'mdState — STARTED / STOPPED / DEGRADED', 'RETAIN_ARRAY_STATUS'],
 
       ['Array Summary',
-       'PUBLISH_ARRAY_SUMMARY', 'INTERVAL_ARRAY_SUMMARY', 60, 'EXPIRE_ARRAY_SUMMARY', '',
+       'INTERVAL_ARRAY_SUMMARY', 60, 'EXPIRE_ARRAY_SUMMARY',
        'Disk counts (total, disabled, invalid, missing) + array capacity / used / free', 'RETAIN_ARRAY_SUMMARY'],
 
       ['Cache Pool',
-       'PUBLISH_CACHE', 'INTERVAL_CACHE', 60,                  'EXPIRE_CACHE', '',
+       'INTERVAL_CACHE', 60,          'EXPIRE_CACHE',
        'Cache state, device count, capacity / used / free', 'RETAIN_CACHE'],
 
       ['Parity Check',
-       'PUBLISH_PARITY', 'INTERVAL_PARITY', 60,                'EXPIRE_PARITY', '',
+       'INTERVAL_PARITY', 60,         'EXPIRE_PARITY',
        'Status, progress %, speed (KB/s) while a parity check or sync is running', 'RETAIN_PARITY'],
 
       ['Disk Rebuild',
-       'PUBLISH_REBUILD', 'INTERVAL_REBUILD', 30,              'EXPIRE_REBUILD', '',
+       'INTERVAL_REBUILD', 30,        'EXPIRE_REBUILD',
        'Status, progress %, speed (KB/s), ETA (min) during a disk rebuild', 'RETAIN_REBUILD'],
 
       ['System Info',
-       'PUBLISH_SYSTEM_INFO', 'INTERVAL_SYSTEM_INFO', 3600,    'EXPIRE_SYSTEM_INFO', '',
+       'INTERVAL_SYSTEM_INFO', 3600,  'EXPIRE_SYSTEM_INFO',
        'Unraid OS version + server name / description / model (Identification sensor)', 'RETAIN_SYSTEM_INFO'],
 
       ['Update Available',
-       'PUBLISH_UPDATE_AVAILABLE', 'INTERVAL_UPDATE_AVAILABLE', 3600, 'EXPIRE_UPDATE_AVAILABLE', '',
+       'INTERVAL_UPDATE_AVAILABLE', 3600, 'EXPIRE_UPDATE_AVAILABLE',
        'Binary sensor — ON when an Unraid OS update is available; attributes contain full update details', 'RETAIN_UPDATE_AVAILABLE'],
 
       ['System Uptime',
-       'PUBLISH_UPTIME', 'INTERVAL_UPTIME', 60,                'EXPIRE_UPTIME', '',
-       'System uptime in seconds (from /proc/uptime)', 'RETAIN_UPTIME'],
+       'INTERVAL_UPTIME', 60,         'EXPIRE_UPTIME',
+       'System uptime in seconds', 'RETAIN_UPTIME'],
 
       '— Disks',
 
       ['Disk Temperatures',
-       'PUBLISH_DISK_TEMPS', 'INTERVAL_DISK_TEMPS', 60,        'EXPIRE_DISK_TEMPS', '',
+       'INTERVAL_DISK_TEMPS', 60,     'EXPIRE_DISK_TEMPS',
        '°C per disk (excludes standby / not-present disks)', 'RETAIN_DISK_TEMPS'],
 
       ['Disk States',
-       'PUBLISH_DISK_STATES', 'INTERVAL_DISK_STATES', 30,      'EXPIRE_DISK_STATES', '',
+       'INTERVAL_DISK_STATES', 30,    'EXPIRE_DISK_STATES',
        'ACTIVE / STANDBY / DISABLED per disk', 'RETAIN_DISK_STATES'],
 
       ['Disk Filesystem Usage',
-       'PUBLISH_DISK_USAGE', 'INTERVAL_DISK_USAGE', 300,       'EXPIRE_DISK_USAGE', '',
+       'INTERVAL_DISK_USAGE', 300,    'EXPIRE_DISK_USAGE',
        'Filesystem size / free / used (GB) per disk', 'RETAIN_DISK_USAGE'],
 
       ['Disk Errors',
-       'PUBLISH_DISK_ERRORS', 'INTERVAL_DISK_ERRORS', 300,     'EXPIRE_DISK_ERRORS', '',
+       'INTERVAL_DISK_ERRORS', 300,   'EXPIRE_DISK_ERRORS',
        'Error count per disk', 'RETAIN_DISK_ERRORS'],
 
       ['Read/Write Speeds',
-       'PUBLISH_RW_SPEEDS', 'INTERVAL_RW_SPEEDS', 30,          'EXPIRE_RW_SPEEDS', '',
+       'INTERVAL_RW_SPEEDS', 30,      'EXPIRE_RW_SPEEDS',
        'KB/s read and write per disk — delta from /proc/diskstats', 'RETAIN_RW_SPEEDS'],
 
       '— Monitor',
 
       ['Monitor',
-       'PUBLISH_MONITOR', 'INTERVAL_MONITOR', 60,              'EXPIRE_MONITOR', '',
+       'INTERVAL_MONITOR', 60,        'EXPIRE_MONITOR',
        'Array sync errors + last parity check summary (date, duration, speed, status, errors)', 'RETAIN_MONITOR'],
 
       '— Network',
 
       ['Network RX/TX Speeds',
-       'PUBLISH_NETWORK', 'INTERVAL_NETWORK', 30,              'EXPIRE_NETWORK', '',
+       'INTERVAL_NETWORK', 30,        'EXPIRE_NETWORK',
        'KB/s receive and transmit per network interface (lo excluded)', 'RETAIN_NETWORK'],
 
       '— Shares',
 
       ['Share Details (JSON)',
-       'PUBLISH_SHARES', 'INTERVAL_SHARES', 300,               'EXPIRE_SHARES', '',
+       'INTERVAL_SHARES', 300,        'EXPIRE_SHARES',
        'Usage stats per share (free, used, size, comment, color) as a JSON sensor', 'RETAIN_SHARES'],
 
     ];
@@ -551,31 +551,19 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     <?php
         continue;
       endif;
-      list($label, $mode_key, $int_key, $default_int, $exp_key, $default_mode, $hint, $retain_key) = $item;
-      $mode     = $cfg[$mode_key]    ?? $default_mode;
-      $interval = $cfg[$int_key]     ?? $default_int;
-      $expire   = $cfg[$exp_key]     ?? 0;
-      $retain   = $cfg[$retain_key]  ?? 'true';
-      $dim      = ($mode === 'onchange' || $mode === '') ? 'umm-dim' : '';
+      list($label, $int_key, $default_int, $exp_key, $hint, $retain_key) = $item;
+      $interval = $cfg[$int_key]    ?? $default_int;
+      $expire   = $cfg[$exp_key]    ?? 0;
+      $retain   = $cfg[$retain_key] ?? 'true';
     ?>
     <div class="umm-metric-row">
       <label title="<?= esc($hint) ?>"><?= htmlspecialchars($label) ?></label>
       <span>
-        <select name="<?= $mode_key ?>" onchange="toggleInterval(this,'<?= $int_key ?>')">
-          <option value=""         <?= sel($cfg,$mode_key,'')         ?>>Disabled</option>
-          <option value="interval" <?= sel($cfg,$mode_key,'interval') ?>>Interval only</option>
-          <option value="onchange" <?= sel($cfg,$mode_key,'onchange') ?>>On change only</option>
-          <option value="both"     <?= sel($cfg,$mode_key,'both')     ?>>Both</option>
-        </select>
+        <input type="number" name="<?= $int_key ?>"
+          value="<?= esc($interval) ?>" min="0" max="86400">
         <?php if ($hint): ?>
           <div class="umm-hint"><?= htmlspecialchars($hint) ?></div>
         <?php endif; ?>
-      </span>
-      <span>
-        <input type="number" name="<?= $int_key ?>" id="int_<?= $int_key ?>"
-          value="<?= esc($interval) ?>" min="5" max="86400"
-          class="<?= $dim ?>">
-        <div class="umm-hint">secs</div>
       </span>
       <span>
         <input type="number" name="<?= $exp_key ?>"
