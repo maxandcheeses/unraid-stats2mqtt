@@ -759,13 +759,14 @@ function ummSaveAndRestart(e) {
   ummSanitizeDeviceId();
   var enabled = (document.getElementById('umm-plugin-enabled-field') || {}).value ?? 'true';
   var action = enabled === 'false' ? 'daemon_stop' : 'daemon_restart';
+  ummSetPendingRestart();
   setTimeout(function() {
     fetch(UMM_EXEC, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({ action: action, csrf_token: UMM_CSRF }),
       credentials: 'same-origin'
-    });
+    }).then(function() { ummClearPendingRestart(); });
     setTimeout(function() { window.location.reload(); }, 2000);
   }, 1200);
   return true;
