@@ -772,11 +772,6 @@ function ummClearLogs() {
   });
 }
 
-function toggleInterval(sel, intKey) {
-  var inp = document.getElementById('int_' + intKey);
-  if (inp) inp.classList.toggle('umm-dim', sel.value === 'onchange' || sel.value === '');
-}
-
 // ── View toggle: Form ↔ YAML ──────────────────────────────────────────────
 var UMM_VIEW = 'form';
 
