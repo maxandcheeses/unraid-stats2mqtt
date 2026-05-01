@@ -940,6 +940,30 @@ function ummSwitchView(view) {
   }, true);
 })();
 
+function ummGenerateApiKey(btn) {
+  var lbl   = document.getElementById('umm-apikey-result');
+  var input = document.getElementById('unraid_api_key');
+  if (btn) btn.disabled = true;
+  if (lbl) { lbl.textContent = 'Generating…'; lbl.style.color = 'inherit'; lbl.style.opacity = '1'; }
+  ummPost({ action: 'generate_api_key' }, function(raw) {
+    if (btn) btn.disabled = false;
+    var data = {};
+    try { data = JSON.parse(raw); } catch(e) {}
+    if (!lbl) return;
+    if (data.ok && data.key) {
+      if (input) input.value = data.key;
+      lbl.textContent = '✓ Key populated — save settings to apply';
+      lbl.style.color = 'var(--umm-success)';
+    } else {
+      lbl.textContent = '✗ ' + (data.msg || 'Failed to generate key');
+      lbl.style.color = 'var(--umm-error)';
+    }
+    lbl.style.opacity = '1';
+    clearTimeout(lbl._hideTimer);
+    lbl._hideTimer = setTimeout(function() { lbl.style.opacity = '0'; }, 6000);
+  });
+}
+
 function ummTestConnection(btn) {
   var lbl = document.getElementById('umm-conn-result');
   if (btn) btn.disabled = true;
