@@ -51,6 +51,28 @@ if ($action === 'set_enabled') {
   exit;
 }
 
+if ($action === 'generate_api_key') {
+  $output = [];
+  // Try to fetch existing key first; create if absent
+  exec("unraid-api apikey --name Stats2MQTT 2>&1", $output, $rc);
+  if ($rc !== 0) {
+    $output = [];
+    exec("unraid-api apikey --create --name 'Stats2MQTT' --roles VIEWER 2>&1", $output, $rc);
+  }
+  $text = implode("\n", $output);
+  // Extract 64-char hex key from output
+  if (preg_match('/\b([0-9a-f]{64})\b/', $text, $m)) {
+    $key = $m[1];
+    // Persist to config so the daemon picks it up without a manual save
+    $cfg['UNRAID_API_KEY'] = $key;
+    save_cfg($cfg_file, $cfg);
+    echo json_encode(['ok' => true, 'key' => $key]);
+  } else {
+    echo json_encode(['ok' => false, 'msg' => htmlspecialchars($text)]);
+  }
+  exit;
+}
+
 if ($action === 'test') {
   $output = [];
   exec('timeout 10 /usr/local/emhttp/plugins/unraid-stats2mqtt/scripts/mqtt_monitor.sh test 2>&1', $output, $rc);
