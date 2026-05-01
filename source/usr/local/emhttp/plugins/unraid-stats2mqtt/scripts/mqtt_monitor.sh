@@ -127,7 +127,7 @@ main() {
     local sysinfo_expire; sysinfo_expire=$(resolve_expire "${EXPIRE_SYSTEM_INFO:-0}" "$sysinfo_interval")
     local sysinfo_retain="${RETAIN_SYSTEM_INFO:-true}"
     _publish_metric "system_info" "$sysinfo_mode" "$sysinfo_interval" "$sysinfo_expire" publish_system_info \
-      "awk '/^version=/{print}' /var/local/emhttp/var.ini 2>/dev/null | md5sum" "$sysinfo_retain"
+      "get_vars_data 2>/dev/null | jq -r '.data.vars.version // empty'" "$sysinfo_retain"
 
     # ── var.ini: Update Available ──────────────────────────────────────────────
     local update_mode="${PUBLISH_UPDATE_AVAILABLE:-}"
