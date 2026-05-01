@@ -11,9 +11,9 @@ source/                              ← tarballed into the .txz plugin package
   etc/rc.d/rc.unraid-stats2mqtt    ← init script
   usr/local/emhttp/plugins/unraid-stats2mqtt/
     scripts/
-      mqtt_monitor.sh                ← entry point (sources lib/ and metrics/)
+      mqtt_monitor.sh                ← entry point (sources lib/ and collectors/)
       lib/                           ← shared utilities (config, logging, mqtt, ha, helpers, loop)
-      metrics/                       ← one file per data source
+      collectors/                    ← one file per data source
     include/exec.php                 ← PHP shim for UI-triggered script calls
     unraid-stats2mqtt.page         ← Unraid plugin UI page
 plugin/unraid-stats2mqtt.plg       ← Unraid plugin manifest
