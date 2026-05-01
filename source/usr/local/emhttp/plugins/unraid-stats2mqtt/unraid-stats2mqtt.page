@@ -31,6 +31,9 @@ if (file_exists($pid_file)) {
   $daemon_running = file_exists("/proc/{$pid}");
 }
 
+exec('/etc/rc.d/rc.unraid-api status 2>/dev/null', $_, $api_rc);
+$api_running = ($api_rc === 0);
+
 function sel($cfg, $key, $val) { return ($cfg[$key] ?? '') === $val ? 'selected' : ''; }
 function opt($cfg, $key)       { return ($cfg[$key] ?? '') === 'true' ? 'selected' : ''; }
 function esc($val)             { return htmlspecialchars($val ?? '', ENT_QUOTES); }
