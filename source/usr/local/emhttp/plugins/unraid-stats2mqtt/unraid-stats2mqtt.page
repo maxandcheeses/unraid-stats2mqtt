@@ -526,7 +526,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
        'PUBLISH_RW_SPEEDS', 'INTERVAL_RW_SPEEDS', 30,          'EXPIRE_RW_SPEEDS', '',
        'KB/s read and write per disk — delta from /proc/diskstats', 'RETAIN_RW_SPEEDS'],
 
-      '— monitor.ini',
+      '— Monitor',
 
       ['Monitor',
        'PUBLISH_MONITOR', 'INTERVAL_MONITOR', 60,              'EXPIRE_MONITOR', '',
