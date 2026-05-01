@@ -496,7 +496,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
        'PUBLISH_UPTIME', 'INTERVAL_UPTIME', 60,                'EXPIRE_UPTIME', '',
        'System uptime in seconds (from /proc/uptime)', 'RETAIN_UPTIME'],
 
-      '— disks.ini',
+      '— Disks',
 
       ['Disk Temperatures',
        'PUBLISH_DISK_TEMPS', 'INTERVAL_DISK_TEMPS', 60,        'EXPIRE_DISK_TEMPS', '',
