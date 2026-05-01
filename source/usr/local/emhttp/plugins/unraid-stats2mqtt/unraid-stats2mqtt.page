@@ -532,7 +532,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
        'PUBLISH_MONITOR', 'INTERVAL_MONITOR', 60,              'EXPIRE_MONITOR', '',
        'Array errors, parity history, flash drive state, Docker disk %, per-disk usage % and alert color', 'RETAIN_MONITOR'],
 
-      '— /proc/net/dev',
+      '— Network',
 
       ['Network RX/TX Speeds',
        'PUBLISH_NETWORK', 'INTERVAL_NETWORK', 30,              'EXPIRE_NETWORK', '',
