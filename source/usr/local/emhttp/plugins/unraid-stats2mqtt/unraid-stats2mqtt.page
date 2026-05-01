@@ -514,14 +514,6 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
        'PUBLISH_DISK_ERRORS', 'INTERVAL_DISK_ERRORS', 300,     'EXPIRE_DISK_ERRORS', '',
        'Error count per disk', 'RETAIN_DISK_ERRORS'],
 
-      ['Disk Details (JSON)',
-       'PUBLISH_DISK_JSON', 'INTERVAL_DISK_JSON', 300,         'EXPIRE_DISK_JSON', '',
-       'All raw disks.ini fields per disk as a single JSON sensor (complements individual sensors)', 'RETAIN_DISK_JSON'],
-
-      ['SMART Data',
-       'PUBLISH_SMART', 'INTERVAL_SMART', 300,                 'EXPIRE_SMART', '',
-       'Health, power hours/cycles, reallocated/pending/uncorrectable sectors, CRC errors, load cycles; NVMe: wear %, spare %, unsafe shutdowns, media errors — reads /var/local/emhttp/smart/*', 'RETAIN_SMART'],
-
       ['Read/Write Speeds',
        'PUBLISH_RW_SPEEDS', 'INTERVAL_RW_SPEEDS', 30,          'EXPIRE_RW_SPEEDS', '',
        'KB/s read and write per disk — delta from /proc/diskstats', 'RETAIN_RW_SPEEDS'],
