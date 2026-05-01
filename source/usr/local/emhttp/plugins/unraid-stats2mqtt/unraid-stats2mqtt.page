@@ -322,6 +322,27 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     </div>
   </div>
 
+  <!-- Unraid API -->
+  <div class="umm-card">
+    <h3>&#128273; Unraid API</h3>
+
+    <div class="umm-row">
+      <label>API Key</label>
+      <div style="flex:1;min-width:0">
+        <input type="password" name="UNRAID_API_KEY" value="<?= esc($cfg['UNRAID_API_KEY'] ?? '') ?>" placeholder="required" style="width:100%;box-sizing:border-box">
+        <div class="umm-hint">Generate in Unraid WebGUI under Settings &rarr; API Keys. Required for all metrics.</div>
+      </div>
+    </div>
+
+    <div class="umm-row">
+      <label>API Host</label>
+      <div style="flex:1;min-width:0">
+        <input type="text" name="UNRAID_API_HOST" value="<?= esc($cfg['UNRAID_API_HOST'] ?? 'https://localhost') ?>" style="width:100%;box-sizing:border-box">
+        <div class="umm-hint">Unraid GraphQL endpoint. Default: <code>https://localhost</code></div>
+      </div>
+    </div>
+  </div>
+
   <!-- MQTT Plugin Identity -->
   <div class="umm-card">
     <h3>&#128268; MQTT Plugin</h3>
