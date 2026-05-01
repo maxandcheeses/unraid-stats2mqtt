@@ -458,7 +458,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     <h3>&#128200; Per-Metric Publish Rules</h3>
 
     <div class="umm-metric-header">
-      <span>Metric</span><span>Publish Mode</span><span>Interval (s)</span><span>Expire After (s)</span><span>Retain</span>
+      <span>Metric</span><span>Interval (s, 0=off)</span><span>Expire After (s)</span><span>Retain</span>
     </div>
 
     <?php
