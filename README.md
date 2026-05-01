@@ -63,6 +63,7 @@ Several sensors expose additional detail as HA state attributes (accessible via 
 | `sensor.unraid_<disk>_smart_health` | `power_on_hours`, `crc_errors`, `nvme_unsafe_shutdowns` (NVMe), `nvme_media_errors` (NVMe) |
 | `sensor.unraid_share_<share>_info` | All fields from `shares.ini` (e.g. `share`, `color`, `free`, `used`, `size`, `include`, `exclude`) |
 | `sensor.unraid_identification` | `server_name`, `description`, `model`, `version` |
+| `binary_sensor.unraid_update_available` | Raw fields from `/tmp/unraidcheck/result.json` (e.g. `isNewer`, `version`) |
 
 - Per-metric publish rules: **interval**, **on-change**, or **both**
 - Protocol support: **MQTT**, **MQTTS** (TLS), **WS**, **WSS**
