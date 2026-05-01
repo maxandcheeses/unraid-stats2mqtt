@@ -935,12 +935,13 @@ function ummSwitchView(view) {
         var enabledMatch = yaml.match(/^PLUGIN_ENABLED:\s*"?(\w+)"?/m);
         var yamlEnabled = enabledMatch ? enabledMatch[1] : 'true';
         var yamlAction = yamlEnabled === 'false' ? 'daemon_stop' : 'daemon_restart';
+        ummSetPendingRestart();
         fetch(UMM_EXEC, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: new URLSearchParams({ action: yamlAction, csrf_token: UMM_CSRF }),
           credentials: 'same-origin'
-        });
+        }).then(function() { ummClearPendingRestart(); });
         setTimeout(function() { window.location.reload(); }, 2500);
       }
     });
