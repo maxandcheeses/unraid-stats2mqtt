@@ -657,7 +657,7 @@ function ummLogAppend(msg) {
   box.scrollTop = box.scrollHeight;
 }
 
-var UMM_NO_RELOAD = { test: true, test_connection: true, set_enabled: true, clear_logs: true };
+var UMM_NO_RELOAD = { test: true, test_connection: true, set_enabled: true, clear_logs: true, generate_api_key: true };
 var UMM_LOG_ONLY  = { test: true, test_connection: true };
 
 function ummIsErr(msg) {
