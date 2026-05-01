@@ -47,7 +47,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     --umm-muted: var(--color-text-muted, #888);
   }
 
-  body { font-family: 'Open Sans', Arial, sans-serif; background: transparent; margin: 0; }
+  .umm-page { font-family: 'Open Sans', Arial, sans-serif; }
 
   .umm-page { max-width: 1100px; }
   .umm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
