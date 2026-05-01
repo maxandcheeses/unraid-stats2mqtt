@@ -989,6 +989,11 @@ function ummTestConnection(btn) {
   });
 }
 
+// Restore pending-restart indicator if set before last page unload
+(function() {
+  if (localStorage.getItem('umm_pending_restart')) ummSetPendingRestart();
+})();
+
 (function() {
   var _logPoll = null;
   function startLogPoll() {
