@@ -184,7 +184,7 @@ main() {
     local monitor_expire; monitor_expire=$(resolve_expire "${EXPIRE_MONITOR:-0}" "$monitor_interval")
     local monitor_retain="${RETAIN_MONITOR:-true}"
     _publish_metric "monitor" "$monitor_mode" "$monitor_interval" "$monitor_expire" publish_monitor \
-      "md5sum /var/local/emhttp/monitor.ini 2>/dev/null" "$monitor_retain"
+      "get_vars_data 2>/dev/null | jq -r '.data.vars.sbSyncErrs // empty'" "$monitor_retain"
 
     # ── /proc/net/dev: Network Speeds ─────────────────────────────────────────
     local net_mode="${PUBLISH_NETWORK:-}"
