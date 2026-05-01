@@ -341,8 +341,8 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     <div class="umm-row">
       <label>API Host</label>
       <div style="flex:1;min-width:0">
-        <input type="text" name="UNRAID_API_HOST" value="<?= esc($cfg['UNRAID_API_HOST'] ?? 'https://localhost') ?>" style="width:100%;box-sizing:border-box">
-        <div class="umm-hint">Unraid GraphQL endpoint. Default: <code>https://localhost</code></div>
+        <input type="text" name="UNRAID_API_HOST" value="<?= esc($cfg['UNRAID_API_HOST'] ?? 'http://localhost') ?>" style="width:100%;box-sizing:border-box">
+        <div class="umm-hint">Unraid GraphQL endpoint. Default: <code>http://localhost</code></div>
       </div>
     </div>
   </div>
