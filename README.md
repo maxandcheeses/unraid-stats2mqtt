@@ -27,6 +27,7 @@ An Unraid plugin (no Docker) that monitors your array and publishes metrics to a
 | Disk rebuild speed | `sensor.unraid_rebuild_speed` | KB/s |
 | Disk rebuild ETA | `sensor.unraid_rebuild_eta` | minutes |
 | Unraid version | `sensor.unraid_unraid_version` | version string |
+| Unraid update available | `binary_sensor.unraid_update_available` | `ON` / `OFF` — see [attributes](#sensor-attributes) |
 | Server identification | `sensor.unraid_identification` | server name — see [attributes](#sensor-attributes) |
 | Disk temperatures | `sensor.unraid_<disk>_temp` | °C |
 | Disk states | `sensor.unraid_<disk>_state` | `ACTIVE`, `STANDBY`, `DISABLED` |
