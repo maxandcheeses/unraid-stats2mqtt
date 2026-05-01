@@ -1,35 +1,15 @@
 #!/bin/bash
-# SOURCE: var.ini, /tmp/unraidcheck/result.json
-# Fields: mdState, mdNumDisks, mdNumDisabled, mdNumInvalid, mdNumMissing,
-#         mdCapacity, mdFree, mdResync*, cacheState, cacheNumDevices,
-#         cacheFsSize, cacheFsFree, cacheFsUsed, version
-
-read_var_ini() { cat /var/local/emhttp/var.ini 2>/dev/null; }
-var_field()    { ini_field "$1" "$2"; }
+# SOURCE: Unraid GraphQL API (array, vars, info)
 
 get_array_status() {
-  local md_state
-  md_state=$(grep -m1 '^mdState=' /var/local/emhttp/var.ini 2>/dev/null | cut -d'"' -f2)
-  case "$md_state" in
-    STARTED)   echo "STARTED" ;;
-    STOPPED)   echo "STOPPED" ;;
-    NEW_ARRAY) echo "STOPPED" ;;
-    ERROR)     echo "DEGRADED" ;;
-    *)
-      if cat /proc/mdstat 2>/dev/null | grep -q "\[.*_.*\]"; then
-        echo "DEGRADED"
-      elif [ -n "$md_state" ]; then
-        echo "$md_state"
-      else
-        echo "STOPPED"
-      fi
-      ;;
-  esac
+  local resp; resp=$(get_array_data) || { echo "UNKNOWN"; return; }
+  echo "$resp" | jq -r '.data.array.state // "UNKNOWN"'
 }
 
 publish_array_status() {
   local expire="${1:-0}" retain="${2:-true}"
   local status; status=$(get_array_status)
+  [ "$status" = "UNKNOWN" ] && return
   local topic="${MQTT_BASE_TOPIC}/sensor/${MQTT_TOPIC}_array_status/state"
   ha_register "array_status" "Array Status" "$topic" "" "" "harddisk" "" "$expire"
   mqtt_publish "$topic" "$status" "$retain"
@@ -37,53 +17,47 @@ publish_array_status() {
 
 publish_array_summary() {
   local expire="${1:-0}" retain="${2:-true}"
-  local data; data=$(read_var_ini)
-  [ -z "$data" ] && return
+  local arr;  arr=$(get_array_data)  || return
+  local vars; vars=$(get_vars_data)  || return
   local base="${MQTT_BASE_TOPIC}/sensor/${MQTT_TOPIC}"
 
   local num_disks num_disabled num_invalid num_missing
-  num_disks=$(var_field    "$data" mdNumDisks)
-  num_disabled=$(var_field "$data" mdNumDisabled)
-  num_invalid=$(var_field  "$data" mdNumInvalid)
-  num_missing=$(var_field  "$data" mdNumMissing)
+  num_disks=$(echo    "$vars" | jq -r '.data.vars.mdNumDisks    // empty')
+  num_disabled=$(echo "$vars" | jq -r '.data.vars.mdNumDisabled // empty')
+  num_invalid=$(echo  "$vars" | jq -r '.data.vars.mdNumInvalid  // empty')
+  num_missing=$(echo  "$vars" | jq -r '.data.vars.mdNumMissing  // empty')
 
   [ -n "$num_disks" ] && {
-    ha_register "array_num_disks" "Array Disk Count" \
-      "${base}_array_num_disks/state" "" "" "harddisk" "" "$expire"
+    ha_register "array_num_disks" "Array Disk Count" "${base}_array_num_disks/state" "" "" "harddisk" "" "$expire"
     mqtt_publish "${base}_array_num_disks/state" "$num_disks" "$retain"
   }
   [ -n "$num_disabled" ] && {
-    ha_register "array_disabled_disks" "Array Disabled Disks" \
-      "${base}_array_disabled_disks/state" "" "" "harddisk-remove" "" "$expire"
+    ha_register "array_disabled_disks" "Array Disabled Disks" "${base}_array_disabled_disks/state" "" "" "harddisk-remove" "" "$expire"
     mqtt_publish "${base}_array_disabled_disks/state" "$num_disabled" "$retain"
   }
   [ -n "$num_invalid" ] && {
-    ha_register "array_invalid_disks" "Array Invalid Disks" \
-      "${base}_array_invalid_disks/state" "" "" "alert-circle-outline" "" "$expire"
+    ha_register "array_invalid_disks" "Array Invalid Disks" "${base}_array_invalid_disks/state" "" "" "alert-circle-outline" "" "$expire"
     mqtt_publish "${base}_array_invalid_disks/state" "$num_invalid" "$retain"
   }
   [ -n "$num_missing" ] && {
-    ha_register "array_missing_disks" "Array Missing Disks" \
-      "${base}_array_missing_disks/state" "" "" "harddisk-remove" "" "$expire"
+    ha_register "array_missing_disks" "Array Missing Disks" "${base}_array_missing_disks/state" "" "" "harddisk-remove" "" "$expire"
     mqtt_publish "${base}_array_missing_disks/state" "$num_missing" "$retain"
   }
 
-  local capacity free
-  capacity=$(var_field "$data" mdCapacity)
-  free=$(var_field     "$data" mdFree)
+  local total free used
+  total=$(echo "$arr" | jq -r '.data.array.capacity.kilobytes.total // empty')
+  free=$(echo  "$arr" | jq -r '.data.array.capacity.kilobytes.free  // empty')
+  used=$(echo  "$arr" | jq -r '.data.array.capacity.kilobytes.used  // empty')
 
-  if [ "${capacity:-0}" -gt 0 ] 2>/dev/null; then
-    local cap_gb; cap_gb=$(awk "BEGIN{printf \"%.2f\", $capacity/1048576}")
-    ha_register "array_capacity" "Array Capacity" \
-      "${base}_array_capacity/state" "GB" "data_size" "harddisk" "" "$expire"
+  if [ "${total:-0}" -gt 0 ] 2>/dev/null; then
+    local cap_gb; cap_gb=$(awk "BEGIN{printf \"%.2f\", $total/1048576}")
+    ha_register "array_capacity" "Array Capacity" "${base}_array_capacity/state" "GB" "data_size" "harddisk" "" "$expire"
     mqtt_publish "${base}_array_capacity/state" "$cap_gb" "$retain"
 
-    if [ "${free:-0}" -gt 0 ] 2>/dev/null; then
-      local used_gb
-      used_gb=$(awk "BEGIN{printf \"%.2f\", ($capacity-$free)/1048576}")
+    if [ "${used:-0}" -gt 0 ] 2>/dev/null; then
+      local used_gb; used_gb=$(awk "BEGIN{printf \"%.2f\", $used/1048576}")
       ha_unregister "array_free"
-      ha_register "array_used" "Array Used" \
-        "${base}_array_used/state" "GB" "data_size" "harddisk" "" "$expire"
+      ha_register "array_used" "Array Used" "${base}_array_used/state" "GB" "data_size" "harddisk" "" "$expire"
       mqtt_publish "${base}_array_used/state" "$used_gb" "$retain"
     fi
   fi
@@ -91,66 +65,61 @@ publish_array_summary() {
 
 publish_cache() {
   local expire="${1:-0}" retain="${2:-true}"
-  local data; data=$(read_var_ini)
-  [ -z "$data" ] && return
+  local arr; arr=$(get_array_data) || return
   local base="${MQTT_BASE_TOPIC}/sensor/${MQTT_TOPIC}"
 
-  local cache_state cache_num cache_size cache_free cache_used
-  cache_state=$(var_field "$data" cacheState)
-  cache_num=$(var_field   "$data" cacheNumDevices)
-  cache_size=$(var_field  "$data" cacheFsSize)
-  cache_free=$(var_field  "$data" cacheFsFree)
-  cache_used=$(var_field  "$data" cacheFsUsed)
+  local cache_count; cache_count=$(echo "$arr" | jq '.data.array.caches | length')
+  [ "${cache_count:-0}" -eq 0 ] && return
 
-  [ -n "$cache_state" ] && {
-    ha_register "cache_state" "Cache State" \
-      "${base}_cache_state/state" "" "" "lightning-bolt" "" "$expire"
-    mqtt_publish "${base}_cache_state/state" "$cache_state" "$retain"
-  }
-  [ -n "$cache_num" ] && {
-    ha_register "cache_num_devices" "Cache Devices" \
-      "${base}_cache_num_devices/state" "" "" "lightning-bolt" "" "$expire"
-    mqtt_publish "${base}_cache_num_devices/state" "$cache_num" "$retain"
-  }
+  local total_size=0 total_free=0 total_used=0 all_ok=true
 
-  if [ "${cache_size:-0}" -gt 0 ] 2>/dev/null; then
-    local size_gb; size_gb=$(awk "BEGIN{printf \"%.2f\", $cache_size/1048576}")
-    ha_register "cache_capacity" "Cache Capacity" \
-      "${base}_cache_capacity/state" "GB" "data_size" "lightning-bolt" "" "$expire"
+  while IFS=$'\t' read -r status fs_size fs_free fs_used; do
+    [ "$status" != "DISK_OK" ] && all_ok=false
+    [ "${fs_size:-0}" -gt 0 ] 2>/dev/null && {
+      total_size=$(( total_size + fs_size ))
+      total_free=$(( total_free + ${fs_free:-0} ))
+      total_used=$(( total_used + ${fs_used:-0} ))
+    }
+  done < <(echo "$arr" | jq -r '.data.array.caches[] | [.status // "", (.fsSize // 0), (.fsFree // 0), (.fsUsed // 0)] | @tsv')
+
+  local cache_state="ACTIVE"; [ "$all_ok" = "false" ] && cache_state="DEGRADED"
+
+  ha_register "cache_state" "Cache State" "${base}_cache_state/state" "" "" "lightning-bolt" "" "$expire"
+  mqtt_publish "${base}_cache_state/state" "$cache_state" "$retain"
+
+  ha_register "cache_num_devices" "Cache Devices" "${base}_cache_num_devices/state" "" "" "lightning-bolt" "" "$expire"
+  mqtt_publish "${base}_cache_num_devices/state" "$cache_count" "$retain"
+
+  if [ "$total_size" -gt 0 ] 2>/dev/null; then
+    local size_gb; size_gb=$(awk "BEGIN{printf \"%.2f\", $total_size/1048576}")
+    ha_register "cache_capacity" "Cache Capacity" "${base}_cache_capacity/state" "GB" "data_size" "lightning-bolt" "" "$expire"
     mqtt_publish "${base}_cache_capacity/state" "$size_gb" "$retain"
 
     ha_unregister "cache_free"
 
-    local used_kb="${cache_used}"
-    [ "${used_kb:-0}" -le 0 ] 2>/dev/null && [ "${cache_free:-0}" -gt 0 ] 2>/dev/null && \
-      used_kb=$(( cache_size - cache_free ))
+    local used_kb="$total_used"
+    [ "${used_kb:-0}" -le 0 ] 2>/dev/null && [ "$total_free" -gt 0 ] 2>/dev/null && \
+      used_kb=$(( total_size - total_free ))
     [ "${used_kb:-0}" -gt 0 ] 2>/dev/null && {
       local used_gb; used_gb=$(awk "BEGIN{printf \"%.2f\", $used_kb/1048576}")
-      ha_register "cache_used" "Cache Used" \
-        "${base}_cache_used/state" "GB" "data_size" "lightning-bolt" "" "$expire"
+      ha_register "cache_used" "Cache Used" "${base}_cache_used/state" "GB" "data_size" "lightning-bolt" "" "$expire"
       mqtt_publish "${base}_cache_used/state" "$used_gb" "$retain"
     }
   fi
 }
 
 get_parity_info() {
-  local data; data=$(read_var_ini)
-  [ -z "$data" ] && echo "UNKNOWN|0|0" && return
-  local action; action=$(var_field "$data" mdResyncAction)
-  case "$action" in
-    check|sync)
-      local size pos dt db pct=0 speed=0
-      size=$(var_field "$data" mdResyncSize)
-      pos=$(var_field  "$data" mdResyncPos)
-      dt=$(var_field   "$data" mdResyncDt)
-      db=$(var_field   "$data" mdResyncDb)
-      [ "${size:-0}" -gt 0 ] && pct=$(awk "BEGIN{printf \"%.1f\", $pos/$size*100}")
-      [ "${dt:-0}" -gt 0 ]   && speed=$(awk "BEGIN{printf \"%.0f\", $db/$dt}")
-      local state="RUNNING"; [ "$action" = "sync" ] && state="SYNC"
-      echo "${state}|${pct}|${speed}"
-      ;;
-    *) echo "IDLE|0|0" ;;
-  esac
+  local arr; arr=$(get_array_data) || { echo "UNKNOWN|0|0"; return; }
+  local running; running=$(echo "$arr" | jq -r '.data.array.parityCheckStatus.running // empty')
+
+  if [ "$running" = "true" ]; then
+    local progress speed
+    progress=$(echo "$arr" | jq -r '.data.array.parityCheckStatus.progress // 0')
+    speed=$(echo    "$arr" | jq -r '.data.array.parityCheckStatus.speed    // "0"')
+    echo "RUNNING|${progress}|${speed}"
+  else
+    echo "IDLE|0|0"
+  fi
 }
 
 publish_parity() {
@@ -161,31 +130,31 @@ publish_parity() {
   [ "$parity_state" = "UNKNOWN" ] && return
 
   local base="${MQTT_BASE_TOPIC}/sensor/${MQTT_TOPIC}_parity"
-  ha_register "parity_status"   "Parity Status"   "${base}_status/state"   ""     "" "shield-check"   "" "$expire"
-  ha_register "parity_progress" "Parity Progress" "${base}_progress/state" "%"    "" "progress-check" "" "$expire"
-  ha_register "parity_speed"    "Parity Speed"    "${base}_speed/state"    "KB/s" "" "speedometer"    "" "$expire"
+  ha_register "parity_status"   "Parity Status"   "${base}_status/state"   ""  "" "shield-check"   "" "$expire"
+  ha_register "parity_progress" "Parity Progress" "${base}_progress/state" "%" "" "progress-check" "" "$expire"
+  ha_register "parity_speed"    "Parity Speed"    "${base}_speed/state"    ""  "" "speedometer"    "" "$expire"
   mqtt_publish "${base}_status/state"   "$parity_state"  "$retain"
   mqtt_publish "${base}_progress/state" "$parity_pct"    "$retain"
   mqtt_publish "${base}_speed/state"    "$parity_speed"  "$retain"
 }
 
 get_rebuild_info() {
-  local data; data=$(read_var_ini)
-  [ -z "$data" ] && echo "UNKNOWN|0|0|0" && return
-  local action; action=$(var_field "$data" mdResyncAction)
+  local vars; vars=$(get_vars_data) || { echo "UNKNOWN|0|0|0"; return; }
+  local action; action=$(echo "$vars" | jq -r '.data.vars.mdResyncAction // empty')
+
   if [[ "$action" == recon* ]]; then
-    local size pos dt db pct=0 speed=0 eta=0
-    size=$(var_field "$data" mdResyncSize)
-    pos=$(var_field  "$data" mdResyncPos)
-    dt=$(var_field   "$data" mdResyncDt)
-    db=$(var_field   "$data" mdResyncDb)
-    local resync; resync=$(var_field "$data" mdResync)
-    [ "${size:-0}" -eq 0 ] && echo "UNKNOWN|0|0|0" && return
-    [ -z "$pos" ]          && echo "UNKNOWN|0|0|0" && return
-    pct=$(awk "BEGIN{printf \"%.1f\", $pos/$size*100}")
-    [ "${dt:-0}" -gt 0 ]    && speed=$(awk "BEGIN{printf \"%.0f\", $db/$dt}")
-    [ "${speed:-0}" -gt 0 ] && eta=$(awk "BEGIN{printf \"%.0f\", ($size-$pos)/$speed/60}")
-    local status="RUNNING"; [ "${resync:-1}" == "0" ] && status="PAUSED"
+    local resync pos size db dt pct=0 speed=0 eta=0
+    resync=$(echo "$vars" | jq -r '.data.vars.mdResync    // 0')
+    pos=$(echo    "$vars" | jq -r '.data.vars.mdResyncPos // "0"')
+    size=$(echo   "$vars" | jq -r '.data.vars.mdResyncSize // 0')
+    db=$(echo     "$vars" | jq -r '.data.vars.mdResyncDb  // "0"')
+    dt=$(echo     "$vars" | jq -r '.data.vars.mdResyncDt  // "0"')
+
+    [ "${size:-0}" -eq 0 ] && { echo "UNKNOWN|0|0|0"; return; }
+    pct=$(awk   "BEGIN{printf \"%.1f\", ${pos:-0}/${size}*100}")
+    [ "${dt:-0}" -gt 0 ] && speed=$(awk "BEGIN{printf \"%.0f\", ${db:-0}/${dt}}")
+    [ "${speed:-0}" -gt 0 ] && eta=$(awk "BEGIN{printf \"%.0f\", (${size}-${pos:-0})/${speed}/60}")
+    local status="RUNNING"; [ "${resync:-1}" = "0" ] && status="PAUSED"
     echo "${status}|${pct}|${speed}|${eta}"
   else
     echo "IDLE|0|0|0"
@@ -245,29 +214,33 @@ publish_update_available() {
 
 publish_system_info() {
   local expire="${1:-0}" retain="${2:-true}"
-  local data; data=$(read_var_ini)
-  [ -z "$data" ] && return
-  local version; version=$(var_field "$data" version)
+  local vars; vars=$(get_vars_data) || return
+  local info; info=$(get_info_data) || return
+
+  local version; version=$(echo "$vars" | jq -r '.data.vars.version // empty')
   [ -n "$version" ] && {
     local topic="${MQTT_BASE_TOPIC}/sensor/${MQTT_TOPIC}_unraid_version/state"
     ha_register "unraid_version" "Unraid Version" "$topic" "" "" "information-outline" "" "$expire"
     mqtt_publish "$topic" "$version" "$retain"
   }
 
-  local server_name; server_name=$(var_field "$data" NAME)
+  local server_name; server_name=$(echo "$vars" | jq -r '.data.vars.name // empty')
   [ -n "$server_name" ] && {
     local state_topic="${MQTT_BASE_TOPIC}/sensor/${MQTT_TOPIC}_identification/state"
     local attr_topic="${MQTT_BASE_TOPIC}/sensor/${MQTT_TOPIC}_identification/attributes"
     ha_register "identification" "Identification" "$state_topic" "" "" "server" "" "$expire" "$attr_topic"
     mqtt_publish "$state_topic" "$server_name" "$retain"
 
-    local description model
-    description=$(var_field "$data" COMMENT)
-    model=$(var_field       "$data" SYS_MODEL)
+    local model cpu_brand cpu_cores cpu_threads
+    model=$(echo       "$vars" | jq -r '.data.vars.sysModel    // empty')
+    cpu_brand=$(echo   "$info" | jq -r '.data.info.cpu.brand   // empty')
+    cpu_cores=$(echo   "$info" | jq -r '.data.info.cpu.cores   // 0')
+    cpu_threads=$(echo "$info" | jq -r '.data.info.cpu.threads // 0')
 
     local attrs
-    attrs=$(printf '{"server_name":"%s","description":"%s","model":"%s","version":"%s"}' \
-      "$server_name" "$description" "$model" "${version:-}")
+    attrs=$(printf '{"server_name":"%s","model":"%s","version":"%s","cpu":"%s","cpu_cores":%s,"cpu_threads":%s}' \
+      "$(json_escape "$server_name")" "$(json_escape "$model")" "$(json_escape "${version:-}")" \
+      "$(json_escape "$cpu_brand")" "${cpu_cores:-0}" "${cpu_threads:-0}")
     mqtt_publish "$attr_topic" "$attrs" "$retain"
   }
 }
