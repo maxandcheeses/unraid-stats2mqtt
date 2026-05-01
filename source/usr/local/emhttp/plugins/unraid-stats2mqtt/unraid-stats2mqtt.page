@@ -185,8 +185,6 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     box-sizing: border-box; width: 100%;
   }
 
-  .umm-dim { opacity: 0.35; }
-
   .umm-metric-group {
     grid-column: 1 / -1; padding: 12px 0 2px;
     font-size: 10px; font-weight: 700; text-transform: uppercase;
