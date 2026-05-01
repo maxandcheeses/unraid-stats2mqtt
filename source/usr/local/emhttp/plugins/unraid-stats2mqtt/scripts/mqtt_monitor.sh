@@ -210,7 +210,7 @@ main() {
     local shares_expire; shares_expire=$(resolve_expire "${EXPIRE_SHARES:-0}" "$shares_interval")
     local shares_retain="${RETAIN_SHARES:-true}"
     _publish_metric "shares" "$shares_mode" "$shares_interval" "$shares_expire" publish_shares \
-      "md5sum /var/local/emhttp/shares.ini 2>/dev/null" "$shares_retain"
+      "get_shares_data 2>/dev/null | jq -c '[.data.shares[] | {f:.free,u:.used}] // empty'" "$shares_retain"
 
     # ── Re-publish everything when HA restarts ─────────────────────────────────
     if [ -f "$HA_ONLINE_FLAG" ]; then
