@@ -467,6 +467,10 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
        'PUBLISH_SYSTEM_INFO', 'INTERVAL_SYSTEM_INFO', 3600,    'EXPIRE_SYSTEM_INFO', '',
        'Unraid OS version + server name / description / model (Identification sensor)', 'RETAIN_SYSTEM_INFO'],
 
+      ['Update Available',
+       'PUBLISH_UPDATE_AVAILABLE', 'INTERVAL_UPDATE_AVAILABLE', 3600, 'EXPIRE_UPDATE_AVAILABLE', '',
+       'Binary sensor — ON when an Unraid OS update is available; attributes contain full update details', 'RETAIN_UPDATE_AVAILABLE'],
+
       ['System Uptime',
        'PUBLISH_UPTIME', 'INTERVAL_UPTIME', 60,                'EXPIRE_UPTIME', '',
        'System uptime in seconds (from /proc/uptime)', 'RETAIN_UPTIME'],
