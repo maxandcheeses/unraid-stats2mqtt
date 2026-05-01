@@ -956,6 +956,15 @@ function ummSwitchView(view) {
   }, true);
 })();
 
+function ummToggleReveal(id, btn) {
+  var input = document.getElementById(id);
+  if (!input) return;
+  var shown = input.type === 'text';
+  input.type = shown ? 'password' : 'text';
+  btn.style.opacity = shown ? '' : '1';
+  btn.title = shown ? 'Show/hide' : 'Hide';
+}
+
 function ummGenerateApiKey(btn) {
   var lbl   = document.getElementById('umm-apikey-result');
   var input = document.getElementById('unraid_api_key');
