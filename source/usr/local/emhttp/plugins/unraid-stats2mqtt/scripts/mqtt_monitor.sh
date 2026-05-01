@@ -26,6 +26,8 @@ source "$SCRIPT_DIR/metrics/network.sh"
 source "$SCRIPT_DIR/metrics/shares_ini.sh"
 source "$SCRIPT_DIR/metrics/system.sh"
 
+trap 'on_error $? $LINENO $BASH_SOURCE' ERR
+trap 'on_exit $?' EXIT
 
 # =============================================================================
 # MAIN LOOP
