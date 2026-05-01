@@ -790,6 +790,9 @@ var UMM_VIEW = 'form';
 
 var UMM_YAML_FIELDS = [
   // Connection
+  // Unraid API
+  'UNRAID_API_KEY','UNRAID_API_HOST',
+  // MQTT Connection
   'MQTT_PROTOCOL','MQTT_HOST','MQTT_PORT','MQTT_USER','MQTT_PASS',
   'MQTT_TLS_INSECURE',
   // Identity
