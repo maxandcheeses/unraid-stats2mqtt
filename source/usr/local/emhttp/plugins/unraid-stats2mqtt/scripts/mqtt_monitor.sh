@@ -54,7 +54,7 @@ main() {
     HA_SUB_PID=$!
   fi
 
-  trap 'mqtt_publish "$AVAILABILITY_TOPIC" "offline" true; [ -n "$HA_SUB_PID" ] && kill "$HA_SUB_PID" 2>/dev/null; exit' EXIT INT TERM
+  trap '_CLEAN_EXIT=1; mqtt_publish "$AVAILABILITY_TOPIC" "offline" true; [ -n "$HA_SUB_PID" ] && kill "$HA_SUB_PID" 2>/dev/null; exit' EXIT INT TERM
 
   local TICK=0
 
