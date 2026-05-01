@@ -22,8 +22,8 @@ publish_monitor() {
     parity_hist_attrs=$(echo "$hist" | jq -c '{history: [.data.parityHistory[] | {date, duration, speed, status, errors}]}')
     ha_register "monitor_parity_history" "Parity History" \
       "${base}_monitor_parity_history/state" \
-      "${base}_monitor_parity_history/attributes" \
-      "" "shield-check" "" "$expire"
+      "" "" "shield-check" "" "$expire" \
+      "${base}_monitor_parity_history/attributes"
     mqtt_publish "${base}_monitor_parity_history/state" "$last_status" "$retain"
     mqtt_publish "${base}_monitor_parity_history/attributes" "$parity_hist_attrs" "$retain"
   }
