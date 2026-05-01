@@ -102,20 +102,6 @@ publish_cache() {
   fi
 }
 
-get_parity_info() {
-  local arr; arr=$(get_array_data) || { echo "UNKNOWN|0|0"; return; }
-  local running; running=$(echo "$arr" | jq -r '.data.array.parityCheckStatus.running // empty')
-
-  if [ "$running" = "true" ]; then
-    local progress speed
-    progress=$(echo "$arr" | jq -r '.data.array.parityCheckStatus.progress // 0')
-    speed=$(echo    "$arr" | jq -r '.data.array.parityCheckStatus.speed    // "0"')
-    echo "RUNNING|${progress}|${speed}"
-  else
-    echo "IDLE|0|0"
-  fi
-}
-
 publish_parity() {
   local expire="${1:-0}" retain="${2:-true}"
   local info; info=$(get_parity_info)
