@@ -16,8 +16,6 @@ publish_monitor() {
   local hist; hist=$(get_parity_history_data) || return
   local last_status; last_status=$(echo "$hist" | jq -r '.data.parityHistory[0].status // empty')
   [ -n "$last_status" ] && {
-    local parity_hist_json
-    parity_hist_json=$(echo "$hist" | jq -c '.data.parityHistory[0] | {date, duration, speed, status, errors}')
     local parity_hist_attrs
     parity_hist_attrs=$(echo "$hist" | jq -c '{history: [.data.parityHistory[] | {date, duration, speed, status, errors}]}')
     ha_register "monitor_parity_history" "Parity History" \
