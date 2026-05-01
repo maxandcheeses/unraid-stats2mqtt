@@ -90,8 +90,8 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     padding: 10px 0 4px clamp(140px, 30%, 200px);
   }
 
-  /* All selects: remove native chrome, Unraid-style filled triangle */
-  select {
+  /* All selects within plugin UI: remove native chrome, Unraid-style filled triangle */
+  .umm-page select {
     -webkit-appearance: none;
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath fill='%23888' d='M0 0l4 5 4-5z'/%3E%3C/svg%3E");
