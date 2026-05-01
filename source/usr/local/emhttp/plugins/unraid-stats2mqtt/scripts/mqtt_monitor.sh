@@ -167,7 +167,7 @@ main() {
     local disk_errors_expire; disk_errors_expire=$(resolve_expire "${EXPIRE_DISK_ERRORS:-0}" "$disk_errors_interval")
     local disk_errors_retain="${RETAIN_DISK_ERRORS:-true}"
     _publish_metric "disk_errors" "$disk_errors_mode" "$disk_errors_interval" "$disk_errors_expire" publish_disk_errors \
-      "awk '/^(numErrors|color)=/{print}' /var/local/emhttp/disks.ini 2>/dev/null | md5sum" "$disk_errors_retain"
+      "get_array_data 2>/dev/null | jq -c '[.data.array.disks[] | .numErrors] // empty'" "$disk_errors_retain"
 
     # ── disks.ini + smartctl: SMART ────────────────────────────────────────────
     local smart_mode="${PUBLISH_SMART:-}"
