@@ -159,7 +159,7 @@ main() {
     local disk_usage_expire; disk_usage_expire=$(resolve_expire "${EXPIRE_DISK_USAGE:-0}" "$disk_usage_interval")
     local disk_usage_retain="${RETAIN_DISK_USAGE:-true}"
     _publish_metric "disk_usage" "$disk_usage_mode" "$disk_usage_interval" "$disk_usage_expire" publish_disk_usage \
-      "awk '/^(fsSize|fsFree|fsUsed)=/{print}' /var/local/emhttp/disks.ini 2>/dev/null | md5sum" "$disk_usage_retain"
+      "get_array_data 2>/dev/null | jq -c '[.data.array.disks[] | {s:.fsSize,f:.fsFree}] // empty'" "$disk_usage_retain"
 
     # ── disks.ini: Disk Errors & Health Color ─────────────────────────────────
     local disk_errors_mode="${PUBLISH_DISK_ERRORS:-}"
