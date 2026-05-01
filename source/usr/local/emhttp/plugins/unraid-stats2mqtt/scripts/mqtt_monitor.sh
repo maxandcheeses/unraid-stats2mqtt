@@ -83,7 +83,7 @@ main() {
     local arr_sum_expire; arr_sum_expire=$(resolve_expire "${EXPIRE_ARRAY_SUMMARY:-0}" "$arr_sum_interval")
     local arr_sum_retain="${RETAIN_ARRAY_SUMMARY:-true}"
     _publish_metric "array_summary" "$arr_sum_mode" "$arr_sum_interval" "$arr_sum_expire" publish_array_summary \
-      "awk '/^(mdNumDisks|mdNumDisabled|mdNumInvalid|mdNumMissing|mdCapacity|mdFree)=/{print}' /var/local/emhttp/var.ini 2>/dev/null | md5sum" \
+      "get_vars_data 2>/dev/null | jq -c '.data.vars | {n:.mdNumDisks,d:.mdNumDisabled,i:.mdNumInvalid,m:.mdNumMissing} // empty'" \
       "$arr_sum_retain"
 
     # ── var.ini: Cache Pool ────────────────────────────────────────────────────
