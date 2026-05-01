@@ -228,7 +228,6 @@ main() {
       is_enabled "$ds_mode"           && publish_disk_states   "$ds_expire"       "$ds_retain"
       is_enabled "$disk_usage_mode"   && publish_disk_usage    "$disk_usage_expire" "$disk_usage_retain"
       is_enabled "$disk_errors_mode"  && publish_disk_errors   "$disk_errors_expire" "$disk_errors_retain"
-      is_enabled "$smart_mode"        && publish_smart         "$smart_expire"    "$smart_retain"
       is_enabled "$rw_mode"           && publish_rw_speeds     "$rw_expire"
       is_enabled "$monitor_mode"      && publish_monitor       "$monitor_expire"  "$monitor_retain"
       is_enabled "$net_mode"          && publish_network_speeds "$net_expire"     "$net_retain"
