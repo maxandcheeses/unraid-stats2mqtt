@@ -6,3 +6,25 @@ log() {
   fi
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
 }
+
+log_syslog() {
+  logger -t unraid-stats2mqtt "$1"
+}
+
+# Call from: trap 'on_error $? $LINENO $BASH_SOURCE' ERR
+on_error() {
+  local rc="$1" line="$2" src="${3:-unknown}"
+  local msg="Unexpected error in ${src}:${line} (exit ${rc})"
+  log "ERROR: ${msg}"
+  log_syslog "ERROR: ${msg}"
+}
+
+# Call from: trap 'on_exit $?' EXIT
+on_exit() {
+  local rc="$1"
+  if [ "${rc}" -ne 0 ] && [ "${_CLEAN_EXIT:-0}" = "0" ]; then
+    local msg="Daemon exited unexpectedly (exit ${rc})"
+    log "ERROR: ${msg}"
+    log_syslog "ERROR: ${msg}"
+  fi
+}
