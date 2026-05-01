@@ -62,3 +62,45 @@ get_parity_history_data() {
 get_info_data() {
   _api_cached "info" '{ info { os { hostname platform uptime kernel arch } cpu { brand cores threads } } }'
 }
+
+get_array_status() {
+  local resp; resp=$(get_array_data) || { echo "UNKNOWN"; return; }
+  echo "$resp" | jq -r '.data.array.state // "UNKNOWN"'
+}
+
+get_parity_info() {
+  local arr; arr=$(get_array_data) || { echo "UNKNOWN|0|0"; return; }
+  local running; running=$(echo "$arr" | jq -r '.data.array.parityCheckStatus.running // empty')
+
+  if [ "$running" = "true" ]; then
+    local progress speed
+    progress=$(echo "$arr" | jq -r '.data.array.parityCheckStatus.progress // 0')
+    speed=$(echo    "$arr" | jq -r '.data.array.parityCheckStatus.speed    // "0"')
+    echo "RUNNING|${progress}|${speed}"
+  else
+    echo "IDLE|0|0"
+  fi
+}
+
+get_rebuild_info() {
+  local vars; vars=$(get_vars_data) || { echo "UNKNOWN|0|0|0"; return; }
+  local action; action=$(echo "$vars" | jq -r '.data.vars.mdResyncAction // empty')
+
+  if [[ "$action" == recon* ]]; then
+    local resync pos size db dt pct=0 speed=0 eta=0
+    resync=$(echo "$vars" | jq -r '.data.vars.mdResync    // 0')
+    pos=$(echo    "$vars" | jq -r '.data.vars.mdResyncPos // "0"')
+    size=$(echo   "$vars" | jq -r '.data.vars.mdResyncSize // 0')
+    db=$(echo     "$vars" | jq -r '.data.vars.mdResyncDb  // "0"')
+    dt=$(echo     "$vars" | jq -r '.data.vars.mdResyncDt  // "0"')
+
+    [ "${size:-0}" -eq 0 ] && { echo "UNKNOWN|0|0|0"; return; }
+    pct=$(awk   "BEGIN{printf \"%.1f\", ${pos:-0}/${size}*100}")
+    [ "${dt:-0}" -gt 0 ] && speed=$(awk "BEGIN{printf \"%.0f\", ${db:-0}/${dt}}")
+    [ "${speed:-0}" -gt 0 ] && eta=$(awk "BEGIN{printf \"%.0f\", (${size}-${pos:-0})/${speed}/60}")
+    local status="RUNNING"; [ "${resync:-1}" = "0" ] && status="PAUSED"
+    echo "${status}|${pct}|${speed}|${eta}"
+  else
+    echo "IDLE|0|0|0"
+  fi
+}
