@@ -827,10 +827,11 @@ var UMM_YAML_FIELDS = [
 function ummFormToYaml() {
   var sections = [
     { comment: '# Plugin', fields: ['PLUGIN_ENABLED'] },
+    { comment: '# Unraid API', fields: ['UNRAID_API_KEY','UNRAID_API_HOST'] },
     { comment: '# MQTT Connection', fields: ['MQTT_PROTOCOL','MQTT_HOST','MQTT_PORT','MQTT_USER','MQTT_PASS','MQTT_TLS_INSECURE'] },
     { comment: '# Device Identity', fields: ['MQTT_DEVICE_NAME','MQTT_DEVICE_ID','MQTT_BASE_TOPIC'] },
     { comment: '# Home Assistant', fields: ['HA_WATCH_STATUS','HA_STATUS_TOPIC','HA_DISCOVERY_TOPIC'] },
-    { comment: '# Metrics — var.ini', fields: [
+    { comment: '# Metrics — Array & System', fields: [
       'PUBLISH_ARRAY_STATUS','INTERVAL_ARRAY_STATUS','EXPIRE_ARRAY_STATUS','RETAIN_ARRAY_STATUS',
       'PUBLISH_ARRAY_SUMMARY','INTERVAL_ARRAY_SUMMARY','EXPIRE_ARRAY_SUMMARY','RETAIN_ARRAY_SUMMARY',
       'PUBLISH_CACHE','INTERVAL_CACHE','EXPIRE_CACHE','RETAIN_CACHE',
@@ -840,22 +841,20 @@ function ummFormToYaml() {
       'PUBLISH_UPDATE_AVAILABLE','INTERVAL_UPDATE_AVAILABLE','EXPIRE_UPDATE_AVAILABLE','RETAIN_UPDATE_AVAILABLE',
       'PUBLISH_UPTIME','INTERVAL_UPTIME','EXPIRE_UPTIME','RETAIN_UPTIME',
     ]},
-    { comment: '# Metrics — disks.ini', fields: [
+    { comment: '# Metrics — Disks', fields: [
       'PUBLISH_DISK_TEMPS','INTERVAL_DISK_TEMPS','EXPIRE_DISK_TEMPS','RETAIN_DISK_TEMPS',
       'PUBLISH_DISK_STATES','INTERVAL_DISK_STATES','EXPIRE_DISK_STATES','RETAIN_DISK_STATES',
       'PUBLISH_DISK_USAGE','INTERVAL_DISK_USAGE','EXPIRE_DISK_USAGE','RETAIN_DISK_USAGE',
       'PUBLISH_DISK_ERRORS','INTERVAL_DISK_ERRORS','EXPIRE_DISK_ERRORS','RETAIN_DISK_ERRORS',
-      'PUBLISH_DISK_JSON','INTERVAL_DISK_JSON','EXPIRE_DISK_JSON','RETAIN_DISK_JSON',
-      'PUBLISH_SMART','INTERVAL_SMART','EXPIRE_SMART','RETAIN_SMART',
       'PUBLISH_RW_SPEEDS','INTERVAL_RW_SPEEDS','EXPIRE_RW_SPEEDS','RETAIN_RW_SPEEDS',
     ]},
-    { comment: '# Metrics — monitor.ini', fields: [
+    { comment: '# Metrics — Monitor', fields: [
       'PUBLISH_MONITOR','INTERVAL_MONITOR','EXPIRE_MONITOR','RETAIN_MONITOR',
     ]},
-    { comment: '# Metrics — network', fields: [
+    { comment: '# Metrics — Network', fields: [
       'PUBLISH_NETWORK','INTERVAL_NETWORK','EXPIRE_NETWORK','RETAIN_NETWORK',
     ]},
-    { comment: '# Metrics — shares.ini', fields: [
+    { comment: '# Metrics — Shares', fields: [
       'PUBLISH_SHARES','INTERVAL_SHARES','EXPIRE_SHARES','RETAIN_SHARES',
     ]},
   ];
