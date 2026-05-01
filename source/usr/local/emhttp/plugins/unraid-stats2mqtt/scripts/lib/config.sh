@@ -2,6 +2,8 @@
 
 load_config() {
   [ -f "$CONFIG_FILE" ] && source "$CONFIG_FILE"
+  UNRAID_API_KEY="${UNRAID_API_KEY:-}"
+  UNRAID_API_HOST="${UNRAID_API_HOST:-https://localhost}"
   MQTT_HOST="${MQTT_HOST:-localhost}"
   MQTT_PORT="${MQTT_PORT:-1883}"
   MQTT_PROTOCOL="${MQTT_PROTOCOL:-mqtt}"
