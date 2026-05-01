@@ -20,12 +20,12 @@ source "$SCRIPT_DIR/lib/helpers.sh"
 source "$SCRIPT_DIR/lib/ha_discovery.sh"
 source "$SCRIPT_DIR/lib/loop.sh"
 source "$SCRIPT_DIR/lib/api.sh"
-source "$SCRIPT_DIR/collectors/api/var.sh"
-source "$SCRIPT_DIR/collectors/api/shares.sh"
-source "$SCRIPT_DIR/collectors/api/monitor.sh"
-source "$SCRIPT_DIR/collectors/ini/disks_ini.sh"
-source "$SCRIPT_DIR/collectors/cli/network.sh"
-source "$SCRIPT_DIR/collectors/cli/system.sh"
+source "$SCRIPT_DIR/publishers/unraid-api/var.sh"
+source "$SCRIPT_DIR/publishers/unraid-api/shares.sh"
+source "$SCRIPT_DIR/publishers/unraid-api/monitor.sh"
+source "$SCRIPT_DIR/publishers/ini/disks_ini.sh"
+source "$SCRIPT_DIR/publishers/cli/network.sh"
+source "$SCRIPT_DIR/publishers/cli/system.sh"
 
 trap 'on_exit $?' EXIT
 
