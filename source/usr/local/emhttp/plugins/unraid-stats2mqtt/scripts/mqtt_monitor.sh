@@ -143,7 +143,7 @@ main() {
     local temp_expire; temp_expire=$(resolve_expire "${EXPIRE_DISK_TEMPS:-0}" "$temp_interval")
     local temp_retain="${RETAIN_DISK_TEMPS:-true}"
     _publish_metric "disk_temps" "$temp_mode" "$temp_interval" "$temp_expire" publish_disk_temps \
-      "awk '/^temp=/{print}' /var/local/emhttp/disks.ini 2>/dev/null | md5sum" "$temp_retain"
+      "get_array_data 2>/dev/null | jq -c '[(.data.array.disks[],.data.array.parities[]) | .temp] // empty'" "$temp_retain"
 
     # ── disks.ini: Disk States ─────────────────────────────────────────────────
     local ds_mode="${PUBLISH_DISK_STATES:-}"
