@@ -522,7 +522,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
 
       ['Monitor',
        'PUBLISH_MONITOR', 'INTERVAL_MONITOR', 60,              'EXPIRE_MONITOR', '',
-       'Array errors, parity history, flash drive state, Docker disk %, per-disk usage % and alert color', 'RETAIN_MONITOR'],
+       'Array sync errors + last parity check summary (date, duration, speed, status, errors)', 'RETAIN_MONITOR'],
 
       '— Network',
 
