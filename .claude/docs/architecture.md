@@ -11,7 +11,7 @@ source/                              ← everything here gets tarred into the .t
   etc/rc.d/rc.unraid-stats2mqtt    ← init script: start/stop/restart/status
   usr/local/emhttp/plugins/unraid-stats2mqtt/
     scripts/
-      mqtt_monitor.sh                ← entry point (sources all lib/ and metrics/)
+      mqtt_monitor.sh                ← entry point (sources all lib/ and collectors/)
       lib/
         config.sh                    ← load_config, build_mqtt_args
         logging.sh                   ← log (with 1 MB rotation)
@@ -19,7 +19,7 @@ source/                              ← everything here gets tarred into the .t
         ha_discovery.sh              ← ha_register, ha_unregister, resolve_expire
         helpers.sh                   ← safe_name, is_enabled, json_escape, read_ini_section, ini_field
         loop.sh                      ← state_changed, should_publish_interval, _publish_metric
-      metrics/
+      collectors/
         var_ini.sh                   ← array status/summary, cache, parity, rebuild, system info
         disks_ini.sh                 ← disk temps/states/usage/errors/JSON, SMART, R/W speeds
         monitor_ini.sh               ← array errors, parity history, flash state, docker usage, per-disk usage/alert
@@ -38,7 +38,7 @@ dist/                                ← build output (gitignored)
 ## Data Flow
 
 ```
-Unraid emhttp .ini files  →  metrics/*.sh  →  mqtt_publish  →  MQTT broker  →  Home Assistant
+Unraid emhttp .ini files  →  collectors/*.sh  →  mqtt_publish  →  MQTT broker  →  Home Assistant
   /var/local/emhttp/
     var.ini
     disks.ini
@@ -53,11 +53,11 @@ Unraid emhttp .ini files  →  metrics/*.sh  →  mqtt_publish  →  MQTT broker
 
 | File / Source          | Publisher           | Key metrics |
 |------------------------|---------------------|-------------|
-| `var.ini`              | `metrics/var_ini.sh`     | array state, disk counts, capacity, cache pool, parity/rebuild progress, Unraid version |
-| `disks.ini`            | `metrics/disks_ini.sh`   | per-disk temp, state, filesystem usage, errors, health color, SMART, R/W speeds, full JSON |
-| `monitor.ini`          | `metrics/monitor_ini.sh` | array errors, parity history, flash state, Docker vdisk %, per-disk usage %, per-disk alert color |
-| `/proc/net/dev`        | `metrics/network.sh`     | per-interface RX/TX KB/s |
-| `shares.ini`           | `metrics/shares_ini.sh`  | per-share JSON blob |
+| `var.ini`              | `collectors/var_ini.sh`     | array state, disk counts, capacity, cache pool, parity/rebuild progress, Unraid version |
+| `disks.ini`            | `collectors/disks_ini.sh`   | per-disk temp, state, filesystem usage, errors, health color, SMART, R/W speeds, full JSON |
+| `monitor.ini`          | `collectors/monitor_ini.sh` | array errors, parity history, flash state, Docker vdisk %, per-disk usage %, per-disk alert color |
+| `/proc/net/dev`        | `collectors/network.sh`     | per-interface RX/TX KB/s |
+| `shares.ini`           | `collectors/shares_ini.sh`  | per-share JSON blob |
 
 ## Publish Modes
 
