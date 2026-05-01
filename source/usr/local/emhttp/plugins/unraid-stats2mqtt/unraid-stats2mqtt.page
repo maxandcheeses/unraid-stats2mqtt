@@ -254,6 +254,11 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     onclick="ummDaemonToggle('daemon_restart')">
     &#8635; Restart
   </button>
+  <span style="font-size:12px;color:var(--umm-muted);margin-left:8px">|</span>
+  <div class="umm-dot <?= $api_running ? 'running' : 'stopped' ?>"></div>
+  <div class="umm-status-text">
+    <strong>API Service:</strong> <span><?= $api_running ? 'Running' : 'Stopped' ?></span>
+  </div>
   <span style="font-size:12px;color:var(--umm-muted);margin-left:8px">Plugin:</span>
   <select id="umm-enabled-select" class="umm-select-sm"
     onchange="ummSetEnabled(this.value)">
