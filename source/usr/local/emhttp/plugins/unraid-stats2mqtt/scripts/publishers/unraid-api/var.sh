@@ -1,10 +1,4 @@
 #!/bin/bash
-# SOURCE: Unraid GraphQL API (array, vars, info)
-
-get_array_status() {
-  local resp; resp=$(get_array_data) || { echo "UNKNOWN"; return; }
-  echo "$resp" | jq -r '.data.array.state // "UNKNOWN"'
-}
 
 publish_array_status() {
   local expire="${1:-0}" retain="${2:-true}"
