@@ -16,10 +16,15 @@ publish_monitor() {
   local hist; hist=$(get_parity_history_data) || return
   local last_status; last_status=$(echo "$hist" | jq -r '.data.parityHistory[0].status // empty')
   [ -n "$last_status" ] && {
-    local parity_hist
-    parity_hist=$(echo "$hist" | jq -c '.data.parityHistory[0] | {date, duration, speed, status, errors}')
+    local parity_hist_json
+    parity_hist_json=$(echo "$hist" | jq -c '.data.parityHistory[0] | {date, duration, speed, status, errors}')
+    local parity_hist_attrs
+    parity_hist_attrs=$(echo "$hist" | jq -c '{history: [.data.parityHistory[] | {date, duration, speed, status, errors}]}')
     ha_register "monitor_parity_history" "Parity History" \
-      "${base}_monitor_parity_history/state" "" "" "shield-check" "" "$expire"
-    mqtt_publish "${base}_monitor_parity_history/state" "$parity_hist" "$retain"
+      "${base}_monitor_parity_history/state" \
+      "${base}_monitor_parity_history/attributes" \
+      "" "shield-check" "" "$expire"
+    mqtt_publish "${base}_monitor_parity_history/state" "$last_status" "$retain"
+    mqtt_publish "${base}_monitor_parity_history/attributes" "$parity_hist_attrs" "$retain"
   }
 }
