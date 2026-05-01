@@ -676,6 +676,22 @@ function ummPost(params, onSuccess, onError) {
   .catch(function(err) { if (onError) onError(err); else ummToast('Request failed: ' + err, 'error'); });
 }
 
+function ummSetPendingRestart() {
+  localStorage.setItem('umm_pending_restart', '1');
+  var btn  = document.getElementById('umm-restart-btn');
+  var note = document.getElementById('umm-restart-note');
+  if (btn)  { btn.classList.remove('umm-btn-muted'); btn.classList.add('umm-btn-danger'); }
+  if (note) note.style.display = '';
+}
+
+function ummClearPendingRestart() {
+  localStorage.removeItem('umm_pending_restart');
+  var btn  = document.getElementById('umm-restart-btn');
+  var note = document.getElementById('umm-restart-note');
+  if (btn)  { btn.classList.remove('umm-btn-danger'); btn.classList.add('umm-btn-muted'); }
+  if (note) note.style.display = 'none';
+}
+
 function ummDaemonToggle(action) {
   var statusEl = document.getElementById('umm-daemon-status');
   var pidEl    = document.getElementById('umm-daemon-pid');
@@ -689,6 +705,7 @@ function ummDaemonToggle(action) {
       if (statusEl) statusEl.textContent = msg;
       if (btn) btn.disabled = false;
     } else {
+      if (action === 'daemon_restart' || action === 'daemon_start') ummClearPendingRestart();
       setTimeout(function() { window.location.reload(); }, 3000);
     }
   });
