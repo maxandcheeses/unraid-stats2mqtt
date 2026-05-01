@@ -508,7 +508,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
 
       ['Disk Filesystem Usage',
        'PUBLISH_DISK_USAGE', 'INTERVAL_DISK_USAGE', 300,       'EXPIRE_DISK_USAGE', '',
-       'Filesystem size / free / used (GB) per disk — reads fsSize, fsFree, fsUsed', 'RETAIN_DISK_USAGE'],
+       'Filesystem size / free / used (GB) per disk', 'RETAIN_DISK_USAGE'],
 
       ['Disk Errors',
        'PUBLISH_DISK_ERRORS', 'INTERVAL_DISK_ERRORS', 300,     'EXPIRE_DISK_ERRORS', '',
