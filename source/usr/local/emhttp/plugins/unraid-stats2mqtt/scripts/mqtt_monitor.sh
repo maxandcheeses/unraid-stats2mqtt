@@ -169,16 +169,7 @@ main() {
     _publish_metric "disk_errors" "$disk_errors_mode" "$disk_errors_interval" "$disk_errors_expire" publish_disk_errors \
       "get_array_data 2>/dev/null | jq -c '[.data.array.disks[] | .numErrors] // empty'" "$disk_errors_retain"
 
-    # ── disks.ini + smartctl: SMART ────────────────────────────────────────────
-    local smart_mode="${PUBLISH_SMART:-}"
-    local smart_interval="${INTERVAL_SMART:-300}"
-    local smart_expire; smart_expire=$(resolve_expire "${EXPIRE_SMART:-0}" "$smart_interval")
-    local smart_retain="${RETAIN_SMART:-true}"
-    if [[ "$smart_mode" == "interval" || "$smart_mode" == "both" ]]; then
-      should_publish_interval "smart_interval" "$smart_interval" "$TICK" && { log "Interval publish: smart"; publish_smart "$smart_expire" "$smart_retain"; }
-    fi
-
-    # ── disks.ini + /proc/diskstats: R/W Speeds ────────────────────────────────
+    # ── /proc/diskstats: R/W Speeds ────────────────────────────────────────────
     local rw_mode="${PUBLISH_RW_SPEEDS:-}"
     local rw_interval="${INTERVAL_RW_SPEEDS:-30}"
     local rw_expire; rw_expire=$(resolve_expire "${EXPIRE_RW_SPEEDS:-0}" "$rw_interval")
