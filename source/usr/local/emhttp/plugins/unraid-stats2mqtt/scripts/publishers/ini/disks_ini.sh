@@ -111,7 +111,6 @@ publish_rw_speeds() {
 
   while IFS=$'\t' read -r disk_name dev; do
     [ -z "$dev" ] && continue
-    [ ! -b "/dev/$dev" ] && continue
 
     local disk_stats; disk_stats=$(collect_diskstats "$dev") || continue
     local read_bytes write_bytes
