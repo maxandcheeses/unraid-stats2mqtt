@@ -66,11 +66,11 @@ Outputs `dist/<plugin>-<version>-x86_64-1.txz` and an updated `.plg`. Upload bot
 | `scripts/lib/config.sh` | `load_config`, `build_mqtt_args` |
 | `scripts/lib/ha_discovery.sh` | `ha_register`, `ha_unregister`, `resolve_expire` |
 | `scripts/lib/loop.sh` | `_publish_metric`, `state_changed`, `should_publish_interval` |
-| `scripts/metrics/var_ini.sh` | Array, cache, parity, rebuild, version |
-| `scripts/metrics/disks_ini.sh` | Per-disk sensors + SMART + R/W speeds |
-| `scripts/metrics/monitor_ini.sh` | monitor.ini aggregates |
-| `scripts/metrics/network.sh` | Network interface speeds |
-| `scripts/metrics/shares_ini.sh` | Share JSON sensors |
+| `scripts/collectors/var_ini.sh` | Array, cache, parity, rebuild, version |
+| `scripts/collectors/disks_ini.sh` | Per-disk sensors + SMART + R/W speeds |
+| `scripts/collectors/monitor_ini.sh` | monitor.ini aggregates |
+| `scripts/collectors/network.sh` | Network interface speeds |
+| `scripts/collectors/shares_ini.sh` | Share JSON sensors |
 
 ## Constraints
 
