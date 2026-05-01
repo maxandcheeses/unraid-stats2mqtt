@@ -11,14 +11,6 @@ log_syslog() {
   logger -t unraid-stats2mqtt "$1"
 }
 
-# Call from: trap 'on_error $? $LINENO $BASH_SOURCE' ERR
-on_error() {
-  local rc="$1" line="$2" src="${3:-unknown}"
-  local msg="Unexpected error in ${src}:${line} (exit ${rc})"
-  log "ERROR: ${msg}"
-  log_syslog "ERROR: ${msg}"
-}
-
 # Call from: trap 'on_exit $?' EXIT
 on_exit() {
   local rc="$1"
