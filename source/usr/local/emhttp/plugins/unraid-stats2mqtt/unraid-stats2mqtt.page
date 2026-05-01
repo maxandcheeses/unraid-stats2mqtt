@@ -462,7 +462,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     // A string entry inserts a group header row.
     $metric_groups = [
 
-      '— var.ini',
+      '— Array &amp; System',
 
       ['Array Status',
        'PUBLISH_ARRAY_STATUS', 'INTERVAL_ARRAY_STATUS', 30,   'EXPIRE_ARRAY_STATUS', '',
