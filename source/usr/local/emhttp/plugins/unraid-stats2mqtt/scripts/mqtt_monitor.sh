@@ -151,7 +151,7 @@ main() {
     local ds_expire; ds_expire=$(resolve_expire "${EXPIRE_DISK_STATES:-0}" "$ds_interval")
     local ds_retain="${RETAIN_DISK_STATES:-true}"
     _publish_metric "disk_states" "$ds_mode" "$ds_interval" "$ds_expire" publish_disk_states \
-      "awk '/^status=/{print}' /var/local/emhttp/disks.ini 2>/dev/null | md5sum" "$ds_retain"
+      "get_array_data 2>/dev/null | jq -c '[.data.array.disks[] | {s:.status,p:.isSpinning}] // empty'" "$ds_retain"
 
     # ── disks.ini: Disk Filesystem Usage ──────────────────────────────────────
     local disk_usage_mode="${PUBLISH_DISK_USAGE:-}"
