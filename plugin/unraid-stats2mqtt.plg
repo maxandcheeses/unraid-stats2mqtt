@@ -94,7 +94,7 @@ echo "unraid-stats2mqtt installed successfully."
 <INLINE>
 if [ -f /etc/rc.d/rc.unraid-stats2mqtt ]; then
   chmod +x /etc/rc.d/rc.unraid-stats2mqtt
-  if /etc/rc.d/rc.unraid-stats2mqtt status &>/dev/null; then
+  if /etc/rc.d/rc.unraid-stats2mqtt status >/dev/null 2>&amp;1; then
     /etc/rc.d/rc.unraid-stats2mqtt restart
   else
     /etc/rc.d/rc.unraid-stats2mqtt start
