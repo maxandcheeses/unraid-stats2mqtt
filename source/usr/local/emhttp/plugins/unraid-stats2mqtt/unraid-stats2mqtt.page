@@ -250,10 +250,11 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     onclick="ummDaemonToggle('<?= $daemon_running ? 'daemon_stop' : 'daemon_start' ?>')">
     <?= $daemon_running ? 'Stop' : 'Start' ?>
   </button>
-  <button type="button" class="umm-btn umm-btn-muted umm-btn-sm"
+  <button type="button" id="umm-restart-btn" class="umm-btn umm-btn-muted umm-btn-sm"
     onclick="ummDaemonToggle('daemon_restart')">
     &#8635; Restart
   </button>
+  <span id="umm-restart-note" style="display:none;font-size:11px;color:var(--umm-error);font-weight:600">&#9888; Restart required for new settings to apply</span>
   <span style="font-size:12px;color:var(--umm-muted);margin-left:8px">|</span>
   <div class="umm-dot <?= $api_running ? 'running' : 'stopped' ?>"></div>
   <div class="umm-status-text">
