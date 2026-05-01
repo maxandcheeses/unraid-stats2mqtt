@@ -113,12 +113,10 @@ publish_rw_speeds() {
     [ -z "$dev" ] && continue
     [ ! -b "/dev/$dev" ] && continue
 
-    local stats; stats=$(awk -v d=" $dev " '$0~d{print;exit}' /proc/diskstats 2>/dev/null)
-    [ -z "$stats" ] && continue
-
+    local disk_stats; disk_stats=$(collect_diskstats "$dev") || continue
     local read_bytes write_bytes
-    read_bytes=$(( $(echo "$stats" | awk '{print $6}') * 512 ))
-    write_bytes=$(( $(echo "$stats" | awk '{print $10}') * 512 ))
+    read_bytes="${disk_stats%% *}"
+    write_bytes="${disk_stats##* }"
 
     if [ -n "${PREV_READ_BYTES[$dev]+x}" ]; then
       local elapsed=$(( now - PREV_READ_TIME[$dev] ))
