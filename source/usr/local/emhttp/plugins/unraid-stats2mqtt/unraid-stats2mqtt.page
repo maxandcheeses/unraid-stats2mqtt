@@ -329,8 +329,12 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
     <div class="umm-row">
       <label>API Key</label>
       <div style="flex:1;min-width:0">
-        <input type="password" name="UNRAID_API_KEY" value="<?= esc($cfg['UNRAID_API_KEY'] ?? '') ?>" placeholder="required" style="width:100%;box-sizing:border-box">
-        <div class="umm-hint">Generate in Unraid WebGUI under Settings &rarr; API Keys. Required for all metrics.</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="password" name="UNRAID_API_KEY" id="unraid_api_key" value="<?= esc($cfg['UNRAID_API_KEY'] ?? '') ?>" placeholder="required" style="flex:1;min-width:0;box-sizing:border-box">
+          <button type="button" class="umm-btn umm-btn-muted umm-btn-sm" onclick="ummGenerateApiKey(this)" style="white-space:nowrap">&#128273; Generate Key</button>
+        </div>
+        <span id="umm-apikey-result" style="font-size:12px;font-weight:600;opacity:0;transition:opacity 0.3s;display:block;margin-top:4px"></span>
+        <div class="umm-hint">Fetches or creates the <code>Stats2MQTT</code> API key on this server. Or generate manually under Settings &rarr; API Keys.</div>
       </div>
     </div>
 
