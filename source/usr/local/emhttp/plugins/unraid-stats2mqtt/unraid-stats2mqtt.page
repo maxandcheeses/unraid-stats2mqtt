@@ -115,7 +115,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
 
   /* Per-metric rows */
   .umm-metric-row {
-    display: grid; grid-template-columns: minmax(120px, 22%) 1fr minmax(80px, 15%) minmax(80px, 15%) minmax(70px, 10%);
+    display: grid; grid-template-columns: minmax(140px, 30%) minmax(80px, 15%) minmax(80px, 15%) minmax(70px, 10%);
     align-items: start; gap: 8px; margin-bottom: 0; font-size: 13px;
     border-bottom: 1px solid var(--umm-border); padding: 7px 0;
   }
@@ -195,7 +195,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
 
   /* Metric table header row */
   .umm-metric-header {
-    display: grid; grid-template-columns: minmax(120px, 22%) 1fr minmax(80px, 15%) minmax(80px, 15%) minmax(70px, 10%);
+    display: grid; grid-template-columns: minmax(140px, 30%) minmax(80px, 15%) minmax(80px, 15%) minmax(70px, 10%);
     gap: 8px; font-size: 11px; color: var(--umm-muted);
     padding: 4px 0 6px; border-bottom: 2px solid var(--umm-border); margin-bottom: 0;
   }
