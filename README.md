@@ -161,6 +161,14 @@ Certificates are stored in:
 | `INTERVAL_MONITOR` | Seconds between monitor.ini publishes | `300` |
 | `PUBLISH_SHARES` | `interval` / `onchange` / `both` | — |
 | `INTERVAL_SHARES` | Seconds between share usage publishes | `300` |
+| `PUBLISH_DOCKER` | Enable Docker container sensors | `true` |
+| `INTERVAL_DOCKER` | Seconds between Docker state publishes | `30` |
+| `DOCKER_SENSOR_MODE` | `include` (allowlist) / `exclude` (denylist) | `include` |
+| `DOCKER_SENSORS` | Comma-separated list of container names to include/exclude | — |
+| `PUBLISH_VMS` | Enable VM sensors | `true` |
+| `INTERVAL_VMS` | Seconds between VM state publishes | `30` |
+| `VM_SENSOR_MODE` | `include` (allowlist) / `exclude` (denylist) | `include` |
+| `VM_SENSORS` | Comma-separated list of VM names to include/exclude | — |
 
 ---
 
