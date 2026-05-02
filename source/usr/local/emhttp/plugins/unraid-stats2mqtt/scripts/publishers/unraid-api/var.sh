@@ -195,7 +195,7 @@ publish_system_info() {
     cpu_threads=$(echo "$info" | jq -r '.data.info.cpu.threads // 0')
 
     local attrs
-    attrs=$(printf '{"server_name":"%s","model":"%s","version":"%s","cpu":"%s","cpu_cores":%s,"cpu_threads":%s}' \
+    attrs=$(printf '{"name":"%s","sysModel":"%s","version":"%s","brand":"%s","cores":%s,"threads":%s}' \
       "$(json_escape "$server_name")" "$(json_escape "$model")" "$(json_escape "${version:-}")" \
       "$(json_escape "$cpu_brand")" "${cpu_cores:-0}" "${cpu_threads:-0}")
     mqtt_publish "$attr_topic" "$attrs" "$retain"
