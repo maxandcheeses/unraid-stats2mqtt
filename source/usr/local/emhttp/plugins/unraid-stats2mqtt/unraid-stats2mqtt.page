@@ -1244,9 +1244,14 @@ function ummEntityModeChange(group, mode) {
   if (note) note.style.display = mode === 'exclude' ? 'block' : 'none';
 }
 
-// Restore pending-restart indicator if set before last page unload
+// Restore pending-restart indicator if set before last page unload.
+// If the daemon is already running (e.g. after a plugin update), treat that as
+// a completed restart and clear the flag instead.
 (function() {
-  if (localStorage.getItem('umm_pending_restart')) ummSetPendingRestart();
+  if (!localStorage.getItem('umm_pending_restart')) return;
+  var daemonRunning = <?= $daemon_running ? 'true' : 'false' ?>;
+  if (daemonRunning) ummClearPendingRestart();
+  else ummSetPendingRestart();
 })();
 
 (function() {
