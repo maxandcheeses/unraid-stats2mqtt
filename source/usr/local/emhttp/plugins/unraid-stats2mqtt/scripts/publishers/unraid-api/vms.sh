@@ -35,7 +35,7 @@ publish_vms() {
     ha_register_binary "$uid" "${name}" "$state_topic" "" "computer" "$expire" "$attr_topic"
 
     local value="OFF"
-    [ "$state" = "running" ] && value="ON"
+    [ "$state" = "RUNNING" ] && value="ON"
     mqtt_publish "$state_topic" "$value" "$retain"
 
     local attrs
