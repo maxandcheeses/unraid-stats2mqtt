@@ -32,7 +32,7 @@ publish_vms() {
     local state_topic="${MQTT_BASE_TOPIC}/binary_sensor/${MQTT_TOPIC}_${uid}/state"
     local attr_topic="${MQTT_BASE_TOPIC}/binary_sensor/${MQTT_TOPIC}_${uid}/attributes"
 
-    ha_register_binary "$uid" "${name}" "$state_topic" "" "computer" "$expire" "$attr_topic"
+    ha_register_binary "$uid" "${name}" "$state_topic" "" "desktop-tower-monitor" "$expire" "$attr_topic"
 
     local value="OFF"
     [ "$state" = "RUNNING" ] && value="ON"
