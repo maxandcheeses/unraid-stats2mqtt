@@ -64,8 +64,10 @@ Several sensors expose additional detail as HA state attributes (accessible via 
 | `sensor.unraid_<disk>` (disk usage) | `size_gb`, `free_gb`, `used_gb`, `read_speed`, `write_speed`, plus raw fields from `disks.ini` |
 | `sensor.unraid_<disk>_smart_health` | `power_on_hours`, `crc_errors`, `nvme_unsafe_shutdowns` (NVMe), `nvme_media_errors` (NVMe) |
 | `sensor.unraid_share_<share>_info` | All fields from `shares.ini` (e.g. `share`, `color`, `free`, `used`, `size`, `include`, `exclude`) |
-| `sensor.unraid_identification` | `server_name`, `description`, `model`, `version` |
+| `sensor.unraid_identification` | `name`, `sysModel`, `version`, `brand`, `cores`, `threads` |
 | `binary_sensor.unraid_update_available` | Raw fields from `/tmp/unraidcheck/result.json` (e.g. `isNewer`, `version`) |
+| `binary_sensor.unraid_docker_<name>` | `state`, `id`, `status`, `image`, `imageId`, `autoStart`, `ports` |
+| `binary_sensor.unraid_vm_<name>` | `name`, `state`, `uuid` |
 
 - Per-metric publish rules: **interval**, **on-change**, or **both**
 - Protocol support: **MQTT**, **MQTTS** (TLS), **WS**, **WSS**
