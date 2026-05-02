@@ -1258,7 +1258,7 @@ function ummEntityModeChange(group, mode) {
 
 // Render restart-pending indicator from server-side flag (visible to all browsers).
 (function() {
-  if (<?= $restart_pending ? 'true' : 'false' ?>) ummSetPendingRestart();
+  if (<?= $restart_pending ? 'true' : 'false' ?>) ummShowRestartIndicator();
 })();
 
 (function() {
