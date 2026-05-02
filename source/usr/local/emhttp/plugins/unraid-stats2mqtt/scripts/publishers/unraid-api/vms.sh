@@ -14,14 +14,11 @@ publish_vms() {
   fi
 
   while IFS= read -r vm_json; do
-    local name state uuid core_count max_memory description autostart
-    name=$(echo "$vm_json"        | jq -r '.name // ""')
-    state=$(echo "$vm_json"       | jq -r '.state // ""')
-    uuid=$(echo "$vm_json"        | jq -r '.uuid // ""')
-    core_count=$(echo "$vm_json"  | jq -r '.coreCount // ""')
-    max_memory=$(echo "$vm_json"  | jq -r '.maxMemory // ""')
-    description=$(echo "$vm_json" | jq -r '.description // ""')
-    autostart=$(echo "$vm_json"   | jq -r '.autostart | tostring')
+    local name state uuid id
+    name=$(echo "$vm_json"  | jq -r '.name // ""')
+    state=$(echo "$vm_json" | jq -r '.state // ""')
+    uuid=$(echo "$vm_json"  | jq -r '.uuid // ""')
+    id=$(echo "$vm_json"    | jq -r '.id // ""')
 
     if [ "$mode" = "include" ]; then
       [ -z "$list" ] && continue
