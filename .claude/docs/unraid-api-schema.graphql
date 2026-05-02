@@ -1,0 +1,341 @@
+# Unraid GraphQL API Schema
+# Source: live introspection from Unraid 7.2.5
+# Used by: scripts/collectors/unraid-api.sh (graphql_query / _api_cached)
+# Endpoint: POST ${UNRAID_API_HOST}/graphql  (header: x-api-key: ${UNRAID_API_KEY})
+
+# ----- Key types used by unraid-stats2mqtt -----
+
+type VmDomain implements Node {
+  id: PrefixedID!          # PrefixedID format: "<serverId>:<uuid>" — strip prefix to get UUID
+  name: String
+  state: VmState!
+  uuid: String @deprecated(reason: "Use id instead")
+}
+
+enum VmState {
+  NOSTATE
+  RUNNING
+  IDLE
+  PAUSED
+  SHUTDOWN
+  SHUTOFF
+  CRASHED
+  PMSUSPENDED
+}
+
+type Vms implements Node {
+  id: PrefixedID!
+  domains: [VmDomain!]
+  domain: [VmDomain!]      # legacy alias for domains, both work
+}
+
+type DockerContainer implements Node {
+  id: PrefixedID!           # PrefixedID format: "<serverId>:<containerId>"
+  names: [String!]!         # first element is the container name (strip leading "/")
+  image: String!
+  imageId: String!
+  command: String!
+  created: Int!
+  ports: [ContainerPort!]!
+  lanIpPorts: [String!]
+  sizeRootFs: BigInt
+  sizeRw: BigInt
+  sizeLog: BigInt
+  labels: JSON
+  state: ContainerState!
+  status: String!
+  hostConfig: ContainerHostConfig
+  networkSettings: JSON
+  mounts: [JSON!]
+  autoStart: Boolean!
+  autoStartOrder: Int
+  autoStartWait: Int
+  templatePath: String
+  projectUrl: String
+  registryUrl: String
+  supportUrl: String
+  iconUrl: String
+  webUiUrl: String
+  shell: String
+  templatePorts: [ContainerPort!]
+  isOrphaned: Boolean!
+  isUpdateAvailable: Boolean
+  isRebuildReady: Boolean
+  tailscaleEnabled: Boolean!
+  tailscaleStatus(forceRefresh: Boolean = false): TailscaleStatus
+}
+
+enum ContainerState {
+  RUNNING
+  PAUSED
+  EXITED
+}
+
+type ContainerPort {
+  ip: String
+  privatePort: Port
+  publicPort: Port
+  type: ContainerPortType!
+}
+
+enum ContainerPortType {
+  TCP
+  UDP
+}
+
+type Docker implements Node {
+  id: PrefixedID!
+  containers(skipCache: Boolean! = false): [DockerContainer!]!
+  networks(skipCache: Boolean! = false): [DockerNetwork!]!
+  portConflicts(skipCache: Boolean! = false): DockerPortConflicts!
+  logs(id: PrefixedID!, since: DateTime, tail: Int): DockerContainerLogs!
+  container(id: PrefixedID!): DockerContainer
+  containerUpdateStatuses: [ExplicitStatusItem!]!
+}
+
+type UnraidArray implements Node {
+  id: PrefixedID!
+  state: ArrayState!
+  capacity: ArrayCapacity!
+  boot: ArrayDisk
+  bootDevices: [ArrayDisk!]!
+  parities: [ArrayDisk!]!
+  parityCheckStatus: ParityCheck!
+  disks: [ArrayDisk!]!
+  caches: [ArrayDisk!]!
+}
+
+enum ArrayState {
+  STARTED
+  STOPPED
+  NEW_ARRAY
+  RECON_DISK
+  DISABLE_DISK
+  SWAP_DSBL
+  INVALID_EXPANSION
+  PARITY_NOT_BIGGEST
+  TOO_MANY_MISSING_DISKS
+  NEW_DISK_TOO_SMALL
+  NO_DATA_DISKS
+}
+
+type ArrayDisk implements Node {
+  id: PrefixedID!
+  idx: Int!
+  name: String
+  device: String
+  size: BigInt
+  status: ArrayDiskStatus
+  rotational: Boolean
+  temp: Int
+  numReads: BigInt
+  numWrites: BigInt
+  numErrors: BigInt
+  fsSize: BigInt
+  fsFree: BigInt
+  fsUsed: BigInt
+  exportable: Boolean
+  type: ArrayDiskType!
+  warning: Int
+  critical: Int
+  fsType: String
+  comment: String
+  format: String
+  transport: String           # "ata" | "nvme" | "usb" | others
+  color: ArrayDiskFsColor
+  isSpinning: Boolean
+}
+
+enum ArrayDiskType {
+  DATA
+  PARITY
+  BOOT
+  FLASH
+  CACHE
+}
+
+enum ArrayDiskStatus {
+  DISK_NP
+  DISK_OK
+  DISK_NP_MISSING
+  DISK_INVALID
+  DISK_WRONG
+  DISK_DSBL
+  DISK_NP_DSBL
+  DISK_DSBL_NEW
+  DISK_NEW
+}
+
+type ParityCheck {
+  date: DateTime
+  duration: Int
+  speed: String
+  status: ParityCheckStatus!
+  errors: Int
+  progress: Int
+  correcting: Boolean
+  paused: Boolean
+  running: Boolean
+}
+
+enum ParityCheckStatus {
+  NEVER_RUN
+  RUNNING
+  PAUSED
+  COMPLETED
+  CANCELLED
+  FAILED
+}
+
+type Share implements Node {
+  id: PrefixedID!
+  name: String
+  free: BigInt
+  used: BigInt
+  size: BigInt
+  include: [String!]
+  exclude: [String!]
+  cache: Boolean
+  nameOrig: String
+  comment: String
+  allocator: String
+  splitLevel: String
+  floor: String
+  cow: String
+  color: String
+  luksStatus: String
+}
+
+type Vars implements Node {
+  id: PrefixedID!
+  version: String
+  name: String               # hostname
+  mdResync: Int
+  mdResyncPos: String
+  mdResyncDb: String
+  mdResyncDt: String
+  mdResyncAction: String
+  mdResyncSize: Int
+  # ... many more fields (see full schema for complete list)
+}
+
+type Info implements Node {
+  id: PrefixedID!
+  time: DateTime!
+  baseboard: InfoBaseboard!
+  cpu: InfoCpu!
+  devices: InfoDevices!
+  display: InfoDisplay!
+  machineId: ID
+  memory: InfoMemory!
+  os: InfoOs!
+  system: InfoSystem!
+  versions: InfoVersions!
+  networkInterfaces: [InfoNetworkInterface!]!
+  primaryNetwork: InfoNetworkInterface
+}
+
+type InfoOs implements Node {
+  id: PrefixedID!
+  platform: String
+  distro: String
+  release: String
+  kernel: String
+  arch: String
+  hostname: String
+  uptime: String             # boot time ISO string
+}
+
+type InfoCpu implements Node {
+  id: PrefixedID!
+  manufacturer: String
+  brand: String
+  cores: Int
+  threads: Int
+  speed: Float               # GHz
+  speedmin: Float
+  speedmax: Float
+  processors: Int
+  socket: String
+}
+
+type Metrics implements Node {
+  id: PrefixedID!
+  cpu: CpuUtilization
+  memory: MemoryUtilization
+  temperature: TemperatureMetrics
+}
+
+type CpuUtilization implements Node {
+  id: PrefixedID!
+  percentTotal: Float!
+  cpus: [CpuLoad!]!
+}
+
+type CpuLoad {
+  percentTotal: Float!
+  percentUser: Float!
+  percentSystem: Float!
+  percentNice: Float!
+  percentIdle: Float!
+  percentIrq: Float!
+  percentGuest: Float!
+  percentSteal: Float!
+}
+
+type MemoryUtilization implements Node {
+  id: PrefixedID!
+  total: BigInt!
+  used: BigInt!
+  free: BigInt!
+  available: BigInt!
+  active: BigInt!
+  buffcache: BigInt!
+  percentTotal: Float!
+  swapTotal: BigInt!
+  swapUsed: BigInt!
+  swapFree: BigInt!
+  percentSwapTotal: Float!
+}
+
+type UPSDevice {
+  id: ID!
+  name: String!
+  model: String!
+  status: String!            # "Online", "On Battery", "Low Battery", etc.
+  battery: UPSBattery!
+  power: UPSPower!
+}
+
+type UPSBattery {
+  chargeLevel: Int!          # percent
+  estimatedRuntime: Int!     # seconds
+  health: String!            # "Good", "Replace", "Unknown"
+}
+
+type UPSPower {
+  inputVoltage: Float!
+  outputVoltage: Float!
+  loadPercentage: Int!
+  nominalPower: Int          # watts
+  currentPower: Float        # watts (nominalPower * loadPercentage / 100)
+}
+
+# ----- Confirmed query shapes used in this project -----
+# Docker:  { docker { containers { id names state status image imageId autoStart ports { ip privatePort publicPort type } } } }
+# VMs:     { vms { domain { id name state } } }
+# Array:   { array { state capacity { kilobytes { free used total } } parityCheckStatus { running progress speed } disks { ... } parities { ... } caches { ... } } }
+# Vars:    { vars { version name mdResync mdResyncPos mdResyncDb mdResyncDt mdResyncAction mdResyncSize ... } }
+# Info:    { info { os { hostname platform uptime kernel arch } cpu { brand cores threads } } }
+# Metrics: { metrics { cpu { percentTotal } memory { total used percentTotal } } }
+# Shares:  { shares { id name free used size } }
+# UPS:     { upsDevices { id name model status battery { chargeLevel estimatedRuntime health } power { inputVoltage outputVoltage loadPercentage nominalPower currentPower } } }
+
+# ----- PrefixedID notes -----
+# Output always includes server prefix: "<serverId>:<resourceId>"
+# Strip prefix with bash:  id="${raw_id##*:}"
+# Input accepts either form (with or without prefix)
+
+# ----- Error handling -----
+# When VMs are not configured/running, the API returns an errors array instead of empty domain list.
+# Always check: if echo "$data" | jq -e '.errors' >/dev/null 2>&1; then ... fi
