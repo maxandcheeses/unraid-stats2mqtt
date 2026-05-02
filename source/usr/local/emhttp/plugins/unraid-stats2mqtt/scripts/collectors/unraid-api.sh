@@ -64,7 +64,7 @@ get_info_data() {
 }
 
 get_docker_data() {
-  _api_cached "docker" '{ docker { containers { id names state status image autoStart } } }'
+  _api_cached "docker" '{ docker { containers { id names state status image imageId autoStart ports { ip privatePort publicPort type } } } }'
 }
 
 get_vms_data() {
