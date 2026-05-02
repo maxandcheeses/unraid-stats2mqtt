@@ -45,8 +45,8 @@ publish_docker() {
     container_id="${full_id:0:12}"
 
     local attrs
-    attrs=$(printf '{"id":"%s","status":"%s","image":"%s","imageId":"%s","autoStart":%s,"ports":%s}' \
-      "$(json_escape "$container_id")" "$(json_escape "$status")" "$(json_escape "$image")" \
+    attrs=$(printf '{"state":"%s","id":"%s","status":"%s","image":"%s","imageId":"%s","autoStart":%s,"ports":%s}' \
+      "$(json_escape "$state")" "$(json_escape "$container_id")" "$(json_escape "$status")" "$(json_escape "$image")" \
       "$(json_escape "$image_id")" "${auto_start:-false}" "${ports_json:-[]}")
     mqtt_publish "$attr_topic" "$attrs" "$retain"
   done < <(echo "$data" | jq -c '.data.docker.containers[]')
