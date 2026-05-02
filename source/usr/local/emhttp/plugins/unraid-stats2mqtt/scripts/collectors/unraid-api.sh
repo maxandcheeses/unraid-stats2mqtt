@@ -63,6 +63,14 @@ get_info_data() {
   _api_cached "info" '{ info { os { hostname platform uptime kernel arch } cpu { brand cores threads } } }'
 }
 
+get_docker_data() {
+  _api_cached "docker" '{ docker { containers { id names state status image autoStart } } }'
+}
+
+get_vms_data() {
+  _api_cached "vms" '{ vms { domain { id uuid name state } } }'
+}
+
 get_array_status() {
   local resp; resp=$(get_array_data) || { echo "UNKNOWN"; return; }
   echo "$resp" | jq -r '.data.array.state // "UNKNOWN"'
