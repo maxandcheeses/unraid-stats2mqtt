@@ -14,11 +14,11 @@ publish_vms() {
   fi
 
   while IFS= read -r vm_json; do
-    local name state uuid id
-    name=$(echo "$vm_json"  | jq -r '.name // ""')
-    state=$(echo "$vm_json" | jq -r '.state // ""')
-    uuid=$(echo "$vm_json"  | jq -r '.uuid // ""')
-    id=$(echo "$vm_json"    | jq -r '.id // ""')
+    local name state raw_id uuid
+    name=$(echo "$vm_json"   | jq -r '.name // ""')
+    state=$(echo "$vm_json"  | jq -r '.state // ""')
+    raw_id=$(echo "$vm_json" | jq -r '.id // ""')
+    uuid="${raw_id##*:}"
 
     if [ "$mode" = "include" ]; then
       [ -z "$list" ] && continue
