@@ -9,7 +9,8 @@ publish_uptime() {
   if [[ "$uptime_raw" =~ ^[0-9]+$ ]]; then
     uptime_seconds="$uptime_raw"
   else
-    boot_epoch=$(date -d "$uptime_raw" +%s 2>/dev/null) || return
+    local uptime_clean="${uptime_raw%.*}Z"
+    boot_epoch=$(date -d "${uptime_clean/Z/}" +%s 2>/dev/null) || return
     now_epoch=$(date +%s)
     uptime_seconds=$(( now_epoch - boot_epoch ))
   fi
