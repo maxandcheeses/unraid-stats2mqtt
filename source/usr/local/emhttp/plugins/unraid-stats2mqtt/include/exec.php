@@ -22,10 +22,12 @@ function save_cfg($file, $data) {
   file_put_contents($file, implode("\n", $lines) . "\n");
 }
 
-$action = $_POST['action'] ?? '';
-$cfg    = load_cfg($cfg_file);
+$action            = $_POST['action'] ?? '';
+$cfg               = load_cfg($cfg_file);
+$restart_flag_file = '/tmp/unraid-stats2mqtt.restart_pending';
 
 if ($action === 'daemon_start') {
+  @unlink($restart_flag_file);
   exec('/etc/rc.d/rc.unraid-stats2mqtt start > /dev/null 2>&1 &');
   echo 'Daemon starting…';
   exit;
@@ -38,8 +40,15 @@ if ($action === 'daemon_stop') {
 }
 
 if ($action === 'daemon_restart') {
+  @unlink($restart_flag_file);
   exec('/etc/rc.d/rc.unraid-stats2mqtt restart > /dev/null 2>&1 &');
   echo 'Daemon restarting…';
+  exit;
+}
+
+if ($action === 'mark_restart_pending') {
+  touch($restart_flag_file);
+  echo 'ok';
   exit;
 }
 
