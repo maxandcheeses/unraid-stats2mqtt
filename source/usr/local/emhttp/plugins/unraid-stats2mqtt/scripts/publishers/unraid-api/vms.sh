@@ -39,8 +39,8 @@ publish_vms() {
     mqtt_publish "$state_topic" "$value" "$retain"
 
     local attrs
-    attrs=$(printf '{"name":"%s","state":"%s","uuid":"%s","id":"%s"}' \
-      "$(json_escape "$name")" "$(json_escape "$state")" "$(json_escape "$uuid")" "$(json_escape "$id")")
+    attrs=$(printf '{"name":"%s","state":"%s","uuid":"%s"}' \
+      "$(json_escape "$name")" "$(json_escape "$state")" "$(json_escape "$uuid")")
     mqtt_publish "$attr_topic" "$attrs" "$retain"
   done < <(echo "$data" | jq -c '.data.vms.domain[]')
 }
