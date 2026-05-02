@@ -964,7 +964,6 @@ function ummToggleReveal(id, btn) {
   var shown = input.type === 'text';
   input.type = shown ? 'password' : 'text';
   btn.style.opacity = shown ? '' : '1';
-  btn.title = shown ? 'Show/hide' : 'Hide';
 }
 
 function ummGenerateApiKey(btn) {
