@@ -86,10 +86,19 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
   }
   .umm-row input:focus, .umm-row select:focus { outline: none; border-bottom-color: var(--umm-accent); }
   .umm-row input[type="file"] { font-size: 12px; opacity: 0.7; flex: 1; min-width: 0; }
+  .umm-reveal-input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 4px center;
+    background-size: 14px 14px;
+    padding-right: 24px !important;
+    cursor: text;
+  }
+  .umm-reveal-input.umm-revealed {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+  }
   .umm-reveal-wrap { display: contents; }
-  .umm-reveal-wrap input { width: auto !important; }
-  .umm-reveal-btn { flex-shrink: 0; align-self: center; margin-left: -20px; background: none !important; border: none !important; box-shadow: none !important; outline: none; cursor: pointer; padding: 0 4px; color: var(--umm-muted); opacity: 0.5; min-width: 0; border-radius: 0; line-height: 0; }
-  .umm-reveal-btn:hover, .umm-reveal-btn:focus, .umm-reveal-btn:active { background: none !important; border: none !important; box-shadow: none !important; opacity: 1; }
+  .umm-reveal-btn { display: none; }
 
   /* Button-only rows (no label, no underline) */
   .umm-row-actions {
