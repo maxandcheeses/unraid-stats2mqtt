@@ -717,7 +717,7 @@ $vm_sensors     = array_filter(array_map('trim', explode(',', $vm_sensors_raw)))
       <?php elseif ($docker_containers !== null): ?>
         <table class="umm-entity-table">
           <thead><tr>
-            <th></th><th>Name</th><th>State</th><th>Image</th>
+            <th></th><th>Name</th><th>ID</th><th>State</th><th>Image</th>
           </tr></thead>
           <tbody>
           <?php foreach ($docker_containers as $c):
@@ -725,10 +725,13 @@ $vm_sensors     = array_filter(array_map('trim', explode(',', $vm_sensors_raw)))
             $cname    = ltrim($raw_name, '/');
             $state    = strtolower($c['state'] ?? '');
             $checked  = in_array($cname, $docker_sensors) ? 'checked' : '';
+            $raw_id   = $c['id'] ?? '';
+            $short_id = substr(strstr($raw_id, ':') !== false ? substr($raw_id, strrpos($raw_id, ':') + 1) : $raw_id, 0, 12);
           ?>
           <tr>
             <td><input type="checkbox" class="umm-docker-cb" data-name="<?= esc($cname) ?>" <?= $checked ?> onchange="ummEntityToggle('docker')"></td>
             <td style="font-weight:600"><?= esc($cname) ?></td>
+            <td style="color:var(--umm-muted);font-family:monospace;font-size:12px"><?= esc($short_id) ?></td>
             <td><span class="umm-state-badge <?= $state === 'running' ? 'running' : 'other' ?>"><?= esc(strtoupper($state)) ?></span></td>
             <td style="color:var(--umm-muted);font-size:12px"><?= esc($c['image'] ?? '') ?></td>
           </tr>
