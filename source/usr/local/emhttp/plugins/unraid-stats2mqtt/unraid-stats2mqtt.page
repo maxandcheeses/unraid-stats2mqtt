@@ -40,6 +40,49 @@ function esc($val)             { return htmlspecialchars($val ?? '', ENT_QUOTES)
 
 $tls_protocols = ['mqtts', 'wss'];
 $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
+
+// Dynamic entity discovery
+$api_key  = $cfg['UNRAID_API_KEY']  ?? '';
+$api_host = $cfg['UNRAID_API_HOST'] ?? '';
+$docker_containers = null;
+$docker_error      = null;
+$vms_domains       = null;
+$vms_error         = null;
+
+function unraid_graphql($host, $key, $query) {
+  $payload = json_encode(['query' => $query]);
+  $ctx = stream_context_create(['http' => [
+    'method'        => 'POST',
+    'header'        => "Content-Type: application/json\r\nx-api-key: {$key}\r\napollo-require-preflight: true\r\n",
+    'content'       => $payload,
+    'timeout'       => 5,
+    'ignore_errors' => true,
+  ], 'ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]);
+  $raw = @file_get_contents(rtrim($host, '/') . '/graphql', false, $ctx);
+  if ($raw === false) return [null, 'Could not reach API'];
+  $json = json_decode($raw, true);
+  if (!$json) return [null, 'Invalid JSON response'];
+  if (isset($json['errors'])) return [null, $json['errors'][0]['message'] ?? 'API error'];
+  return [$json['data'], null];
+}
+
+if ($api_key !== '' && $api_host !== '') {
+  [$docker_data, $docker_error] = unraid_graphql($api_host, $api_key,
+    '{ docker { containers { id names state status image autoStart } } }');
+  if ($docker_data) $docker_containers = $docker_data['docker']['containers'] ?? [];
+
+  [$vms_data, $vms_error] = unraid_graphql($api_host, $api_key,
+    '{ vms { domain { id uuid name state } } }');
+  if ($vms_data) $vms_domains = $vms_data['vms']['domain'] ?? [];
+}
+
+$docker_sensor_mode = $cfg['DOCKER_SENSOR_MODE'] ?? 'include';
+$docker_sensors_raw = $cfg['DOCKER_SENSORS'] ?? '';
+$docker_sensors     = array_filter(array_map('trim', explode(',', $docker_sensors_raw)));
+
+$vm_sensor_mode = $cfg['VM_SENSOR_MODE'] ?? 'include';
+$vm_sensors_raw = $cfg['VM_SENSORS'] ?? '';
+$vm_sensors     = array_filter(array_map('trim', explode(',', $vm_sensors_raw)));
 ?>
 <style>
   :root {
