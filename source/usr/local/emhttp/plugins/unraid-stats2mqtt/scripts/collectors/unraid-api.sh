@@ -68,7 +68,7 @@ get_docker_data() {
 }
 
 get_vms_data() {
-  _api_cached "vms" '{ vms { domain { id uuid name state } } }'
+  _api_cached "vms" '{ vms { domain { id name state } } }'
 }
 
 get_array_status() {
