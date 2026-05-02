@@ -963,8 +963,7 @@ function ummSwitchView(view) {
 })();
 
 function ummRevealClick(e, input) {
-  var rightEdge = input.getBoundingClientRect().right;
-  if (e.clientX >= rightEdge - 24) {
+  if (e.offsetX >= input.offsetWidth - 24) {
     var shown = input.type === 'text';
     input.type = shown ? 'password' : 'text';
     input.classList.toggle('umm-revealed', !shown);
