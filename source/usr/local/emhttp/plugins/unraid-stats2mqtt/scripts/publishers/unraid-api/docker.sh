@@ -6,6 +6,8 @@ publish_docker() {
   local mode="${DOCKER_SENSOR_MODE:-include}"
   local list="${DOCKER_SENSORS:-}"
 
+  [ "$mode" = "include" ] && [ -z "$list" ] && return
+
   local data; data=$(get_docker_data) || return
 
   while IFS= read -r container_json; do
