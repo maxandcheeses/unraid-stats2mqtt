@@ -4,108 +4,109 @@
 planned
 
 ## Summary
-Add per-VM and per-Docker-container sensors to unraid-stats2mqtt. Each VM and each Docker container gets its own Home Assistant sensor whose state reflects the running status of that workload. Attributes carry identifying metadata. Users can choose to publish all VMs/containers or a named allowlist. All data is sourced exclusively from the Unraid GraphQL API — no CLI tools (no virsh, no docker CLI).
+Add per-VM and per-Docker-container binary sensors to unraid-stats2mqtt. Each Docker container and each VM gets one HA binary sensor whose state reflects whether the workload is currently running. Attributes carry identifying metadata. All data is sourced from the Unraid GraphQL API using the confirmed query shapes from Unraid 7.2.5.
 
 ## Goals
-- Publish one HA sensor per VM, with state = current VM power state (e.g. `running`, `paused`, `shut off`)
-- Publish one HA sensor per Docker container, with state = current container status (e.g. `running`, `stopped`, `exited`)
-- Expose identifying metadata as JSON attributes on each sensor (name, image/template, ID, etc.)
-- Support an allowlist config so users can restrict publishing to specific named VMs or containers
-- Follow the existing `_publish_metric` / `ha_register` / `graphql_query` pattern exactly
-- Add two new publisher files: `publishers/unraid-api/vms.sh` and `publishers/unraid-api/docker.sh`
-- Add two new `_api_cached` helper functions in `collectors/unraid-api.sh`: `get_vms_data` and `get_docker_data`
-- Wire both metrics into the main loop in `mqtt_monitor.sh` with their own `INTERVAL_VMS` and `INTERVAL_DOCKER` config knobs
-- Register both metric groups in the plugin UI page (`unraid-stats2mqtt.page`)
+- Publish one HA binary sensor per Docker container: ON when `state` is `running`, OFF otherwise; attributes include `status`, `image`, `autoStart`
+- Publish one HA binary sensor per VM: ON when `state` is `running`, OFF otherwise; attributes include `state` (raw string) and `uuid`
+- Guard against the "VMs are not available" API error so a VM-less system does not crash the daemon
+- Follow the existing `_publish_metric` / `ha_register` / `_api_cached` pattern exactly
+- Add two new collector files: `scripts/collectors/docker.sh` and `scripts/collectors/vms.sh`
+- Add `get_docker_data` and `get_vms_data` functions using `_api_cached` in `scripts/collectors/unraid-api.sh` (or equivalent api helper file)
+- Wire both metrics into the main loop in `mqtt_monitor.sh` and the HA-came-online re-publish block
+- Add corresponding config knobs and UI settings
 
 ## Non-goals
-- CPU usage, memory usage, or other resource consumption metrics per container/VM (not exposed by the API)
-- Network stats per container or VM
+- CPU usage, memory usage, network stats, or any other resource consumption metrics per container or VM (not exposed by the API)
 - Start/stop/restart controls (mutations are out of scope)
-- Support for `onchange` publish mode (interval-only, consistent with current API-backed metrics)
+- `onchange` publish mode (interval-only, consistent with existing API-backed metrics)
+- Allowlist filtering (no `VM_ALLOWLIST` or `DOCKER_ALLOWLIST` — all containers and all VMs are always published)
 - Any data source other than the Unraid GraphQL API
 
 ## Design
 
-### API dependency and verification
+### GraphQL queries
 
-The Unraid GraphQL API is the sole data source. Based on live introspection of Unraid 7.x, the top-level query type does not currently expose `docker` or `vms` fields. Before implementation can begin, the exact GraphQL query paths must be confirmed against the live API or the public schema at `https://studio.apollographql.com/public/Unraid-API/variant/current/schema/reference`.
+The confirmed query shapes for Unraid 7.2.5 are:
 
-If the API does expose these resources, the expected query shapes are:
+**Docker:** `{ docker { containers { id names state status image autoStart } } }`
 
-**VMs** — likely under a top-level `vms` or `domains` field returning an array of domain objects. Expected fields per VM: `name`, `status` (power state string), `id`, `coreCount`, `ramSize`, `description`, `template` or similar. The query would be added to `collectors/unraid-api.sh` as `get_vms_data`.
+The `docker` top-level field returns a `Docker` type whose only valid field is `containers`. Each element is a `DockerContainer` with fields: `id`, `names`, `state`, `status`, `image`, `imageId`, `autoStart`, `ports { ip privatePort publicPort type }`. The query above requests only the fields needed for publishing; `ports` and `imageId` are omitted.
 
-**Docker containers** — likely under a top-level `docker` or `containers` field returning an array. Expected fields per container: `name`, `status`, `image`, `id`, `autoStart`, `created` or similar. The query would be added to `collectors/unraid-api.sh` as `get_docker_data`.
+**VMs:** `{ vms { domain { id uuid name state } } }`
 
-Both functions would follow the `_api_cached` pattern to avoid redundant HTTP calls within a single tick.
+The `vms` top-level field returns a `Vms` type whose only valid field is `domain`. Each element is a `VmDomain` with confirmed fields: `id`, `uuid`, `name`, `state`. No resource or hardware fields exist on this type. When VMs are not running (or not configured), the API returns an error payload with message "VMs are not available" rather than an empty array.
 
-### Publisher: vms.sh
+### Collector: get_docker_data
 
-`publishers/unraid-api/vms.sh` implements `publish_vms(expire, retain)`. It calls `get_vms_data`, iterates over the array of VM objects with `jq`, and for each VM:
+`get_docker_data` is added to the existing unraid-api collector file. It calls `_api_cached` with the Docker query above. The result is cached for the duration of the tick. Returns the raw JSON response.
 
-1. Sanitizes the VM name with `safe_name` to produce a stable UID component (e.g. `vm_mywindowsvm`)
-2. Calls `ha_register` to register a sensor with `device_class` empty, `icon` `virtual-machine`, state topic `${MQTT_BASE_TOPIC}/sensor/${MQTT_TOPIC}_vm_<safe_name>/state`
-3. Calls `mqtt_publish` on the state topic with the power state value
-4. Publishes a JSON attributes blob to an attributes topic containing: `name`, `id`, `status`, and any available metadata fields
-5. Calls `ha_register` with `json_attributes_topic` pointing at the attributes topic
+### Collector: get_vms_data
 
-If `VM_ALLOWLIST` is non-empty (comma-separated VM names from config), only VMs whose name appears in the list are published. Unregistered VMs from a previous tick that no longer appear are not actively unregistered — topic expiry handles cleanup if `EXPIRE_VMS` is configured.
+`get_vms_data` is added to the same collector file. It calls `_api_cached` with the VMs query above. Before returning, the caller must check whether the response contains an error with the message "VMs are not available" (or any `errors` key) and treat that as an empty domain list rather than a fatal error. Returns the raw JSON response.
 
-### Publisher: docker.sh
+### Publisher: scripts/collectors/docker.sh
 
-`publishers/unraid-api/docker.sh` implements `publish_docker(expire, retain)`. Identical structure to `vms.sh`: iterates containers, sanitizes name to produce a UID component (e.g. `docker_nginx`), registers a sensor with `icon` `docker`, publishes state = container status string, publishes attributes JSON.
+Implements `publish_docker(expire)`. Calls `get_docker_data`, parses the `data.docker.containers` array with `jq`. For each container:
 
-If `DOCKER_ALLOWLIST` is non-empty, only listed containers are published.
+1. Extracts `names` (an array — use the first element), `state`, `status`, `image`, `autoStart`
+2. Sanitizes the container name with `safe_name` to produce a stable UID component, e.g. `docker_nginx`
+3. Calls `ha_register` to declare a binary sensor with `device_class` empty, `icon` `mdi:docker`, payload_on `ON`, payload_off `OFF`
+4. Publishes state topic with value `ON` if `state == "running"`, otherwise `OFF`
+5. Publishes a JSON attributes blob to the attributes topic containing: `status`, `image`, `autoStart`
+
+Sensor UID pattern: `${MQTT_TOPIC}_docker_<safe_name>`
+State topic pattern: `${MQTT_BASE_TOPIC}/binary_sensor/${MQTT_TOPIC}_docker_<safe_name>/state`
+
+### Publisher: scripts/collectors/vms.sh
+
+Implements `publish_vms(expire)`. Calls `get_vms_data`. If the response contains an `errors` key (i.e., "VMs are not available"), logs a debug message and returns immediately without publishing anything and without crashing. Otherwise parses `data.vms.domain` array with `jq`. For each VM:
+
+1. Extracts `id`, `uuid`, `name`, `state`
+2. Sanitizes `name` with `safe_name`, e.g. `vm_windows11`
+3. Calls `ha_register` to declare a binary sensor with `icon` `mdi:virtual-machine`, payload_on `ON`, payload_off `OFF`
+4. Publishes state topic with value `ON` if `state == "running"`, otherwise `OFF`
+5. Publishes a JSON attributes blob containing: `state` (raw string), `uuid`
+
+Sensor UID pattern: `${MQTT_TOPIC}_vm_<safe_name>`
+State topic pattern: `${MQTT_BASE_TOPIC}/binary_sensor/${MQTT_TOPIC}_vm_<safe_name>/state`
 
 ### Config additions
 
-New variables in `config.cfg` (with defaults):
+New variables in `config.cfg` with defaults:
 
 | Variable | Default | Meaning |
 |---|---|---|
-| `INTERVAL_VMS` | `30` | Publish interval in seconds; `0` disables |
-| `EXPIRE_VMS` | `0` | HA `expire_after` seconds |
-| `RETAIN_VMS` | `true` | MQTT retain flag |
-| `VM_ALLOWLIST` | `` | Comma-separated VM names; empty = publish all |
-| `INTERVAL_DOCKER` | `30` | Publish interval in seconds; `0` disables |
-| `EXPIRE_DOCKER` | `0` | HA `expire_after` seconds |
-| `RETAIN_DOCKER` | `true` | MQTT retain flag |
-| `DOCKER_ALLOWLIST` | `` | Comma-separated container names; empty = publish all |
+| `PUBLISH_DOCKER` | `true` | Master enable/disable for Docker metrics |
+| `INTERVAL_DOCKER` | `30` | Publish interval in seconds |
+| `EXPIRE_DOCKER` | `0` | HA `expire_after` seconds; 0 = no expiry |
+| `PUBLISH_VMS` | `true` | Master enable/disable for VM metrics |
+| `INTERVAL_VMS` | `30` | Publish interval in seconds |
+| `EXPIRE_VMS` | `0` | HA `expire_after` seconds; 0 = no expiry |
 
 ### Main loop wiring
 
-In `mqtt_monitor.sh`, after the existing `shares` metric block, add two new `_publish_metric` calls following the exact same pattern as every other metric group. Add corresponding blocks in the HA-came-online re-publish section.
+In `mqtt_monitor.sh`, add two new `_publish_metric` calls after the existing `shares` block, one for `publish_docker` and one for `publish_vms`, following the identical pattern used by every other metric group. Add matching re-publish calls in the HA-came-online block.
 
 ### UI page additions
 
-In `unraid-stats2mqtt.page`, add two new setting groups in the Settings section — one for VMs and one for Docker — mirroring the existing interval/expire/retain/allowlist fields for other metric groups.
-
-### Sensor naming convention
-
-- VM sensor UID: `vm_<safe_name>` where `safe_name` converts the VM name to lowercase alphanumeric with underscores
-- Docker sensor UID: `docker_<safe_name>`
-- State value for VMs: raw string from the API (e.g. `running`, `shut off`, `paused`)
-- State value for Docker containers: raw string from the API (e.g. `running`, `stopped`, `exited`)
+In `unraid-stats2mqtt.page`, add two new setting groups — one for Docker and one for VMs — mirroring the existing interval/expire/enable fields for other metric groups.
 
 ## Open Questions
 
-- **API availability**: The Unraid GraphQL API may not yet expose `vms` or `docker` as top-level query fields. This must be verified on the target Unraid version before implementation. If the fields do not exist, implementation must be deferred until Unraid adds them.
-- **Exact query shape**: The field names, nesting, and available subfields for VM and Docker objects need to be confirmed from the live API or the Apollo Studio schema reference.
-- **VM state string values**: Need to confirm what string values the API returns for VM power states (libvirt uses `running`, `paused`, `shut off`, `crashed`, etc.) and whether the API normalizes these.
-- **Docker status string values**: Need to confirm what string values the API returns (Docker uses `running`, `exited`, `paused`, `restarting`, `dead`, `created`).
-- **Container name vs. container ID**: The allowlist should match on human-readable container name. Confirm the API exposes a stable `name` field.
-- **Stale sensor cleanup**: When a VM or container is removed from Unraid, its MQTT topic persists until expiry. Should the publisher actively call `ha_unregister` for VMs/containers that were present on a previous tick but are now absent? This requires state tracking across ticks (similar to how disk publishers handle removed disks).
+None. All schema questions have been resolved via live probing on Unraid 7.2.5.
 
 ## Acceptance Criteria
 
-- [ ] `get_vms_data` in `collectors/unraid-api.sh` returns valid JSON from the Unraid API and is cached per tick
-- [ ] `get_docker_data` in `collectors/unraid-api.sh` returns valid JSON from the Unraid API and is cached per tick
-- [ ] `publish_vms` publishes one HA sensor per VM (or per allowlisted VM) with state = power state
-- [ ] `publish_docker` publishes one HA sensor per container (or per allowlisted container) with state = status
-- [ ] Each sensor has a JSON attributes topic containing name and available metadata
-- [ ] Setting `INTERVAL_VMS=0` or `INTERVAL_DOCKER=0` completely disables that metric group
-- [ ] `VM_ALLOWLIST=MyVM1,MyVM2` causes only those two VMs to be published; others are skipped
-- [ ] `DOCKER_ALLOWLIST=nginx,homeassistant` causes only those two containers to be published
-- [ ] Both metric groups appear in the plugin UI settings page
+- [ ] `get_docker_data` returns valid JSON from the Unraid GraphQL API and is cached per tick
+- [ ] `get_vms_data` returns valid JSON from the Unraid GraphQL API and is cached per tick
+- [ ] `publish_docker` publishes one HA binary sensor per container with state ON/OFF derived from `state == "running"`
+- [ ] Each Docker binary sensor has attributes: `status`, `image`, `autoStart`
+- [ ] `publish_vms` publishes one HA binary sensor per VM with state ON/OFF derived from `state == "running"`
+- [ ] Each VM binary sensor has attributes: `state` (raw string), `uuid`
+- [ ] When the VMs API returns an error ("VMs are not available" or any `errors` key), `publish_vms` logs a debug message and returns without crashing
+- [ ] Setting `PUBLISH_DOCKER=false` or `INTERVAL_DOCKER=0` completely disables Docker publishing
+- [ ] Setting `PUBLISH_VMS=false` or `INTERVAL_VMS=0` completely disables VM publishing
 - [ ] Both metric groups are re-published when HA comes back online
-- [ ] Sensor UIDs are stable across restarts (derived from name only, not from a runtime-assigned ID)
-- [ ] If the API returns an error or the `vms`/`docker` query field does not exist, the publisher logs a warning and returns without crashing the daemon
+- [ ] Sensor UIDs are stable across daemon restarts (derived from container/VM name only, not runtime-assigned IDs)
+- [ ] Both metric groups appear in the plugin UI settings page
