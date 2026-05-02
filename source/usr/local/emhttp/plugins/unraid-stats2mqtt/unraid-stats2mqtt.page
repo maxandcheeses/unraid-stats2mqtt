@@ -1214,6 +1214,19 @@ function ummTestConnection(btn) {
   });
 }
 
+function ummEntityToggle(group) {
+  var cbs   = document.querySelectorAll('.umm-' + group + '-cb');
+  var names = [];
+  cbs.forEach(function(cb) { if (cb.checked) names.push(cb.dataset.name); });
+  var input = document.getElementById(group + '-sensors-input');
+  if (input) input.value = names.join(',');
+}
+
+function ummEntityModeChange(group, mode) {
+  var note = document.getElementById(group + '-exclude-note');
+  if (note) note.style.display = mode === 'exclude' ? 'block' : 'none';
+}
+
 // Restore pending-restart indicator if set before last page unload
 (function() {
   if (localStorage.getItem('umm_pending_restart')) ummSetPendingRestart();
