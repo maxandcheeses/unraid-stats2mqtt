@@ -129,7 +129,7 @@ main() {
     local net_interval="${INTERVAL_NETWORK:-30}"
     local net_expire; net_expire=$(resolve_expire "${EXPIRE_NETWORK:-0}" "$net_interval")
     local net_retain="${RETAIN_NETWORK:-true}"
-    _publish_metric "network"        "$net_interval"  "$net_expire"  publish_network_speeds  "$net_retain"
+    _publish_metric "network"        "$net_interval"  "$net_expire"  publish_network  "$net_retain"
 
     local uptime_interval="${INTERVAL_UPTIME:-60}"
     local uptime_expire; uptime_expire=$(resolve_expire "${EXPIRE_UPTIME:-0}" "$uptime_interval")
