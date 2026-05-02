@@ -161,7 +161,6 @@ main() {
       [ "${ds_interval:-0}"           -gt 0 ] && publish_disk_states     "$ds_expire"           "$ds_retain"
       [ "${disk_usage_interval:-0}"   -gt 0 ] && publish_disk_usage      "$disk_usage_expire"   "$disk_usage_retain"
       [ "${disk_errors_interval:-0}"  -gt 0 ] && publish_disk_errors     "$disk_errors_expire"  "$disk_errors_retain"
-      [ "${rw_interval:-0}"           -gt 0 ] && publish_rw_speeds       "$rw_expire"
       [ "${monitor_interval:-0}"      -gt 0 ] && publish_monitor         "$monitor_expire"      "$monitor_retain"
       [ "${shares_interval:-0}"        -gt 0 ] && publish_shares          "$shares_expire"       "$shares_retain"
       [ "${uptime_interval:-0}"        -gt 0 ] && publish_uptime          "$uptime_expire"       "$uptime_retain"
