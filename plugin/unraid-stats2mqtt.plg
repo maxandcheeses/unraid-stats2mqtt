@@ -3,7 +3,7 @@
   <!ENTITY name      "unraid-stats2mqtt">
   <!ENTITY author    "Maxwell Luong">
   <!ENTITY launch    "Settings/unraid-stats2mqtt">
-  <!ENTITY version   "2026.05.136">
+  <!ENTITY version   "2026.05.137">
   <!ENTITY pluginURL "https://raw.githubusercontent.com/maxandcheeses/unraid-stats2mqtt/main/plugin/unraid-stats2mqtt.plg">
   <!ENTITY pluginDir "/usr/local/emhttp/plugins/&name;">
   <!ENTITY emhttp    "/usr/local/emhttp">
@@ -24,7 +24,7 @@
 <!-- Download and install the source package -->
 <FILE Name="/boot/config/plugins/&name;/&name;-&version;.txz" Run="upgradepkg --install-new">
 <URL>&txzURL;</URL>
-<MD5>de62541a6c5c50e6daf6fa83274a1995</MD5>
+<MD5>c6aa9671a15455e485e2aa2f1ad84002</MD5>
 </FILE>
 
 <!-- Plugin config directory (only write if not already present) -->
