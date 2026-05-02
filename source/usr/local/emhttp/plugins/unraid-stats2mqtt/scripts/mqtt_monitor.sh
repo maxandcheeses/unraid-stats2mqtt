@@ -27,7 +27,7 @@ source "$SCRIPT_DIR/publishers/unraid-api/monitor.sh"
 source "$SCRIPT_DIR/publishers/unraid-api/system.sh"
 source "$SCRIPT_DIR/publishers/unraid-api/docker.sh"
 source "$SCRIPT_DIR/publishers/unraid-api/vms.sh"
-source "$SCRIPT_DIR/publishers/ini/disks_ini.sh"
+source "$SCRIPT_DIR/publishers/unraid-api/disks.sh"
 
 trap 'on_exit $?' EXIT
 
