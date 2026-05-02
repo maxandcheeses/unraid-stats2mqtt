@@ -136,6 +136,18 @@ main() {
     local shares_retain="${RETAIN_SHARES:-true}"
     _publish_metric "shares"         "$shares_interval" "$shares_expire" publish_shares      "$shares_retain"
 
+    local docker_interval="${INTERVAL_DOCKER:-30}"
+    local docker_expire; docker_expire=$(resolve_expire "${EXPIRE_DOCKER:-0}" "$docker_interval")
+    local docker_retain="${RETAIN_DOCKER:-false}"
+    [ "${PUBLISH_DOCKER:-true}" = "true" ] && \
+      _publish_metric "docker"       "$docker_interval" "$docker_expire" publish_docker      "$docker_retain"
+
+    local vms_interval="${INTERVAL_VMS:-30}"
+    local vms_expire; vms_expire=$(resolve_expire "${EXPIRE_VMS:-0}" "$vms_interval")
+    local vms_retain="${RETAIN_VMS:-false}"
+    [ "${PUBLISH_VMS:-true}" = "true" ] && \
+      _publish_metric "vms"          "$vms_interval"    "$vms_expire"    publish_vms         "$vms_retain"
+
     # ── Re-publish everything when HA restarts ─────────────────────────────────
     if [ -f "$HA_ONLINE_FLAG" ]; then
       rm -f "$HA_ONLINE_FLAG"
