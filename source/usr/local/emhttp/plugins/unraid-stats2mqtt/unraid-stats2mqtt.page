@@ -892,6 +892,13 @@ function ummPost(params, onSuccess, onError) {
   .catch(function(err) { if (onError) onError(err); else ummToast('Request failed: ' + err, 'error'); });
 }
 
+function ummShowRestartIndicator() {
+  var btn  = document.getElementById('umm-restart-btn');
+  var note = document.getElementById('umm-restart-note');
+  if (btn)  { btn.classList.remove('umm-btn-muted'); btn.classList.add('umm-btn-danger'); }
+  if (note) note.style.display = '';
+}
+
 function ummSetPendingRestart() {
   fetch(UMM_EXEC, {
     method: 'POST',
@@ -899,10 +906,7 @@ function ummSetPendingRestart() {
     body: new URLSearchParams({ action: 'mark_restart_pending', csrf_token: UMM_CSRF }),
     credentials: 'same-origin'
   });
-  var btn  = document.getElementById('umm-restart-btn');
-  var note = document.getElementById('umm-restart-note');
-  if (btn)  { btn.classList.remove('umm-btn-muted'); btn.classList.add('umm-btn-danger'); }
-  if (note) note.style.display = '';
+  ummShowRestartIndicator();
 }
 
 function ummClearPendingRestart() {
