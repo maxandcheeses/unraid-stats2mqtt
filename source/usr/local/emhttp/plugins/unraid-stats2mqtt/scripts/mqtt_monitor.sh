@@ -118,10 +118,6 @@ main() {
     local disk_errors_retain="${RETAIN_DISK_ERRORS:-true}"
     _publish_metric "disk_errors"    "$disk_errors_interval" "$disk_errors_expire" publish_disk_errors "$disk_errors_retain"
 
-    local rw_interval="${INTERVAL_RW_SPEEDS:-30}"
-    local rw_expire; rw_expire=$(resolve_expire "${EXPIRE_RW_SPEEDS:-0}" "$rw_interval")
-    _publish_metric "rw_speeds"      "$rw_interval"   "$rw_expire"   publish_rw_speeds
-
     local monitor_interval="${INTERVAL_MONITOR:-60}"
     local monitor_expire; monitor_expire=$(resolve_expire "${EXPIRE_MONITOR:-0}" "$monitor_interval")
     local monitor_retain="${RETAIN_MONITOR:-true}"
