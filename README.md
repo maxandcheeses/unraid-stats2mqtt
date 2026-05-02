@@ -29,6 +29,8 @@ An Unraid plugin (no Docker) that monitors your array and publishes metrics to a
 | Unraid version | `sensor.unraid_unraid_version` | version string |
 | Unraid update available | `binary_sensor.unraid_update_available` | `ON` / `OFF` — see [attributes](#sensor-attributes) |
 | Server identification | `sensor.unraid_identification` | server name — see [attributes](#sensor-attributes) |
+| Docker containers | `binary_sensor.unraid_docker_<name>` | `ON` (running) / `OFF` — see [attributes](#sensor-attributes) |
+| Virtual machines | `binary_sensor.unraid_vm_<name>` | `ON` (running) / `OFF` — see [attributes](#sensor-attributes) |
 | Disk temperatures | `sensor.unraid_<disk>_temp` | °C |
 | Disk states | `sensor.unraid_<disk>_state` | `ACTIVE`, `STANDBY`, `DISABLED` |
 | Disk errors | `sensor.unraid_<disk>_errors` | count |
