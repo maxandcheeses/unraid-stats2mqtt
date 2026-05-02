@@ -13,7 +13,16 @@ publish_vms() {
     return
   fi
 
-  while IFS=$'\t' read -r name state uuid; do
+  while IFS= read -r vm_json; do
+    local name state uuid core_count max_memory description autostart
+    name=$(echo "$vm_json"        | jq -r '.name // ""')
+    state=$(echo "$vm_json"       | jq -r '.state // ""')
+    uuid=$(echo "$vm_json"        | jq -r '.uuid // ""')
+    core_count=$(echo "$vm_json"  | jq -r '.coreCount // ""')
+    max_memory=$(echo "$vm_json"  | jq -r '.maxMemory // ""')
+    description=$(echo "$vm_json" | jq -r '.description // ""')
+    autostart=$(echo "$vm_json"   | jq -r '.autostart | tostring')
+
     if [ "$mode" = "include" ]; then
       [ -z "$list" ] && continue
       echo ",$list," | grep -qF ",${name}," || continue
@@ -33,8 +42,10 @@ publish_vms() {
     mqtt_publish "$state_topic" "$value" "$retain"
 
     local attrs
-    attrs=$(printf '{"state":"%s","uuid":"%s"}' \
-      "$(json_escape "$state")" "$(json_escape "$uuid")")
+    attrs=$(printf '{"state":"%s","uuid":"%s","coreCount":"%s","maxMemory":"%s","description":"%s","autostart":%s}' \
+      "$(json_escape "$state")" "$(json_escape "$uuid")" \
+      "$(json_escape "$core_count")" "$(json_escape "$max_memory")" \
+      "$(json_escape "$description")" "${autostart:-false}")
     mqtt_publish "$attr_topic" "$attrs" "$retain"
-  done < <(echo "$data" | jq -r '.data.vms.domain[] | [(.name // ""), (.state // ""), (.uuid // "")] | @tsv')
+  done < <(echo "$data" | jq -c '.data.vms.domain[]')
 }
