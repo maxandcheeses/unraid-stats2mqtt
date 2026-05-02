@@ -8,7 +8,16 @@ publish_docker() {
 
   local data; data=$(get_docker_data) || return
 
-  while IFS=$'\t' read -r raw_name state status image auto_start; do
+  while IFS= read -r container_json; do
+    local raw_name state status image image_id auto_start ports_json
+    raw_name=$(echo "$container_json"  | jq -r '.names[0] // ""')
+    state=$(echo "$container_json"     | jq -r '.state // ""')
+    status=$(echo "$container_json"    | jq -r '.status // ""')
+    image=$(echo "$container_json"     | jq -r '.image // ""')
+    image_id=$(echo "$container_json"  | jq -r '.imageId // ""')
+    auto_start=$(echo "$container_json" | jq -r '.autoStart | tostring')
+    ports_json=$(echo "$container_json" | jq -c '[.ports[]? | {ip,privatePort,publicPort,type}]')
+
     local name="${raw_name#/}"
 
     if [ "$mode" = "include" ]; then
@@ -30,8 +39,9 @@ publish_docker() {
     mqtt_publish "$state_topic" "$value" "$retain"
 
     local attrs
-    attrs=$(printf '{"status":"%s","image":"%s","autoStart":%s}' \
-      "$(json_escape "$status")" "$(json_escape "$image")" "${auto_start:-false}")
+    attrs=$(printf '{"status":"%s","image":"%s","imageId":"%s","autoStart":%s,"ports":%s}' \
+      "$(json_escape "$status")" "$(json_escape "$image")" "$(json_escape "$image_id")" \
+      "${auto_start:-false}" "${ports_json:-[]}")
     mqtt_publish "$attr_topic" "$attrs" "$retain"
-  done < <(echo "$data" | jq -r '.data.docker.containers[] | [(.names[0] // ""), (.state // ""), (.status // ""), (.image // ""), (.autoStart | tostring)] | @tsv')
+  done < <(echo "$data" | jq -c '.data.docker.containers[]')
 }
