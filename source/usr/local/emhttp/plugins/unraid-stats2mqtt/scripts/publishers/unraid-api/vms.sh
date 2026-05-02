@@ -6,6 +6,8 @@ publish_vms() {
   local mode="${VM_SENSOR_MODE:-include}"
   local list="${VM_SENSORS:-}"
 
+  [ "$mode" = "include" ] && [ -z "$list" ] && return
+
   local data; data=$(get_vms_data) || return
 
   if echo "$data" | jq -e '.errors' >/dev/null 2>&1; then
