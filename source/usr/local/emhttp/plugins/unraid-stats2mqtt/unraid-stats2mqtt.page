@@ -24,12 +24,16 @@ function load_cfg($file) {
 
 $cfg = load_cfg($cfg_file);
 
-$pid_file = '/var/run/unraid-stats2mqtt.pid';
+$pid_file           = '/var/run/unraid-stats2mqtt.pid';
+$restart_flag_file  = '/tmp/unraid-stats2mqtt.restart_pending';
 $daemon_running = false;
 if (file_exists($pid_file)) {
   $pid = trim(file_get_contents($pid_file));
   $daemon_running = file_exists("/proc/{$pid}");
 }
+// If the daemon is running, the restart has completed — clear any stale flag.
+if ($daemon_running) @unlink($restart_flag_file);
+$restart_pending = file_exists($restart_flag_file);
 
 exec('/etc/rc.d/rc.unraid-api status 2>/dev/null', $_, $api_rc);
 $api_running = ($api_rc === 0);
