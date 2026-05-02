@@ -4,7 +4,7 @@
 planned
 
 ## Summary
-Add per-VM and per-Docker-container binary sensors to unraid-stats2mqtt. Each Docker container and each VM gets one HA binary sensor whose state reflects whether the workload is currently running. Attributes carry identifying metadata. All data is sourced from the Unraid GraphQL API using the confirmed query shapes from Unraid 7.2.5. The settings page dynamically discovers containers and VMs from the API and lets the user toggle which entities are exposed as sensors.
+Add per-VM and per-Docker-container binary sensors to unraid-stats2mqtt. Each Docker container and each VM gets one HA binary sensor whose state reflects whether the workload is currently running. Attributes carry identifying metadata. All data is sourced from the Unraid GraphQL API using the confirmed query shapes from Unraid 7.2.5. The settings page dynamically discovers containers and VMs from the API and lets the user toggle which entities are exposed as sensors. Each group (Docker and VMs) supports an include/exclude mode that controls whether the checkbox list is an allowlist or a denylist.
 
 ## Goals
 - Publish one HA binary sensor per Docker container: ON when `state` is `running`, OFF otherwise; attributes include `status`, `image`, `autoStart`
@@ -15,6 +15,7 @@ Add per-VM and per-Docker-container binary sensors to unraid-stats2mqtt. Each Do
 - Add `get_docker_data` and `get_vms_data` functions using `_api_cached` in the existing unraid-api collector file
 - Wire both metrics into the main loop in `mqtt_monitor.sh` and the HA-came-online re-publish block
 - Add corresponding config knobs and a dynamic entity-selection UI in the settings page
+- Support per-group include/exclude mode so users can either allowlist or denylist specific entities
 
 ## Non-goals
 - CPU usage, memory usage, network stats, or any other resource consumption metrics per container or VM
@@ -46,12 +47,25 @@ The `vms` top-level field returns a `Vms` type whose only valid field is `domain
 
 `get_vms_data` is added to the same collector file. It calls `_api_cached` with the VMs query above. The caller checks whether the response contains any `errors` key and treats that as an empty domain list rather than a fatal error. Returns the raw JSON response.
 
+### Include/exclude mode
+
+Each group has an independent mode setting. The mode is stored in `DOCKER_SENSOR_MODE` and `VM_SENSOR_MODE`. Valid values are `include` and `exclude`. Default is `include` for both.
+
+The `DOCKER_SENSORS` and `VM_SENSORS` comma-separated lists serve dual purpose depending on the mode:
+
+- **include mode:** the list is an allowlist. Only entities whose name appears in the list are published. An empty list means nothing is published.
+- **exclude mode:** the list is a denylist. All entities are published except those whose name appears in the list. An empty list means all entities are published.
+
+The mode has no effect on how names are stored — in both modes, the list contains entity names. The meaning of the list (allow vs. deny) is what changes.
+
 ### Publisher: scripts/collectors/docker.sh
 
-Implements `publish_docker(expire)`. Reads `DOCKER_SENSORS` from config. If the value is empty, returns immediately without publishing anything. Calls `get_docker_data` and parses the `data.docker.containers` array with `jq`. For each container:
+Implements `publish_docker(expire)`. Reads `DOCKER_SENSORS` and `DOCKER_SENSOR_MODE` from config. Calls `get_docker_data` and parses the `data.docker.containers` array with `jq`. For each container:
 
 1. Extracts `names` (an array — use the first element, strip leading `/`), `state`, `status`, `image`, `autoStart`
-2. Checks whether the stripped container name is in the `DOCKER_SENSORS` comma-separated list; if not, skips
+2. Applies the mode filter:
+   - If `DOCKER_SENSOR_MODE` is `include`: skip the container if its stripped name is NOT in `DOCKER_SENSORS`. If `DOCKER_SENSORS` is empty, skip all containers.
+   - If `DOCKER_SENSOR_MODE` is `exclude`: skip the container if its stripped name IS in `DOCKER_SENSORS`. If `DOCKER_SENSORS` is empty, publish all containers.
 3. Sanitizes the container name with `safe_name` to produce a stable UID component, e.g. `docker_nginx`
 4. Calls `ha_register` to declare a binary sensor with `device_class` empty, `icon` `mdi:docker`, `payload_on` `ON`, `payload_off` `OFF`
 5. Publishes state topic with value `ON` if `state == "running"`, otherwise `OFF`
@@ -62,10 +76,12 @@ State topic pattern: `${MQTT_BASE_TOPIC}/binary_sensor/${MQTT_TOPIC}_docker_<saf
 
 ### Publisher: scripts/collectors/vms.sh
 
-Implements `publish_vms(expire)`. Reads `VM_SENSORS` from config. If the value is empty, returns immediately without publishing anything. Calls `get_vms_data`. If the response contains an `errors` key ("VMs are not available" or similar), logs a debug message and returns without crashing. Otherwise parses `data.vms.domain` array with `jq`. For each VM:
+Implements `publish_vms(expire)`. Reads `VM_SENSORS` and `VM_SENSOR_MODE` from config. Calls `get_vms_data`. If the response contains an `errors` key ("VMs are not available" or similar), logs a debug message and returns without crashing. Otherwise parses `data.vms.domain` array with `jq`. For each VM:
 
 1. Extracts `id`, `uuid`, `name`, `state`
-2. Checks whether `name` is in the `VM_SENSORS` comma-separated list; if not, skips
+2. Applies the mode filter:
+   - If `VM_SENSOR_MODE` is `include`: skip the VM if its name is NOT in `VM_SENSORS`. If `VM_SENSORS` is empty, skip all VMs.
+   - If `VM_SENSOR_MODE` is `exclude`: skip the VM if its name IS in `VM_SENSORS`. If `VM_SENSORS` is empty, publish all VMs.
 3. Sanitizes `name` with `safe_name`, e.g. `vm_windows11`
 4. Calls `ha_register` to declare a binary sensor with `icon` `mdi:virtual-machine`, `payload_on` `ON`, `payload_off` `OFF`
 5. Publishes state topic with value `ON` if `state == "running"`, otherwise `OFF`
@@ -84,14 +100,23 @@ New variables in `config.cfg` with defaults:
 | `INTERVAL_DOCKER` | `30` | Publish interval in seconds |
 | `EXPIRE_DOCKER` | `0` | HA `expire_after` seconds; 0 = no expiry |
 | `RETAIN_DOCKER` | `false` | MQTT retain flag for Docker sensor messages |
-| `DOCKER_SENSORS` | `` | Comma-separated container names to expose; empty = none |
+| `DOCKER_SENSOR_MODE` | `include` | `include` = publish only listed; `exclude` = publish all except listed |
+| `DOCKER_SENSORS` | `` | Comma-separated container names; allowlist in include mode, denylist in exclude mode |
 | `PUBLISH_VMS` | `true` | Master enable/disable for VM metrics |
 | `INTERVAL_VMS` | `30` | Publish interval in seconds |
 | `EXPIRE_VMS` | `0` | HA `expire_after` seconds; 0 = no expiry |
 | `RETAIN_VMS` | `false` | MQTT retain flag for VM sensor messages |
-| `VM_SENSORS` | `` | Comma-separated VM names to expose; empty = none |
+| `VM_SENSOR_MODE` | `include` | `include` = publish only listed; `exclude` = publish all except listed |
+| `VM_SENSORS` | `` | Comma-separated VM names; allowlist in include mode, denylist in exclude mode |
 
-`DOCKER_SENSORS` and `VM_SENSORS` are the source of truth for which entities get published. An empty value means nothing is published for that group even if `PUBLISH_DOCKER` / `PUBLISH_VMS` is true.
+The effective publish behavior by mode and list state:
+
+| Mode | List | Result |
+|---|---|---|
+| `include` | empty | publish nothing |
+| `include` | non-empty | publish only listed names |
+| `exclude` | empty | publish all |
+| `exclude` | non-empty | publish all except listed names |
 
 ### Main loop wiring
 
@@ -112,11 +137,27 @@ If both are present, the PHP backend makes two HTTP POST requests to the Unraid 
 
 Each request is made with the `x-api-key` header set to `UNRAID_API_KEY`. Failures (HTTP error, JSON parse error, `errors` key in response) are caught per-group. If a group's request fails, that group renders its own inline error message rather than failing the whole page.
 
+**Group mode toggle**
+
+At the top of each group (Docker Containers and Virtual Machines), render a mode toggle before the entity table. The toggle is a pair of radio buttons (or a styled toggle) with two options:
+
+- "Publish selected" — maps to `include` mode
+- "Publish all (exclude checked)" — maps to `exclude` mode
+
+The selected option reflects the current `DOCKER_SENSOR_MODE` or `VM_SENSOR_MODE` config value. These radio buttons are named `DOCKER_SENSOR_MODE` and `VM_SENSOR_MODE` respectively and are submitted with the form POST directly (no hidden input needed, since radio buttons carry their value naturally).
+
+When the user switches the mode toggle, JavaScript updates a visible label or note below the toggle to clarify the current meaning of the checkboxes:
+
+- In `include` mode: no extra label needed (default behavior is self-explanatory)
+- In `exclude` mode: display a short note such as "Checked items will be excluded from publishing"
+
+The label update happens immediately on toggle change without a page reload.
+
 **Docker Containers group**
 
-Renders a table with one row per container. Columns:
+Renders a mode toggle (described above) followed by a table with one row per container. Columns:
 
-- Checkbox: checked if the container's stripped name is in the current `DOCKER_SENSORS` config value
+- Checkbox: in `include` mode, checked if the container's stripped name is in `DOCKER_SENSORS`; in `exclude` mode, checked if the container's stripped name is in `DOCKER_SENSORS` (the denylist)
 - Name: the first element of `names`, with leading `/` stripped
 - State badge: green "RUNNING" if `state == "running"`, gray badge with the raw state value otherwise
 - Image: the `image` field value
@@ -125,9 +166,9 @@ All checkboxes share the name attribute `docker_sensor_toggle` (or similar). A h
 
 **Virtual Machines group**
 
-Renders a table with one row per VM. Columns:
+Renders a mode toggle (described above) followed by a table with one row per VM. Columns:
 
-- Checkbox: checked if the VM's name is in the current `VM_SENSORS` config value
+- Checkbox: in `include` mode, checked if the VM's name is in `VM_SENSORS`; in `exclude` mode, checked if the VM's name is in `VM_SENSORS` (the denylist)
 - Name: the `name` field
 - State badge: green "RUNNING" if `state == "running"`, gray badge with the raw state value otherwise
 - UUID: the `uuid` field value
@@ -136,7 +177,7 @@ Same hidden-input + JS pattern as Docker: a hidden `<input name="VM_SENSORS">` i
 
 **Form submission**
 
-Both hidden inputs (`DOCKER_SENSORS` and `VM_SENSORS`) are submitted via the existing `/update.php` form POST that handles all other config saves. No new endpoints are required. The `/update.php` handler treats them as plain string config values and writes them to `config.cfg`.
+The hidden inputs (`DOCKER_SENSORS` and `VM_SENSORS`) and the radio inputs (`DOCKER_SENSOR_MODE` and `VM_SENSOR_MODE`) are submitted via the existing `/update.php` form POST that handles all other config saves. No new endpoints are required. The `/update.php` handler treats all four as plain string config values and writes them to `config.cfg`.
 
 **Interval/expire/retain controls**
 
@@ -144,18 +185,22 @@ Both hidden inputs (`DOCKER_SENSORS` and `VM_SENSORS`) are submitted via the exi
 
 ## Open Questions
 
-None. All schema questions resolved via live probing on Unraid 7.2.5. Entity-selection UI requirements confirmed.
+None. All schema questions resolved via live probing on Unraid 7.2.5. Entity-selection UI requirements confirmed. Include/exclude mode requirements confirmed.
 
 ## Acceptance Criteria
 
 - [ ] `get_docker_data` returns valid JSON from the Unraid GraphQL API and is cached per tick
 - [ ] `get_vms_data` returns valid JSON from the Unraid GraphQL API and is cached per tick
-- [ ] `publish_docker` publishes only the containers listed in `DOCKER_SENSORS`; containers not in the list are silently skipped
-- [ ] `publish_docker` publishes nothing when `DOCKER_SENSORS` is empty
+- [ ] In `include` mode, `publish_docker` publishes only the containers listed in `DOCKER_SENSORS`; containers not in the list are silently skipped
+- [ ] In `include` mode, `publish_docker` publishes nothing when `DOCKER_SENSORS` is empty
+- [ ] In `exclude` mode, `publish_docker` publishes all containers except those listed in `DOCKER_SENSORS`
+- [ ] In `exclude` mode, `publish_docker` publishes all containers when `DOCKER_SENSORS` is empty
 - [ ] Each published Docker binary sensor has state ON when `state == "running"`, OFF otherwise
 - [ ] Each Docker binary sensor has attributes: `status`, `image`, `autoStart`
-- [ ] `publish_vms` publishes only the VMs listed in `VM_SENSORS`; VMs not in the list are silently skipped
-- [ ] `publish_vms` publishes nothing when `VM_SENSORS` is empty
+- [ ] In `include` mode, `publish_vms` publishes only the VMs listed in `VM_SENSORS`; VMs not in the list are silently skipped
+- [ ] In `include` mode, `publish_vms` publishes nothing when `VM_SENSORS` is empty
+- [ ] In `exclude` mode, `publish_vms` publishes all VMs except those listed in `VM_SENSORS`
+- [ ] In `exclude` mode, `publish_vms` publishes all VMs when `VM_SENSORS` is empty
 - [ ] Each published VM binary sensor has state ON when `state == "running"`, OFF otherwise
 - [ ] Each VM binary sensor has attributes: `state` (raw string), `uuid`
 - [ ] When the VMs API returns an error ("VMs are not available" or any `errors` key), `publish_vms` logs a debug message and returns without crashing
@@ -163,6 +208,13 @@ None. All schema questions resolved via live probing on Unraid 7.2.5. Entity-sel
 - [ ] Setting `PUBLISH_VMS=false` or `INTERVAL_VMS=0` completely disables VM publishing
 - [ ] Both metric groups are re-published when HA comes back online
 - [ ] Sensor UIDs are stable across daemon restarts (derived from container/VM name only, not runtime-assigned IDs)
+- [ ] `DOCKER_SENSOR_MODE` defaults to `include` and `VM_SENSOR_MODE` defaults to `include`
+- [ ] Settings page renders a mode toggle at the top of the Docker Containers group reflecting the current `DOCKER_SENSOR_MODE` value
+- [ ] Settings page renders a mode toggle at the top of the Virtual Machines group reflecting the current `VM_SENSOR_MODE` value
+- [ ] Switching the mode toggle to "Publish all (exclude checked)" displays a clarifying note that checked items will be excluded
+- [ ] Switching the mode toggle back to "Publish selected" removes or hides the exclusion note
+- [ ] Mode toggle selection is submitted as `DOCKER_SENSOR_MODE` / `VM_SENSOR_MODE` via the form POST and saved to `config.cfg`
+- [ ] In both modes, the checkbox state reflects whether the entity name is in the stored list (allowlist in include, denylist in exclude)
 - [ ] Settings page renders the Docker Containers section with one row per container discovered from the API
 - [ ] Settings page renders the Virtual Machines section with one row per VM discovered from the API
 - [ ] Each row shows a toggle checkbox, entity name, current state badge, and image (Docker) or uuid (VM)
