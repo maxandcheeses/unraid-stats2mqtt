@@ -674,6 +674,129 @@ $vm_sensors     = array_filter(array_map('trim', explode(',', $vm_sensors_raw)))
   </div>
 </div>
 
+<!-- Entity Discovery -->
+<div class="umm-section-full">
+  <div class="umm-card">
+    <h3>&#127988; Docker &amp; VM Sensors</h3>
+
+    <?php if ($api_key === '' || $api_host === ''): ?>
+      <p class="umm-hint" style="padding:8px 0">Configure your API key above to discover containers and VMs.</p>
+    <?php else: ?>
+
+    <!-- Hidden inputs updated by JS on checkbox change -->
+    <input type="hidden" name="DOCKER_SENSORS" id="docker-sensors-input" value="<?= esc($docker_sensors_raw) ?>">
+    <input type="hidden" name="VM_SENSORS"     id="vm-sensors-input"     value="<?= esc($vm_sensors_raw) ?>">
+
+    <!-- ── Docker Containers ── -->
+    <div style="margin-bottom:24px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;opacity:0.45;padding:4px 0 8px">Docker Containers</div>
+
+      <div class="umm-mode-toggle">
+        <label>
+          <input type="radio" name="DOCKER_SENSOR_MODE" value="include"
+            <?= $docker_sensor_mode === 'include' ? 'checked' : '' ?>
+            onchange="ummEntityModeChange('docker', 'include')">
+          Publish selected
+        </label>
+        <label>
+          <input type="radio" name="DOCKER_SENSOR_MODE" value="exclude"
+            <?= $docker_sensor_mode === 'exclude' ? 'checked' : '' ?>
+            onchange="ummEntityModeChange('docker', 'exclude')">
+          Publish all (exclude checked)
+        </label>
+      </div>
+      <div id="docker-exclude-note" class="umm-exclude-note"
+        style="<?= $docker_sensor_mode === 'exclude' ? 'display:block' : '' ?>">
+        Checked items will be excluded from publishing.
+      </div>
+
+      <?php if ($docker_error !== null): ?>
+        <p class="umm-hint" style="color:var(--umm-error)">&#10005; <?= esc($docker_error) ?></p>
+      <?php elseif ($docker_containers !== null && count($docker_containers) === 0): ?>
+        <p class="umm-hint">No containers found.</p>
+      <?php elseif ($docker_containers !== null): ?>
+        <table class="umm-entity-table">
+          <thead><tr>
+            <th></th><th>Name</th><th>State</th><th>Image</th>
+          </tr></thead>
+          <tbody>
+          <?php foreach ($docker_containers as $c):
+            $raw_name = $c['names'][0] ?? '';
+            $cname    = ltrim($raw_name, '/');
+            $state    = strtolower($c['state'] ?? '');
+            $checked  = in_array($cname, $docker_sensors) ? 'checked' : '';
+          ?>
+          <tr>
+            <td><input type="checkbox" class="umm-docker-cb" data-name="<?= esc($cname) ?>" <?= $checked ?> onchange="ummEntityToggle('docker')"></td>
+            <td style="font-weight:600"><?= esc($cname) ?></td>
+            <td><span class="umm-state-badge <?= $state === 'running' ? 'running' : 'other' ?>"><?= esc(strtoupper($state)) ?></span></td>
+            <td style="color:var(--umm-muted);font-size:12px"><?= esc($c['image'] ?? '') ?></td>
+          </tr>
+          <?php endforeach; ?>
+          </tbody>
+        </table>
+      <?php else: ?>
+        <p class="umm-hint" style="color:var(--umm-error)">Could not load containers.</p>
+      <?php endif; ?>
+    </div>
+
+    <!-- ── Virtual Machines ── -->
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;opacity:0.45;padding:4px 0 8px">Virtual Machines</div>
+
+      <div class="umm-mode-toggle">
+        <label>
+          <input type="radio" name="VM_SENSOR_MODE" value="include"
+            <?= $vm_sensor_mode === 'include' ? 'checked' : '' ?>
+            onchange="ummEntityModeChange('vm', 'include')">
+          Publish selected
+        </label>
+        <label>
+          <input type="radio" name="VM_SENSOR_MODE" value="exclude"
+            <?= $vm_sensor_mode === 'exclude' ? 'checked' : '' ?>
+            onchange="ummEntityModeChange('vm', 'exclude')">
+          Publish all (exclude checked)
+        </label>
+      </div>
+      <div id="vm-exclude-note" class="umm-exclude-note"
+        style="<?= $vm_sensor_mode === 'exclude' ? 'display:block' : '' ?>">
+        Checked items will be excluded from publishing.
+      </div>
+
+      <?php if ($vms_error !== null): ?>
+        <p class="umm-hint" style="color:var(--umm-muted)">&#8212; <?= esc($vms_error) ?></p>
+      <?php elseif ($vms_domains !== null && count($vms_domains) === 0): ?>
+        <p class="umm-hint">No VMs found.</p>
+      <?php elseif ($vms_domains !== null): ?>
+        <table class="umm-entity-table">
+          <thead><tr>
+            <th></th><th>Name</th><th>State</th><th>UUID</th>
+          </tr></thead>
+          <tbody>
+          <?php foreach ($vms_domains as $vm):
+            $vname   = $vm['name'] ?? '';
+            $state   = strtolower($vm['state'] ?? '');
+            $uuid    = $vm['uuid'] ?? '';
+            $checked = in_array($vname, $vm_sensors) ? 'checked' : '';
+          ?>
+          <tr>
+            <td><input type="checkbox" class="umm-vm-cb" data-name="<?= esc($vname) ?>" <?= $checked ?> onchange="ummEntityToggle('vm')"></td>
+            <td style="font-weight:600"><?= esc($vname) ?></td>
+            <td><span class="umm-state-badge <?= $state === 'running' ? 'running' : 'other' ?>"><?= esc(strtoupper($state)) ?></span></td>
+            <td style="color:var(--umm-muted);font-size:12px"><?= esc($uuid) ?></td>
+          </tr>
+          <?php endforeach; ?>
+          </tbody>
+        </table>
+      <?php else: ?>
+        <p class="umm-hint" style="color:var(--umm-muted)">&#8212; VMs not available on this system.</p>
+      <?php endif; ?>
+    </div>
+
+    <?php endif; ?>
+  </div>
+</div>
+
 <!-- Save -->
 </div><!-- /umm-form-view -->
 
