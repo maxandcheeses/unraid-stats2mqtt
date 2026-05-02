@@ -962,12 +962,21 @@ function ummSwitchView(view) {
   }, true);
 })();
 
+function ummRevealClick(e, input) {
+  var rightEdge = input.getBoundingClientRect().right;
+  if (e.clientX >= rightEdge - 24) {
+    var shown = input.type === 'text';
+    input.type = shown ? 'password' : 'text';
+    input.classList.toggle('umm-revealed', !shown);
+  }
+}
 function ummToggleReveal(id, btn) {
   var input = document.getElementById(id);
   if (!input) return;
   var shown = input.type === 'text';
   input.type = shown ? 'password' : 'text';
-  btn.style.opacity = shown ? '' : '1';
+  input.classList.toggle('umm-revealed', !shown);
+  if (btn) btn.style.opacity = shown ? '' : '1';
 }
 
 function ummGenerateApiKey(btn) {
