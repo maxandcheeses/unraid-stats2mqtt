@@ -236,6 +236,25 @@ $vm_sensors     = array_filter(array_map('trim', explode(',', $vm_sensors_raw)))
   .umm-hint { font-size: 11px; color: var(--umm-muted); margin-top: 3px; }
   .tls-section.hidden { display: none; }
 
+  .umm-entity-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .umm-entity-table th {
+    font-size: 11px; color: var(--umm-muted); font-weight: 600;
+    text-align: left; padding: 4px 8px 6px 0; border-bottom: 2px solid var(--umm-border);
+  }
+  .umm-entity-table td { padding: 7px 8px 7px 0; border-bottom: 1px solid var(--umm-border); vertical-align: middle; }
+  .umm-entity-table tr:last-child td { border-bottom: none; }
+  .umm-entity-table td:first-child { width: 32px; }
+  .umm-state-badge {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px;
+    padding: 2px 7px; border-radius: 10px; text-transform: uppercase;
+  }
+  .umm-state-badge.running { color: var(--umm-success); border: 1px solid var(--umm-success); }
+  .umm-state-badge.other   { color: var(--umm-muted);   border: 1px solid var(--umm-muted); opacity: 0.7; }
+  .umm-mode-toggle { display: flex; gap: 16px; align-items: center; padding: 8px 0 10px; font-size: 13px; }
+  .umm-mode-toggle label { display: flex; align-items: center; gap: 5px; cursor: pointer; font-weight: 600; }
+  .umm-mode-toggle input[type="radio"] { cursor: pointer; }
+  .umm-exclude-note { font-size: 11px; color: var(--umm-muted); margin-bottom: 8px; display: none; }
+
   .umm-log-box {
     background: var(--color-input, var(--input-background, inherit));
     border: 1px solid var(--umm-border); border-radius: 4px;
