@@ -605,10 +605,6 @@ $vm_sensors     = array_filter(array_map('trim', explode(',', $vm_sensors_raw)))
        'INTERVAL_DISK_ERRORS', 300,   'EXPIRE_DISK_ERRORS',
        'Error count per disk', 'RETAIN_DISK_ERRORS'],
 
-      ['Read/Write Speeds',
-       'INTERVAL_RW_SPEEDS', 30,      'EXPIRE_RW_SPEEDS',
-       'KB/s read and write per disk — delta from /proc/diskstats', 'RETAIN_RW_SPEEDS'],
-
       '— Monitor',
 
       ['Monitor',
