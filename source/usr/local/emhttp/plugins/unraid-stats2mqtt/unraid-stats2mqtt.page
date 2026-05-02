@@ -86,10 +86,10 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
   }
   .umm-row input:focus, .umm-row select:focus { outline: none; border-bottom-color: var(--umm-accent); }
   .umm-row input[type="file"] { font-size: 12px; opacity: 0.7; flex: 1; min-width: 0; }
-  .umm-reveal-wrap { display: flex; align-items: center; flex: 1; min-width: 0; }
-  .umm-reveal-wrap input { flex: 1; min-width: 0; }
-  .umm-reveal-btn { background: none; border: none; cursor: pointer; padding: 0 4px; color: var(--umm-muted); font-size: 14px; line-height: 1; flex-shrink: 0; }
-  .umm-reveal-btn:hover { color: var(--umm-accent); }
+  .umm-reveal-wrap { position: relative; flex: 1; min-width: 0; }
+  .umm-reveal-wrap input { width: 100%; box-sizing: border-box; padding-right: 20px; }
+  .umm-reveal-btn { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 0; color: var(--umm-muted); font-size: 13px; line-height: 1; opacity: 0.5; }
+  .umm-reveal-btn:hover { opacity: 1; }
 
   /* Button-only rows (no label, no underline) */
   .umm-row-actions {
