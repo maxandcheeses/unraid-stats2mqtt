@@ -152,13 +152,13 @@ publish_update_available() {
 
   ha_register_binary "update_available" "Unraid Update Available" "$state_topic" "update" "package-up" "$expire" "$attr_topic"
 
-  if [ ! -f "$check_file" ]; then
+  local result; result=$(get_update_check_data)
+  if [ $? -ne 0 ]; then
     mqtt_publish "$state_topic" "OFF" "$retain"
     mqtt_publish "$attr_topic" "{}" "$retain"
     return
   fi
 
-  local result; result=$(cat "$check_file")
   local is_newer; is_newer=$(printf '%s' "$result" | grep -o '"isNewer":[^,}]*' | cut -d: -f2 | tr -d ' "')
 
   if [ "$is_newer" = "true" ]; then
