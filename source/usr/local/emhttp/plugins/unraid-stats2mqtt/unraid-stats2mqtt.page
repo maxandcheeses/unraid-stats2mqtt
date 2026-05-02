@@ -351,8 +351,7 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
       <label>API Key</label>
       <div style="flex:1;min-width:0">
         <div style="display:flex;gap:8px;align-items:center">
-          <input type="password" name="UNRAID_API_KEY" id="unraid_api_key" value="<?= esc($cfg['UNRAID_API_KEY'] ?? '') ?>" placeholder="required" style="flex:1;min-width:0">
-          <button type="button" class="umm-reveal-btn" onclick="ummToggleReveal('unraid_api_key', this)" title="Show/hide"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <input type="password" name="UNRAID_API_KEY" id="unraid_api_key" value="<?= esc($cfg['UNRAID_API_KEY'] ?? '') ?>" placeholder="required" class="umm-reveal-input" onclick="ummRevealClick(event, this)" style="flex:1;min-width:0">
           <button type="button" class="umm-btn umm-btn-muted umm-btn-sm" onclick="ummGenerateApiKey(this)" style="white-space:nowrap">&#128273; Generate Key</button>
         </div>
         <span id="umm-apikey-result" style="font-size:12px;font-weight:600;opacity:0;transition:opacity 0.3s;display:block;margin-top:4px"></span>
