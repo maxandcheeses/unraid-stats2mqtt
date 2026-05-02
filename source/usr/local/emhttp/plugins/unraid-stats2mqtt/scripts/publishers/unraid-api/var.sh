@@ -146,7 +146,6 @@ publish_rebuild() {
 
 publish_update_available() {
   local expire="${1:-0}" retain="${2:-true}"
-  local check_file="/tmp/unraidcheck/result.json"
   local state_topic="${MQTT_BASE_TOPIC}/binary_sensor/${MQTT_TOPIC}_update_available/state"
   local attr_topic="${MQTT_BASE_TOPIC}/binary_sensor/${MQTT_TOPIC}_update_available/attributes"
 
