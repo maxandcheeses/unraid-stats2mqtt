@@ -68,7 +68,7 @@ get_docker_data() {
 }
 
 get_vms_data() {
-  _api_cached "vms" '{ vms { domain { id uuid name state coreCount maxMemory description autostart } } }'
+  _api_cached "vms" '{ vms { domain { id uuid name state } } }'
 }
 
 get_array_status() {
