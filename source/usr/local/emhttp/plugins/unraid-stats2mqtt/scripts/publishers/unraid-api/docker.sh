@@ -38,8 +38,11 @@ publish_docker() {
     [ "$state" = "RUNNING" ] && value="ON"
     mqtt_publish "$state_topic" "$value" "$retain"
 
-    local container_id
-    container_id=$(echo "$container_json" | jq -r '.id // ""')
+    local raw_id full_id container_id
+    raw_id=$(echo "$container_json" | jq -r '.id // ""')
+    # API returns <nodeId>:<containerId> — extract just the container portion
+    full_id="${raw_id##*:}"
+    container_id="${full_id:0:12}"
 
     local attrs
     attrs=$(printf '{"id":"%s","status":"%s","image":"%s","imageId":"%s","autoStart":%s,"ports":%s}' \
