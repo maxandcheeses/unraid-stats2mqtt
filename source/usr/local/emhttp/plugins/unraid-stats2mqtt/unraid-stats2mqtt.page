@@ -344,8 +344,10 @@ $show_tls = in_array($cfg['MQTT_PROTOCOL'] ?? 'mqtt', $tls_protocols);
       <label>API Key</label>
       <div style="flex:1;min-width:0">
         <div style="display:flex;gap:8px;align-items:center">
-          <input type="password" name="UNRAID_API_KEY" id="unraid_api_key" value="<?= esc($cfg['UNRAID_API_KEY'] ?? '') ?>" placeholder="required" style="flex:1;min-width:0;box-sizing:border-box">
-          <button type="button" class="umm-reveal-btn" onclick="ummToggleReveal('unraid_api_key', this)" title="Show/hide key">&#128065;</button>
+          <div class="umm-reveal-wrap">
+            <input type="password" name="UNRAID_API_KEY" id="unraid_api_key" value="<?= esc($cfg['UNRAID_API_KEY'] ?? '') ?>" placeholder="required">
+            <button type="button" class="umm-reveal-btn" onclick="ummToggleReveal('unraid_api_key', this)" title="Show/hide">&#128065;</button>
+          </div>
           <button type="button" class="umm-btn umm-btn-muted umm-btn-sm" onclick="ummGenerateApiKey(this)" style="white-space:nowrap">&#128273; Generate Key</button>
         </div>
         <span id="umm-apikey-result" style="font-size:12px;font-weight:600;opacity:0;transition:opacity 0.3s;display:block;margin-top:4px"></span>
