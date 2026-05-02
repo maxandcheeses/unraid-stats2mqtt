@@ -1083,6 +1083,14 @@ function ummFormToYaml() {
     { comment: '# Metrics — Shares', fields: [
       'INTERVAL_SHARES','EXPIRE_SHARES','RETAIN_SHARES',
     ]},
+    { comment: '# Metrics — Docker', fields: [
+      'INTERVAL_DOCKER','EXPIRE_DOCKER','RETAIN_DOCKER',
+      'DOCKER_SENSOR_MODE','DOCKER_SENSORS',
+    ]},
+    { comment: '# Metrics — VMs', fields: [
+      'INTERVAL_VMS','EXPIRE_VMS','RETAIN_VMS',
+      'VM_SENSOR_MODE','VM_SENSORS',
+    ]},
   ];
   var lines = ['# unraid-stats2mqtt config'];
   sections.forEach(function(sec) {
