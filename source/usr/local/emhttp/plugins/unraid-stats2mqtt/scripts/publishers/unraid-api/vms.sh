@@ -1,6 +1,9 @@
 #!/bin/bash
 # SOURCE: Unraid GraphQL API (virtual machines)
 
+# Publishes one binary_sensor per VM (ON=RUNNING).
+# Respects VM_SENSOR_MODE (include/exclude) and VM_SENSORS allowlist/denylist.
+# Attributes include name, state, and UUID.
 publish_vms() {
   local expire="${1:-0}" retain="${2:-false}"
   local mode="${VM_SENSOR_MODE:-include}"
