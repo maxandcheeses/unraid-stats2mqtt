@@ -82,6 +82,11 @@ get_vms_data() {
   _api_cached "vms" '{ vms { domain { id name state } } }'
 }
 
+# Returns all network interfaces with name, IPs, MAC, operstate, speed, and type.
+get_network_data() {
+  _api_cached "network" '{ info { networkInterfaces { iface ip4 ip4subnet ip6 mac operstate speed type internal } } }'
+}
+
 # Returns the array state string (e.g. "STARTED", "STOPPED"). Returns "UNKNOWN" on API failure.
 get_array_status() {
   local resp; resp=$(get_array_data) || { echo "UNKNOWN"; return; }
