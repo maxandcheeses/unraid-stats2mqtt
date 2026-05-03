@@ -10,6 +10,7 @@ _unregister_disk_sensors() {
   ha_unregister "${sn}_errors"
 }
 
+# Publishes temperature sensor for each array disk and parity. Skips disks with no temp or DISK_NP status.
 publish_disk_temps() {
   local expire="${1:-0}" retain="${2:-true}"
   local arr; arr=$(get_array_data) || return
