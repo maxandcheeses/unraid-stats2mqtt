@@ -10,6 +10,7 @@ publish_array_status() {
   mqtt_publish "$topic" "$status" "$retain"
 }
 
+# Publishes aggregate array metrics: disk count, disabled/invalid/missing counts, total capacity, and used GB.
 publish_array_summary() {
   local expire="${1:-0}" retain="${2:-true}"
   local arr;  arr=$(get_array_data)  || return
