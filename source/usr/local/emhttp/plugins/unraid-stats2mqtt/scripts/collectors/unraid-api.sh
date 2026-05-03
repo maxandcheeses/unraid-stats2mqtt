@@ -88,6 +88,7 @@ get_array_status() {
   echo "$resp" | jq -r '.data.array.state // "UNKNOWN"'
 }
 
+# Returns parity check state as "STATUS|progress%|speed". STATUS is RUNNING or IDLE.
 get_parity_info() {
   local arr; arr=$(get_array_data) || { echo "UNKNOWN|0|0"; return; }
   local running; running=$(echo "$arr" | jq -r '.data.array.parityCheckStatus.running // empty')
