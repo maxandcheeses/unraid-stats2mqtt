@@ -1,6 +1,7 @@
 #!/bin/bash
 # SOURCE: Unraid GraphQL API (vars, parityHistory)
 
+# Publishes array sync error count and parity history (most recent status as state, full log as attributes).
 publish_monitor() {
   local expire="${1:-0}" retain="${2:-true}"
   local base="${MQTT_BASE_TOPIC}/sensor/${MQTT_TOPIC}"
