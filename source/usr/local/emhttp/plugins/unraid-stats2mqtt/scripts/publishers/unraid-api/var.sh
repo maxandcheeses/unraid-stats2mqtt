@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Publishes the array state string (e.g. "STARTED", "STOPPED") as a single sensor.
 publish_array_status() {
   local expire="${1:-0}" retain="${2:-true}"
   local status; status=$(get_array_status)
