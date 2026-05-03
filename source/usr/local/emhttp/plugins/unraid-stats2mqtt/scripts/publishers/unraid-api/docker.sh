@@ -1,6 +1,9 @@
 #!/bin/bash
 # SOURCE: Unraid GraphQL API (docker containers)
 
+# Publishes one binary_sensor per Docker container (ON=RUNNING).
+# Respects DOCKER_SENSOR_MODE (include/exclude) and DOCKER_SENSORS allowlist/denylist.
+# Attributes include state, short container ID, status, image, autoStart, and port mappings.
 publish_docker() {
   local expire="${1:-0}" retain="${2:-false}"
   local mode="${DOCKER_SENSOR_MODE:-include}"
