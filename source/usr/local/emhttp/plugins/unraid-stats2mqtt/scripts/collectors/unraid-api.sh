@@ -47,6 +47,7 @@ _api_cached() {
   echo "$result"
 }
 
+# Returns array state, capacity, per-disk status/temp/errors/usage, parity check status, and cache pool info.
 get_array_data() {
   _api_cached "array" '{ array { state capacity { kilobytes { free used total } disks { free used total } } parities { name device status temp numErrors type } disks { name device status temp numErrors fsSize fsFree fsUsed type color isSpinning } caches { name device status fsSize fsFree fsUsed } parityCheckStatus { date duration speed status errors progress running paused } } }'
 }
