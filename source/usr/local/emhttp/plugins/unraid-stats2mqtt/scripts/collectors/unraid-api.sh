@@ -52,6 +52,7 @@ get_array_data() {
   _api_cached "array" '{ array { state capacity { kilobytes { free used total } disks { free used total } } parities { name device status temp numErrors type } disks { name device status temp numErrors fsSize fsFree fsUsed type color isSpinning } caches { name device status fsSize fsFree fsUsed } parityCheckStatus { date duration speed status errors progress running paused } } }'
 }
 
+# Returns server identity, Unraid version, array disk counts, resync state, and registration info.
 get_vars_data() {
   _api_cached "vars" '{ vars { version name sysModel mdNumDisks mdNumDisabled mdNumInvalid mdNumMissing mdColor mdState mdResync mdResyncAction mdResyncPos mdResyncDb mdResyncDt sbSyncErrs flashGuid regState } }'
 }
