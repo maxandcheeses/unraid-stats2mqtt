@@ -82,9 +82,9 @@ get_vms_data() {
   _api_cached "vms" '{ vms { domain { id name state } } }'
 }
 
-# Returns all network interfaces with name, IPs, MAC, operstate, speed, and type.
+# Returns all network interfaces with name, IPs, MAC, status, protocol, and DHCP config.
 get_network_data() {
-  _api_cached "network" '{ info { networkInterfaces { iface ip4 ip4subnet ip6 mac operstate speed type internal } } }'
+  _api_cached "network" '{ info { networkInterfaces { id name description macAddress status protocol ipAddress netmask gateway useDhcp ipv6Address ipv6Netmask ipv6Gateway useDhcp6 } primaryNetwork { id name } } }'
 }
 
 # Returns the array state string (e.g. "STARTED", "STOPPED"). Returns "UNKNOWN" on API failure.
