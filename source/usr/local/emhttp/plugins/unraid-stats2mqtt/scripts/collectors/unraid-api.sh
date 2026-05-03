@@ -33,6 +33,8 @@ graphql_query() {
   echo "$response"
 }
 
+# Wraps graphql_query with a per-tick in-memory cache keyed by $key.
+# Repeated calls within the same TICK return the cached result without a network round-trip.
 _api_cached() {
   local key="$1" query="$2"
   if [ "${_API_CACHE_TICK[$key]:-}" = "${TICK}" ] && [ -n "${_API_CACHE[$key]+x}" ]; then
