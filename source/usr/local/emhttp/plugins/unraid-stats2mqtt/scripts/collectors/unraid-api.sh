@@ -3,6 +3,8 @@
 declare -A _API_CACHE
 declare -A _API_CACHE_TICK
 
+# Sends a GraphQL query to the Unraid API and returns the raw JSON response.
+# Requires UNRAID_API_KEY and UNRAID_API_HOST. Returns 1 on network failure or API error.
 graphql_query() {
   local query="$1"
   if [ -z "${UNRAID_API_KEY:-}" ]; then
