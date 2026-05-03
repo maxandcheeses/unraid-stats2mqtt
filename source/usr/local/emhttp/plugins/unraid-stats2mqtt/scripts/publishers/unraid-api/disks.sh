@@ -25,6 +25,7 @@ publish_disk_temps() {
   done < <(echo "$arr" | jq -r '(.data.array.disks[], .data.array.parities[]) | [.name, (.temp // ""), .status] | @tsv')
 }
 
+# Publishes state sensor per array disk: ACTIVE, STANDBY (spun down), or DISABLED. Unregisters sensors for missing disks.
 publish_disk_states() {
   local expire="${1:-0}" retain="${2:-true}"
   local arr; arr=$(get_array_data) || return
