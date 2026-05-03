@@ -59,6 +59,7 @@ publish_array_summary() {
   fi
 }
 
+# Publishes cache pool state (ACTIVE/DEGRADED), device count, total capacity, and used GB across all cache devices.
 publish_cache() {
   local expire="${1:-0}" retain="${2:-true}"
   local arr; arr=$(get_array_data) || return
