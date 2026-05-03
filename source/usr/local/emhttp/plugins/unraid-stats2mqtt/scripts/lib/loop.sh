@@ -17,7 +17,7 @@ should_publish_interval() {
 _publish_metric() {
   local key="$1" interval="$2" expire="$3" fn="$4" retain="${5:-true}"
   [ "${interval:-0}" -le 0 ] 2>/dev/null && return
-  if should_publish_interval "${key}_interval" "$interval" "$TICK"; then
+  if [ "${TICK:-0}" -eq 0 ] || should_publish_interval "${key}_interval" "$interval" "$TICK"; then
     log "Interval publish: $key"
     "$fn" "$expire" "$retain"
   fi
