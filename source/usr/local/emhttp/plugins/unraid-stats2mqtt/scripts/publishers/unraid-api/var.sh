@@ -150,6 +150,8 @@ publish_rebuild() {
   mqtt_publish "${base}_eta/state"      "$eta"    "$retain"
 }
 
+# Publishes a binary_sensor for Unraid OS update availability. State is ON if isNewer=true in the update check result.
+# Falls back to OFF if the update check file hasn't been written yet.
 publish_update_available() {
   local expire="${1:-0}" retain="${2:-true}"
   local state_topic="${MQTT_BASE_TOPIC}/binary_sensor/${MQTT_TOPIC}_update_available/state"
