@@ -2,11 +2,11 @@
 
 <img src="docs/unraid-mqtt.png" width="120" />
 
-An Unraid plugin (no Docker) that monitors your array and publishes metrics to an MQTT broker in **Home Assistant discovery format**.
+An Unraid plugin (no Docker) that monitors your server and publishes metrics to an MQTT broker in **Home Assistant discovery format**.
 
 ## Features
 
-| Metric | HA Entities Created | Possible Values |
+| Metric | HA Entity | Values / Notes |
 |---|---|---|
 | Array status | `sensor.unraid_array_status` | `STARTED`, `STARTING`, `STOPPED`, `STOPPING`, `DEGRADED` |
 | Array disk count | `sensor.unraid_array_num_disks` | count |
@@ -14,66 +14,45 @@ An Unraid plugin (no Docker) that monitors your array and publishes metrics to a
 | Array invalid disks | `sensor.unraid_array_invalid_disks` | count |
 | Array missing disks | `sensor.unraid_array_missing_disks` | count |
 | Array capacity | `sensor.unraid_array_capacity` | GB |
-| Array used | `sensor.unraid_array_used` | `0`–`100` (%) |
-| Cache state | `sensor.unraid_cache_state` | `STARTED`, `STOPPED`, etc. |
+| Array used | `sensor.unraid_array_used` | GB |
+| Cache state | `sensor.unraid_cache_state` | `ACTIVE`, `DEGRADED` |
 | Cache devices | `sensor.unraid_cache_num_devices` | count |
 | Cache capacity | `sensor.unraid_cache_capacity` | GB |
-| Cache used | `sensor.unraid_cache_used` | `0`–`100` (%) |
-| Parity check | `sensor.unraid_parity_status` | `IDLE`, `RUNNING`, `PAUSED` |
+| Cache used | `sensor.unraid_cache_used` | GB |
+| Parity status | `sensor.unraid_parity_status` | `IDLE`, `RUNNING` |
 | Parity progress | `sensor.unraid_parity_progress` | `0`–`100` (%) |
 | Parity speed | `sensor.unraid_parity_speed` | KB/s |
-| Disk rebuild | `sensor.unraid_rebuild_status` | `RUNNING`, `PAUSED` |
+| Disk rebuild status | `sensor.unraid_rebuild_status` | `IDLE`, `RUNNING`, `PAUSED` |
 | Disk rebuild progress | `sensor.unraid_rebuild_progress` | `0`–`100` (%) |
 | Disk rebuild speed | `sensor.unraid_rebuild_speed` | KB/s |
 | Disk rebuild ETA | `sensor.unraid_rebuild_eta` | minutes |
 | Unraid version | `sensor.unraid_unraid_version` | version string |
-| Unraid update available | `binary_sensor.unraid_update_available` | `ON` / `OFF` — see [attributes](#sensor-attributes) |
+| Update available | `binary_sensor.unraid_update_available` | `ON` / `OFF` — see [attributes](#sensor-attributes) |
 | Server identification | `sensor.unraid_identification` | server name — see [attributes](#sensor-attributes) |
-| Docker containers | `binary_sensor.unraid_docker_<name>` | `ON` (running) / `OFF` — see [attributes](#sensor-attributes) |
-| Virtual machines | `binary_sensor.unraid_vm_<name>` | `ON` (running) / `OFF` — see [attributes](#sensor-attributes) |
-| Disk temperatures | `sensor.unraid_<disk>_temp` | °C |
-| Disk states | `sensor.unraid_<disk>_state` | `ACTIVE`, `STANDBY`, `DISABLED` |
-| Disk errors | `sensor.unraid_<disk>_errors` | count |
-| Disk usage | `sensor.unraid_<disk>` | `0`–`100` (%) — see [attributes](#sensor-attributes) |
-| SMART health | `sensor.unraid_<disk>_smart_health` | `PASSED`, `FAILED`, `UNKNOWN` — see [attributes](#sensor-attributes) |
-| Reallocated sectors | `sensor.unraid_<disk>_reallocated` | count |
-| Pending sectors | `sensor.unraid_<disk>_pending_sectors` | count |
-| Offline uncorrectable | `sensor.unraid_<disk>_offline_uncorrectable` | count |
-| Power-on hours | attribute of `sensor.unraid_<disk>_smart_health` | hours |
-| Read speed | `sensor.unraid_<disk>_read_speed` | KB/s |
-| Write speed | `sensor.unraid_<disk>_write_speed` | KB/s |
-| Network RX | `sensor.unraid_net_<iface>_rx` | KB/s |
-| Network TX | `sensor.unraid_net_<iface>_tx` | KB/s |
-| Share usage | `sensor.unraid_share_<share>_info` | `0`–`100` (%) — see [attributes](#sensor-attributes) |
 | System uptime | `sensor.unraid_system_uptime` | seconds |
-| Array errors | `sensor.unraid_monitor_array_errors` | count |
-| Parity history | `sensor.unraid_monitor_parity_history` | text |
-| Flash drive state | `sensor.unraid_flash_state` | `OK`, etc. |
-| Docker disk usage | `sensor.unraid_docker_disk_usage` | `0`–`100` (%) |
-| Device usage | `sensor.unraid_monitor_<device>_used_pct` | `0`–`100` (%) |
-| Device alert | `sensor.unraid_monitor_<device>_alert` | `0` / `1` |
+| Disk temperature | `sensor.unraid_<disk>_temp` | °C |
+| Disk state | `sensor.unraid_<disk>_state` | `ACTIVE`, `STANDBY`, `DISABLED` |
+| Disk filesystem usage | `sensor.unraid_<disk>` | `0`–`100` (%) — see [attributes](#sensor-attributes) |
+| Disk errors | `sensor.unraid_<disk>_errors` | count |
+| Array sync errors | `sensor.unraid_monitor_array_errors` | count |
+| Parity history | `sensor.unraid_monitor_parity_history` | last run status — see [attributes](#sensor-attributes) |
+| Network interface | `sensor.unraid_net_<iface>` | `up` / `down` — see [attributes](#sensor-attributes) |
+| Share info | `sensor.unraid_share_<share>_info` | `0`–`100` (%) — see [attributes](#sensor-attributes) |
+| Docker container | `binary_sensor.unraid_docker_<name>` | `ON` (running) / `OFF` — see [attributes](#sensor-attributes) |
+| Virtual machine | `binary_sensor.unraid_vm_<name>` | `ON` (running) / `OFF` — see [attributes](#sensor-attributes) |
 
 ### Sensor Attributes
 
-Several sensors expose additional detail as HA state attributes (accessible via `{{ state_attr(...) }}` in templates):
-
-![Disk sensor attributes](docs/ha-attributes.png)
-
 | Sensor | Attributes |
 |---|---|
-| `sensor.unraid_<disk>` (disk usage) | `size_gb`, `free_gb`, `used_gb`, `read_speed`, `write_speed`, plus raw fields from `disks.ini` |
-| `sensor.unraid_<disk>_smart_health` | `power_on_hours`, `crc_errors`, `nvme_unsafe_shutdowns` (NVMe), `nvme_media_errors` (NVMe) |
-| `sensor.unraid_share_<share>_info` | All fields from `shares.ini` (e.g. `share`, `color`, `free`, `used`, `size`, `include`, `exclude`) |
+| `sensor.unraid_<disk>` (disk usage) | `size_gb`, `free_gb`, `used_gb` |
 | `sensor.unraid_identification` | `name`, `sysModel`, `version`, `brand`, `cores`, `threads` |
-| `binary_sensor.unraid_update_available` | Raw fields from `/tmp/unraidcheck/result.json` (e.g. `isNewer`, `version`) |
+| `binary_sensor.unraid_update_available` | `isNewer`, `version`, and other fields from the update check result |
+| `sensor.unraid_monitor_parity_history` | `history` — list of parity runs with `date`, `duration`, `speed`, `status`, `errors` |
+| `sensor.unraid_net_<iface>` | `macAddress`, `protocol`, `ipAddress`, `netmask`, `gateway`, `useDhcp`, `ipv6Address`, `ipv6Netmask`, `ipv6Gateway`, `useDhcp6`, `description` |
+| `sensor.unraid_share_<share>_info` | `free`, `used`, `size`, `comment`, `color` |
 | `binary_sensor.unraid_docker_<name>` | `state`, `id`, `status`, `image`, `imageId`, `autoStart`, `ports` |
 | `binary_sensor.unraid_vm_<name>` | `name`, `state`, `uuid` |
-
-- Per-metric publish rules: **interval**, **on-change**, or **both**
-- Protocol support: **MQTT**, **MQTTS** (TLS), **WS**, **WSS**
-- TLS: CA cert, client cert/key, or insecure skip-verify
-- Pure Bash/PHP daemon — no Docker, no Node, no Python required
-- Settings UI in the Unraid WebUI under **Settings → Stats to MQTT**
 
 ---
 
@@ -124,67 +103,73 @@ Certificates are stored in:
 
 | Setting | Description | Default |
 |---|---|---|
+| `UNRAID_API_KEY` | Unraid GraphQL API key | — |
+| `UNRAID_API_HOST` | Unraid API endpoint | `http://localhost` |
 | `MQTT_HOST` | Broker IP or hostname | `localhost` |
 | `MQTT_PORT` | Broker port | `1883` |
 | `MQTT_PROTOCOL` | `mqtt` / `mqtts` / `ws` / `wss` | `mqtt` |
-| `MQTT_BASE_TOPIC` | HA discovery prefix | `homeassistant` |
-| `MQTT_DEVICE_ID` | Used in topic paths | `unraid` |
-| `PUBLISH_ARRAY_STATUS` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_ARRAY_STATUS` | Seconds between array status publishes | `300` |
-| `PUBLISH_ARRAY_SUMMARY` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_ARRAY_SUMMARY` | Seconds between array summary publishes | `300` |
-| `PUBLISH_CACHE` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_CACHE` | Seconds between cache publishes | `300` |
-| `PUBLISH_PARITY` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_PARITY` | Seconds between parity publishes | `300` |
-| `PUBLISH_REBUILD` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_REBUILD` | Seconds between rebuild publishes | `300` |
-| `PUBLISH_SYSTEM_INFO` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_SYSTEM_INFO` | Seconds between system info publishes | `300` |
-| `PUBLISH_DISK_TEMPS` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_DISK_TEMPS` | Seconds between disk temp publishes | `300` |
-| `PUBLISH_DISK_STATES` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_DISK_STATES` | Seconds between disk state publishes | `300` |
-| `PUBLISH_DISK_USAGE` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_DISK_USAGE` | Seconds between disk usage publishes | `300` |
-| `PUBLISH_DISK_ERRORS` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_DISK_ERRORS` | Seconds between disk error publishes | `300` |
-| `PUBLISH_SMART` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_SMART` | Seconds between SMART publishes | `300` |
-| `PUBLISH_RW_SPEEDS` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_RW_SPEEDS` | Seconds between R/W speed publishes | `300` |
-| `PUBLISH_NETWORK` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_NETWORK` | Seconds between network speed publishes | `60` |
-| `PUBLISH_UPTIME` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_UPTIME` | Seconds between uptime publishes | `60` |
-| `PUBLISH_MONITOR` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_MONITOR` | Seconds between monitor.ini publishes | `300` |
-| `PUBLISH_SHARES` | `interval` / `onchange` / `both` | — |
-| `INTERVAL_SHARES` | Seconds between share usage publishes | `300` |
-| `PUBLISH_DOCKER` | Enable Docker container sensors | `true` |
-| `INTERVAL_DOCKER` | Seconds between Docker state publishes | `30` |
-| `DOCKER_SENSOR_MODE` | `include` (allowlist) / `exclude` (denylist) | `include` |
-| `DOCKER_SENSORS` | Comma-separated list of container names to include/exclude | — |
-| `PUBLISH_VMS` | Enable VM sensors | `true` |
-| `INTERVAL_VMS` | Seconds between VM state publishes | `30` |
-| `VM_SENSOR_MODE` | `include` (allowlist) / `exclude` (denylist) | `include` |
-| `VM_SENSORS` | Comma-separated list of VM names to include/exclude | — |
+| `MQTT_BASE_TOPIC` | Base topic prefix | `unraid` |
+| `MQTT_DEVICE_NAME` | Friendly name in Home Assistant | `Unraid Server` |
+| `MQTT_DEVICE_ID` | HA device identifier (used in topic paths) | `unraid` |
+| `HA_WATCH_STATUS` | Re-publish discovery when HA restarts | `true` |
+| `HA_STATUS_TOPIC` | HA birth/will topic | `homeassistant/status` |
+| `HA_DISCOVERY_TOPIC` | HA MQTT discovery prefix | `homeassistant` |
+
+### Per-Metric Settings
+
+Each metric group has three settings:
+
+| Setting | Description | Example |
+|---|---|---|
+| `INTERVAL_<METRIC>` | Seconds between publishes. `0` disables the metric. | `60` |
+| `EXPIRE_AFTER_<METRIC>` | Seconds before HA marks entity unavailable. `0` = never. | `120` |
+| `RETAIN_<METRIC>` | Whether MQTT messages are retained | `true` |
+
+All enabled metrics publish immediately on daemon start, then follow their interval.
+
+| Metric group | Config key prefix | Default interval |
+|---|---|---|
+| Array status | `INTERVAL_ARRAY_STATUS` | `30` s |
+| Array summary | `INTERVAL_ARRAY_SUMMARY` | `60` s |
+| Cache pool | `INTERVAL_CACHE` | `60` s |
+| Parity check | `INTERVAL_PARITY` | `60` s |
+| Disk rebuild | `INTERVAL_REBUILD` | `30` s |
+| System info | `INTERVAL_SYSTEM_INFO` | `3600` s |
+| Update available | `INTERVAL_UPDATE_AVAILABLE` | `3600` s |
+| System uptime | `INTERVAL_UPTIME` | `60` s |
+| Disk temperatures | `INTERVAL_DISK_TEMPS` | `60` s |
+| Disk states | `INTERVAL_DISK_STATES` | `30` s |
+| Disk filesystem usage | `INTERVAL_DISK_USAGE` | `300` s |
+| Disk errors | `INTERVAL_DISK_ERRORS` | `300` s |
+| Monitor (sync errors + parity history) | `INTERVAL_MONITOR` | `60` s |
+| Network interfaces | `INTERVAL_NETWORK` | `60` s |
+| Shares | `INTERVAL_SHARES` | `300` s |
+| Docker containers | `INTERVAL_DOCKER` | `30` s |
+| Virtual machines | `INTERVAL_VMS` | `30` s |
+
+Docker and VM sensors also support an include/exclude list to limit which containers or VMs get a sensor. Configure these in the WebUI under **Docker & VM Sensors**.
 
 ---
 
 ## MQTT Topic Structure
 
-Discovery config topics (retained):
+State topics follow the pattern:
 ```
-homeassistant/sensor/unraid_<entity>/config
+<MQTT_BASE_TOPIC>/sensor/<MQTT_DEVICE_ID>_<entity>/state
+<MQTT_BASE_TOPIC>/binary_sensor/<MQTT_DEVICE_ID>_<entity>/state
 ```
 
-State topics:
+HA discovery config topics (retained):
 ```
-homeassistant/sensor/unraid_array_status/state
-homeassistant/sensor/unraid_disk1_temp/state
-homeassistant/sensor/unraid_disk1_read_speed/state
-...
+<HA_DISCOVERY_TOPIC>/sensor/<MQTT_DEVICE_ID>_<entity>/config
+<HA_DISCOVERY_TOPIC>/binary_sensor/<MQTT_DEVICE_ID>_<entity>/config
+```
+
+With default settings, examples look like:
+```
+unraid/sensor/unraid_array_status/state
+unraid/sensor/unraid_disk1_temp/state
+unraid/binary_sensor/unraid_docker_plex/state
 ```
 
 ---
@@ -198,23 +183,18 @@ Once the plugin is running and your HA MQTT integration is configured, entities 
 Example Lovelace card:
 ```yaml
 type: entities
-title: Unraid Array
+title: Unraid
 entities:
   - sensor.unraid_array_status
+  - sensor.unraid_array_capacity
+  - sensor.unraid_array_used
   - sensor.unraid_parity_status
   - sensor.unraid_parity_progress
-  - sensor.unraid_parity_speed
   - sensor.unraid_rebuild_status
-  - sensor.unraid_rebuild_progress
-  - sensor.unraid_rebuild_speed
-  - sensor.unraid_rebuild_eta
+  - sensor.unraid_system_uptime
   - sensor.unraid_disk1_temp
   - sensor.unraid_disk1_state
-  - sensor.unraid_disk1_smart_health
-  - sensor.unraid_disk1_reallocated
-  - sensor.unraid_disk1_pending_sectors
-  - sensor.unraid_disk1_read_speed
-  - sensor.unraid_disk1_write_speed
+  - sensor.unraid_net_eth0
 ```
 
 ---
@@ -265,8 +245,7 @@ Outputs to `dist/`:
 ## Dependencies
 
 - `mosquitto-clients` (provides `mosquitto_pub`) — auto-installed by the plugin
-- `smartmontools` — available by default on Unraid
-- `hdparm` — available by default on Unraid
+- `jq` — auto-installed by the plugin
 
 ---
 
