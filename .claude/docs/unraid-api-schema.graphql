@@ -269,23 +269,37 @@ type InfoOs implements Node {
   platform: String
   distro: String
   release: String
+  codename: String
   kernel: String
   arch: String
   hostname: String
+  fqdn: String
+  build: String
+  servicepack: String
   uptime: String             # boot time ISO string
+  logofile: String
+  serial: String
+  uefi: Boolean
 }
 
 type InfoCpu implements Node {
   id: PrefixedID!
   manufacturer: String
   brand: String
+  vendor: String
+  family: String
+  model: String
+  stepping: String
+  revision: String
+  voltage: String
   cores: Int
   threads: Int
+  processors: Int
+  socket: String
   speed: Float               # GHz
   speedmin: Float
   speedmax: Float
-  processors: Int
-  socket: String
+  flags: [String!]
 }
 
 type Metrics implements Node {
