@@ -72,6 +72,7 @@ get_info_data() {
   _api_cached "info" '{ info { os { hostname platform uptime kernel arch } cpu { brand cores threads } } }'
 }
 
+# Returns all Docker containers with state, status, image, autostart, and port mappings.
 get_docker_data() {
   _api_cached "docker" '{ docker { containers { id names state status image imageId autoStart ports { ip privatePort publicPort type } } } }'
 }
