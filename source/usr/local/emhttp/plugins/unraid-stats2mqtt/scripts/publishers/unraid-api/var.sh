@@ -122,6 +122,8 @@ publish_parity() {
   mqtt_publish "${base}_speed/state"    "$parity_speed"  "$retain"
 }
 
+# Publishes disk rebuild status, progress %, speed (KB/s), and ETA (min). Skips when state is UNKNOWN.
+# Re-queries once if progress is 0% to avoid a false idle reading at rebuild start.
 publish_rebuild() {
   local expire="${1:-0}" retain="${2:-true}"
   local info; info=$(get_rebuild_info)
