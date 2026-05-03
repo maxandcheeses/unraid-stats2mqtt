@@ -82,6 +82,7 @@ get_vms_data() {
   _api_cached "vms" '{ vms { domain { id name state } } }'
 }
 
+# Returns the array state string (e.g. "STARTED", "STOPPED"). Returns "UNKNOWN" on API failure.
 get_array_status() {
   local resp; resp=$(get_array_data) || { echo "UNKNOWN"; return; }
   echo "$resp" | jq -r '.data.array.state // "UNKNOWN"'
