@@ -105,6 +105,17 @@ type UnraidArray implements Node {
   caches: [ArrayDisk!]!
 }
 
+type ArrayCapacity {
+  kilobytes: Capacity!
+  disks: Capacity!
+}
+
+type Capacity {
+  free: String!    # numeric kilobyte count as string, e.g. "1234567890"
+  used: String!
+  total: String!
+}
+
 enum ArrayState {
   STARTED
   STOPPED
