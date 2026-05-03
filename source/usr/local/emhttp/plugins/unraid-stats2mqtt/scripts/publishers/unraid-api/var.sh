@@ -176,6 +176,7 @@ publish_update_available() {
   mqtt_publish "$attr_topic" "$result" "$retain"
 }
 
+# Publishes Unraid version and server identification sensor (state=server name, attributes include model, CPU brand/cores/threads).
 publish_system_info() {
   local expire="${1:-0}" retain="${2:-true}"
   local vars; vars=$(get_vars_data) || return
