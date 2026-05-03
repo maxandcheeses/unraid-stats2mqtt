@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Publishes system uptime in seconds. Handles both raw-seconds and ISO timestamp formats from the API.
 publish_uptime() {
   local expire="${1:-0}" retain="${2:-true}"
   local info; info=$(get_info_data) || return
