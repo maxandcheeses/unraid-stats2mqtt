@@ -235,6 +235,23 @@ type Info implements Node {
   primaryNetwork: InfoNetworkInterface
 }
 
+type InfoNetworkInterface implements Node {
+  id: PrefixedID!
+  name: String!
+  description: String
+  macAddress: String
+  status: String
+  protocol: String
+  ipAddress: String
+  netmask: String
+  gateway: String
+  useDhcp: Boolean
+  ipv6Address: String
+  ipv6Netmask: String
+  ipv6Gateway: String
+  useDhcp6: Boolean
+}
+
 type InfoOs implements Node {
   id: PrefixedID!
   platform: String
