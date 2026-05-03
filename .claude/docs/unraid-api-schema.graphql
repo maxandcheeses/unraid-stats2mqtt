@@ -347,6 +347,7 @@ type UPSPower {
 # Metrics: { metrics { cpu { percentTotal } memory { total used percentTotal } } }
 # Shares:  { shares { id name free used size } }
 # UPS:     { upsDevices { id name model status battery { chargeLevel estimatedRuntime health } power { inputVoltage outputVoltage loadPercentage nominalPower currentPower } } }
+# Network: { info { networkInterfaces { id name description macAddress status protocol ipAddress netmask gateway useDhcp ipv6Address ipv6Netmask ipv6Gateway useDhcp6 } primaryNetwork { id name } } }
 
 # ----- PrefixedID notes -----
 # Output always includes server prefix: "<serverId>:<resourceId>"
