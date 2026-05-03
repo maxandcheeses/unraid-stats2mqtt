@@ -146,6 +146,11 @@ main() {
     [ "${PUBLISH_VMS:-true}" = "true" ] && \
       _publish_metric "vms"          "$vms_interval"    "$vms_expire"    publish_vms         "$vms_retain"
 
+    local net_interval="${INTERVAL_NETWORK:-60}"
+    local net_expire; net_expire=$(resolve_expire "${EXPIRE_NETWORK:-0}" "$net_interval")
+    local net_retain="${RETAIN_NETWORK:-true}"
+    _publish_metric "network"        "$net_interval"    "$net_expire"    publish_network      "$net_retain"
+
     # ── Re-publish everything when HA restarts ─────────────────────────────────
     if [ -f "$HA_ONLINE_FLAG" ]; then
       rm -f "$HA_ONLINE_FLAG"
