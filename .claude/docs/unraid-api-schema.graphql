@@ -166,6 +166,18 @@ enum ArrayDiskStatus {
   DISK_NEW
 }
 
+enum ArrayDiskFsColor {
+  GREEN_ON
+  GREEN_BLINK
+  BLUE_ON
+  BLUE_BLINK
+  YELLOW_ON
+  YELLOW_BLINK
+  RED_ON
+  RED_OFF
+  GREY_OFF
+}
+
 type ParityCheck {
   date: DateTime
   duration: Int
