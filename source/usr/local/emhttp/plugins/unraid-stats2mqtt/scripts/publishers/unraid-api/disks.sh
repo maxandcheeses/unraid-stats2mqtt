@@ -83,6 +83,7 @@ publish_disk_usage() {
   done < <(echo "$arr" | jq -r '.data.array.disks[] | [.name, .status, (.fsSize // 0), (.fsFree // 0), (.fsUsed // 0)] | @tsv')
 }
 
+# Publishes error count sensor per array disk. Skips disks with null/missing error counts.
 publish_disk_errors() {
   local expire="${1:-0}" retain="${2:-true}"
   local arr; arr=$(get_array_data) || return
