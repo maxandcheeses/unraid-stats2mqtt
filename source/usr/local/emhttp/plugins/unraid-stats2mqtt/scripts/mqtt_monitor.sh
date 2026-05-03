@@ -170,8 +170,9 @@ main() {
       [ "${monitor_interval:-0}"      -gt 0 ] && publish_monitor         "$monitor_expire"      "$monitor_retain"
       [ "${shares_interval:-0}"        -gt 0 ] && publish_shares          "$shares_expire"       "$shares_retain"
       [ "${uptime_interval:-0}"        -gt 0 ] && publish_uptime          "$uptime_expire"       "$uptime_retain"
-      [ "${PUBLISH_DOCKER:-true}" = "true" ] && [ "${docker_interval:-0}" -gt 0 ] && publish_docker "$docker_expire" "$docker_retain"
-      [ "${PUBLISH_VMS:-true}"    = "true" ] && [ "${vms_interval:-0}"    -gt 0 ] && publish_vms    "$vms_expire"    "$vms_retain"
+      [ "${PUBLISH_DOCKER:-true}" = "true" ] && [ "${docker_interval:-0}" -gt 0 ] && publish_docker   "$docker_expire"  "$docker_retain"
+      [ "${PUBLISH_VMS:-true}"    = "true" ] && [ "${vms_interval:-0}"    -gt 0 ] && publish_vms      "$vms_expire"     "$vms_retain"
+      [ "${net_interval:-0}"      -gt 0 ]                                          && publish_network  "$net_expire"     "$net_retain"
     fi
 
     # Heartbeat: keep HA from marking device unavailable
