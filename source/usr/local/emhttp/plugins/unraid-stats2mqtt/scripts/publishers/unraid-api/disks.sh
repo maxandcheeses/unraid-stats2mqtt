@@ -54,6 +54,7 @@ publish_disk_states() {
   done < <(echo "$arr" | jq -r '.data.array.disks[] | [.name, .status, (.isSpinning // true | tostring)] | @tsv')
 }
 
+# Publishes filesystem usage % per array disk. Attributes include size_gb, free_gb, used_gb.
 publish_disk_usage() {
   local expire="${1:-0}" retain="${2:-true}"
   local arr; arr=$(get_array_data) || return
