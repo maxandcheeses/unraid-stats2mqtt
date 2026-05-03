@@ -105,6 +105,7 @@ publish_cache() {
   fi
 }
 
+# Publishes parity check status, progress %, and speed. Skips when state is UNKNOWN.
 publish_parity() {
   local expire="${1:-0}" retain="${2:-true}"
   local info; info=$(get_parity_info)
