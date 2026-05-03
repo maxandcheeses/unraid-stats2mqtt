@@ -77,6 +77,7 @@ get_docker_data() {
   _api_cached "docker" '{ docker { containers { id names state status image imageId autoStart ports { ip privatePort publicPort type } } } }'
 }
 
+# Returns all VMs with id, name, and current domain state.
 get_vms_data() {
   _api_cached "vms" '{ vms { domain { id name state } } }'
 }
