@@ -1,6 +1,7 @@
 #!/bin/bash
 # SOURCE: Unraid GraphQL API (shares)
 
+# Publishes one sensor per user share. State is usage % (computed via HA template), attributes include free/used/size/comment/color.
 publish_shares() {
   local expire="${1:-0}" retain="${2:-true}"
   local shares; shares=$(get_shares_data) || return
