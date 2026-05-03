@@ -67,6 +67,7 @@ get_parity_history_data() {
   _api_cached "parityHistory" '{ parityHistory { date duration speed status errors } }'
 }
 
+# Returns OS info (hostname, platform, uptime, kernel, arch) and CPU info (brand, cores, threads).
 get_info_data() {
   _api_cached "info" '{ info { os { hostname platform uptime kernel arch } cpu { brand cores threads } } }'
 }
