@@ -62,6 +62,7 @@ get_shares_data() {
   _api_cached "shares" '{ shares { name free used size comment color } }'
 }
 
+# Returns the historical parity check log (date, duration, speed, status, errors per run).
 get_parity_history_data() {
   _api_cached "parityHistory" '{ parityHistory { date duration speed status errors } }'
 }
