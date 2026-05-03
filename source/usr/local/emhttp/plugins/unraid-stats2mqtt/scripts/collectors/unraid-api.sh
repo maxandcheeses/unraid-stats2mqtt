@@ -57,6 +57,7 @@ get_vars_data() {
   _api_cached "vars" '{ vars { version name sysModel mdNumDisks mdNumDisabled mdNumInvalid mdNumMissing mdColor mdState mdResync mdResyncAction mdResyncPos mdResyncDb mdResyncDt sbSyncErrs flashGuid regState } }'
 }
 
+# Returns all user shares with name, size, free/used, comment, and color.
 get_shares_data() {
   _api_cached "shares" '{ shares { name free used size comment color } }'
 }
