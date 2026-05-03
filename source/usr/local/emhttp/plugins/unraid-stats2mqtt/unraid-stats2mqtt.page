@@ -613,9 +613,9 @@ $vm_sensors     = array_filter(array_map('trim', explode(',', $vm_sensors_raw)))
 
       '— Network',
 
-      ['Network RX/TX Speeds',
-       'INTERVAL_NETWORK', 30,        'EXPIRE_NETWORK',
-       'KB/s receive and transmit per network interface (lo excluded)', 'RETAIN_NETWORK'],
+      ['Network Interfaces',
+       'INTERVAL_NETWORK', 60,        'EXPIRE_NETWORK',
+       'Status (up/down) per interface; attributes: IP, MAC, gateway, protocol, DHCP config (lo excluded)', 'RETAIN_NETWORK'],
 
       '— Shares',
 
