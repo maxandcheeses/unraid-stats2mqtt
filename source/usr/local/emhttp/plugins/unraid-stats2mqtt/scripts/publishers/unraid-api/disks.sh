@@ -1,6 +1,7 @@
 #!/bin/bash
 # SOURCE: Unraid GraphQL API (array disks/parities/caches)
 
+# Removes HA discovery registrations for a disk that is no longer present (DISK_NP status).
 _unregister_disk_sensors() {
   local sn; sn=$(safe_name "$1")
   ha_unregister "${sn}_state"
