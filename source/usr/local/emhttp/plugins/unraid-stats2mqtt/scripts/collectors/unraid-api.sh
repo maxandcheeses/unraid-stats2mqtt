@@ -103,6 +103,8 @@ get_parity_info() {
   fi
 }
 
+# Returns disk rebuild state as "STATUS|pct|speed_KB/s|eta_min". STATUS is RUNNING, PAUSED, or IDLE.
+# Derived from mdResyncAction (recon*), mdResyncPos/Size/Db/Dt vars.
 get_rebuild_info() {
   local vars; vars=$(get_vars_data) || { echo "UNKNOWN|0|0|0"; return; }
   local action; action=$(echo "$vars" | jq -r '.data.vars.mdResyncAction // empty')
