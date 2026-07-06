@@ -51,7 +51,7 @@ publish_disk_states() {
     local topic="${MQTT_BASE_TOPIC}/sensor/${MQTT_TOPIC}_${sn}_state/state"
     ha_register "${sn}_state" "${name} State" "$topic" "" "" "harddisk" "" "$expire"
     mqtt_publish "$topic" "$state" "$retain"
-  done < <(echo "$arr" | jq -r '.data.array.disks[] | [.name, .status, (.isSpinning // true | tostring)] | @tsv')
+  done < <(echo "$arr" | jq -r '.data.array.disks[] | [.name, .status, (if .isSpinning == false then "false" else "true" end)] | @tsv')
 }
 
 # Publishes filesystem usage % per array disk. Attributes include size_gb, free_gb, used_gb.
